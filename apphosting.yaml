@@ -1,0 +1,32 @@
+# Configuration Firebase App Hosting.
+# Doc : https://firebase.google.com/docs/app-hosting/configure
+runConfig:
+  # Site vitrine : démarrage économe, montée en charge automatique.
+  minInstances: 0
+  maxInstances: 4
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://bloomystudio.web.app
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Décommenter quand la mesure d'audience est décidée.
+  # - variable: NEXT_PUBLIC_GA_ID
+  #   value: G-XXXXXXXXXX
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
+
+  # Notifications e-mail : secrets gérés par Cloud Secret Manager.
+  # firebase apphosting:secrets:set RESEND_API_KEY
+  # - variable: RESEND_API_KEY
+  #   secret: RESEND_API_KEY
+  # - variable: LEADS_FROM_EMAIL
+  #   value: "Bloomy Studio <notifications@studio.bloomy.one>"
+  #   availability:
+  #     - RUNTIME

@@ -1,0 +1,442 @@
+@import "tailwindcss";
+
+/*
+ * Système de design « Atelier clair ».
+ *
+ * Beaucoup de blanc, une seule couleur forte, et le travail montré plutôt que
+ * décrit. Le fleuriste doit comprendre en trois secondes ce que nous faisons
+ * et à quoi ça ressemble — la typographie et la lumière portent le reste.
+ *
+ * Rôles de couleur (à respecter) :
+ *   cream      l'ivoire chaud — fond de page ; sur aplat sombre, couleur du texte
+ *   cream-deep panneaux et bandes en léger retrait
+ *   paper-warm surface légèrement rosée : encarts, formulaires
+ *   ink        anthracite chaud — titres et corps, jamais du noir pur
+ *   rose       LE bourgogne : la seule couleur d'action. Liens, boutons, aplat
+ *              de conversion. Une seule couleur d'action par page.
+ *   plum       prune profond : surface sombre et chaude, jamais un texte de
+ *              corps. C'est le fond des composants d'interface (admin, produit)
+ *              — il évite le noir de SaaS.
+ *   bloom      accent floral vif, en micro-dose : pastille, soulignement de
+ *              survol, ponctuation d'un chiffre. Jamais deux dans un écran,
+ *              jamais porteur d'une information seule.
+ *   sage       vert botanique désaturé, décoratif (tiges, feuillages)
+ *   hairline   tous les filets de la mise en page
+ *
+ * Les variantes -deep sont les seules autorisées pour du texte (≥ 4.5:1).
+ */
+@theme {
+  /* Papier — ivoire chaud. La lumière est la matière du site. */
+  --color-cream: #faf7f1;
+  --color-cream-deep: #f3ede4;
+  --color-paper: #ffffff;
+  --color-paper-warm: #fcf6f4;
+
+  /* Anthracite chaud, jamais du noir pur */
+  --color-ink: #1b181c;
+  --color-ink-soft: #57525a;
+  --color-ink-faint: #6e6873;
+
+  /* La fleur : un bourgogne de dahlia. Unique couleur d'action. */
+  --color-rose: #8a2145;
+  --color-rose-deep: #6e1836;
+  --color-rose-veil: #f8ecef;
+
+  /* Prune profond — surfaces sombres et composants d'interface. 13:1 sur ivoire. */
+  --color-plum: #43203a;
+  --color-plum-soft: #5a2e4d;
+
+  /* Accent floral vif — ponctuel, 5:1 sur ivoire. */
+  --color-bloom: #c43060;
+
+  /* Vert botanique désaturé — tiges, feuillages, pictogrammes */
+  --color-sage: #8da089;
+  --color-sage-deep: #3b5a45;
+  --color-sage-veil: #edf1ea;
+
+  /* Filets */
+  --color-hairline: #eae2d8;
+  --color-hairline-dark: #33272f;
+
+  --color-error: #a32433;
+
+  /*
+   * Cal Sans pour les titres : une seule graisse, pas d'italique. Toute
+   * emphase passe donc par la couleur, jamais par `italic` — la fonte n'en a
+   * pas et le navigateur en synthétiserait une, penchée et sale.
+   */
+  --font-display: "Cal Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --shadow-lift: 0 1px 2px rgb(27 24 28 / 0.04), 0 12px 30px -14px rgb(27 24 28 / 0.12);
+  --shadow-float: 0 2px 6px rgb(27 24 28 / 0.05), 0 30px 70px -24px rgb(27 24 28 / 0.20);
+}
+
+::selection {
+  background: var(--color-rose);
+  color: var(--color-cream);
+}
+
+/*
+ * Fondu court, utilisé au changement de projet dans la vitrine. Déclaré hors
+ * de toute media query : la règle globale `prefers-reduced-motion` plus bas
+ * ramène déjà sa durée à zéro.
+ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Grain de papier : tuile de bruit de 180 px, très basse opacité. Sur un fond
+ * aussi clair, au-delà de 2 % le papier paraît sale plutôt que texturé.
+ *
+ * `z-index: -1` place le voile entre le fond de page et le contenu, sans
+ * toucher au contenu lui-même. Surtout ne pas revenir à un `body > *` qui
+ * forcerait `position: relative` sur chaque enfant : cette règle n'est dans
+ * aucune couche CSS, elle l'emporterait donc sur les utilitaires Tailwind
+ * (qui vivent dans `@layer utilities`) — et casserait `sr-only`, dont le lien
+ * d'évitement dépend. Il occupait ainsi 22 px en haut de chaque page.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Tout ce qui suit vit dans `components` : les classes du système posent la
+ * valeur par défaut, et n'importe quel utilitaire Tailwind (`text-cream`,
+ * `text-sm`…) reprend la main sans `!important`.
+ */
+@layer components {
+
+/*
+ * Échelle display — Cal Sans.
+ * Géométrique, chaleureuse, dessinée serrée : elle n'a qu'une graisse (400),
+ * donc la hiérarchie se joue uniquement sur la taille et l'interlignage.
+ * Le titre doit tenir en deux lignes et laisser voir le haut de la vitrine —
+ * c'est elle qui répond à la question du visiteur, pas la typographie.
+ */
+/*
+ * H1 — accueil et pages intérieures. Plafonné à 3,75 rem : au-delà, les titres
+ * descriptifs des pages de référencement passaient à quatre lignes et le titre
+ * devenait un mur plutôt qu'une phrase.
+ */
+.text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 1.4rem + 3.2vw, 3.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+}
+
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 1.2rem + 2.4vw, 2.95rem);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  font-weight: 400;
+}
+
+.text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.85rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  font-weight: 400;
+}
+
+.text-display-sm {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1rem + 0.45vw, 1.3rem);
+  line-height: 1.26;
+  letter-spacing: -0.008em;
+  font-weight: 400;
+}
+
+/*
+ * Chapô de section. Facultatif : on ne l'ajoute que s'il porte une information
+ * que le titre ne porte pas. Mesure de ligne courte, sinon il se lit comme un
+ * paragraphe d'agence.
+ */
+.lede {
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--color-ink-soft);
+}
+
+/*
+ * Petite capitale utilitaire — Inter, taille optique basse pour rester
+ * lisible en capitales espacées. Libellés, légendes et micro-liens.
+ */
+.plate-label {
+  font-family: var(--font-sans);
+  font-variation-settings: "opsz" 14;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/*
+ * Pastille de section. Elle remplace l'ancien filet de marge : posée au-dessus
+ * d'un titre centré, elle nomme la section en trois mots et laisse tout
+ * l'espace au titre. C'est ce qui tient la page ensemble sans une ligne de
+ * texte de plus.
+ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-paper);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  box-shadow: 0 1px 2px rgb(22 18 17 / 0.04);
+}
+
+/* La pastille : seule micro-dose d'accent vif autorisée en tête de section. */
+.pill::before {
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  flex: none;
+  background: var(--color-bloom);
+}
+
+.on-ink .plate-label {
+  color: color-mix(in srgb, var(--color-cream) 62%, transparent);
+}
+
+.on-ink .pill {
+  border-color: color-mix(in srgb, var(--color-cream) 22%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 8%, transparent);
+  box-shadow: none;
+}
+
+/* Numéro d'étape — réservé aux séquences réelles (la méthode). */
+.step-num {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.55rem;
+  line-height: 1;
+  color: var(--color-rose-deep);
+}
+
+.on-ink .step-num {
+  color: var(--color-rose);
+}
+
+/* Légende d'illustration — s'inverse sur les bandes sombres. */
+.caption {
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+}
+
+.on-ink .caption {
+  color: color-mix(in srgb, var(--color-cream) 58%, transparent);
+}
+
+/* Filet horizontal signature */
+.rule {
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* Liens éditoriaux dans la prose */
+.prose-links a {
+  color: var(--color-rose);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-rose) 38%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms var(--ease-soft);
+}
+
+.prose-links a:hover {
+  text-decoration-color: var(--color-rose);
+}
+
+/* Prose d'article (blog, pages légales) */
+.article > * + * {
+  margin-top: 1.1em;
+}
+
+.article h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.15rem + 1vw, 1.85rem);
+  line-height: 1.18;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  margin-top: 2.2em;
+}
+
+.article h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.008em;
+  margin-top: 1.8em;
+}
+
+.article p,
+.article li {
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+
+.article strong {
+  color: var(--color-ink);
+}
+
+.article ul,
+.article ol {
+  padding-left: 1.4rem;
+}
+
+.article ul {
+  list-style: disc;
+}
+
+.article ol {
+  list-style: decimal;
+}
+
+.article li + li {
+  margin-top: 0.45em;
+}
+
+.article a {
+  color: var(--color-rose);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article blockquote {
+  border-left: 2px solid var(--color-rose);
+  padding-left: 1.25rem;
+  font-style: italic;
+}
+
+/* Les tableaux défilent dans leur propre conteneur — jamais la page. */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.article th,
+.article td {
+  border-bottom: 1px solid var(--color-hairline);
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.article th {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+} /* @layer components */
+
+/* Focus visible global */
+:focus-visible {
+  outline: 2px solid var(--color-rose-deep);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.on-ink :focus-visible {
+  outline-color: var(--color-cream);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * Révélation au défilement. L'état masqué est conditionné à `[data-js]`,
+   * posé par le script en tête de document : sans JavaScript, le contenu
+   * reste visible. La classe `is-visible` est ajoutée par l'observateur
+   * d'intersection (components/ui/Reveal.tsx).
+   */
+  [data-js] .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 500ms var(--ease-soft) var(--reveal-delay, 0ms),
+      transform 500ms var(--ease-soft) var(--reveal-delay, 0ms);
+  }
+
+  [data-js] .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .fade-up {
+    animation: fade-up 700ms var(--ease-soft) both;
+  }
+
+  .fade-up-late {
+    animation: fade-up 700ms 150ms var(--ease-soft) both;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* La révélation au défilement ne s'arme pas du tout : rien à annuler. */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

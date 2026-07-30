@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "bloomy-antigravity"
+  },
+  "targets": {
+    "bloomy-antigravity": {
+      "hosting": {
+        "studio": ["bloomystudio"]
+      }
+    }
+  }
+}
