@@ -40,7 +40,7 @@ export function ContactForm() {
   }
 
   return (
-    <form action={formAction} className="rounded-sm border border-hairline bg-paper-warm p-6 sm:p-9">
+    <form action={formAction} className="rounded-sm border border-hairline bg-paper-soft p-6 sm:p-9">
       {state.status === "error" && state.message && (
         <div
           role="alert"

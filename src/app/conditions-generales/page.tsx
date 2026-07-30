@@ -1,6 +1,6 @@
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
-import { PLACEHOLDER, legalEntity } from "@/lib/legal";
+import { PLACEHOLDER, hasLegalPlaceholders, legalEntity } from "@/lib/legal";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
@@ -8,6 +8,9 @@ export const metadata = pageMetadata({
   description:
     "Conditions générales de prestation de Bloomy Studio : devis, déroulement des projets, propriété des livrables, paiement et responsabilités.",
   path: "/conditions-generales",
+  // Tant que l'entité légale est incomplète, la page reste hors index :
+  // une mention légale à trous indexée nuit plus qu'elle ne sert.
+  noindex: hasLegalPlaceholders(),
 });
 
 export default function CgvPage() {
@@ -60,7 +63,8 @@ export default function CgvPage() {
 
       <h2>5. Obligations et responsabilité</h2>
       <p>
-        {legalEntity.name} est tenue à une obligation de moyens. Aucun
+        {legalEntity.name}{" "}
+        est tenue à une obligation de moyens. Aucun
         positionnement dans les moteurs de recherche ni aucun volume
         d&apos;affaires ne peut être garanti — toute promesse contraire serait
         trompeuse. La responsabilité de {legalEntity.name} est limitée au

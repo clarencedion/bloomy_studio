@@ -1,8 +1,13 @@
 import Image from "next/image";
 
+import { LiveSiteLink } from "@/components/ui/LiveSiteLink";
 import { Sprig, type SpecimenName } from "@/components/visuals/Botanical";
 import { BrowserFrame } from "@/components/visuals/DeviceFrame";
-import { floristSites, getShowcaseSite } from "@/lib/portfolio";
+import {
+  floristSites,
+  getShowcaseSite,
+  type ShowcaseSlug,
+} from "@/lib/portfolio";
 
 /**
  * Vitrine : les sites de fleuristes réellement livrés par le studio, montrés
@@ -74,7 +79,9 @@ export function SiteShowpiece({
   eager = false,
   className = "",
 }: {
-  slug: string;
+  /** Type littéral : une faute de frappe devient une erreur de compilation,
+   *  au lieu d'une page qui perd silencieusement son visuel. */
+  slug: ShowcaseSlug;
   eager?: boolean;
   className?: string;
 }) {
@@ -94,8 +101,11 @@ export function SiteShowpiece({
           className="h-auto w-full"
         />
       </BrowserFrame>
-      <figcaption className="caption mx-auto mt-4 max-w-xl text-center">
-        {site.name}, {site.city} — {site.note}
+      <figcaption className="mx-auto mt-4 max-w-xl">
+        <span className="caption block text-center">
+          {site.name}, {site.city} — {site.note}
+        </span>
+        <LiveSiteLink site={site} className="mt-3 justify-center" />
       </figcaption>
     </figure>
   );

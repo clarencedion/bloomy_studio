@@ -1,6 +1,6 @@
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
-import { dataProtection, legalEntity } from "@/lib/legal";
+import { dataProtection, hasLegalPlaceholders, legalEntity } from "@/lib/legal";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
@@ -8,6 +8,9 @@ export const metadata = pageMetadata({
   description:
     "Comment Bloomy Studio traite vos données personnelles : finalités, base légale, durées de conservation, destinataires et exercice de vos droits RGPD.",
   path: "/politique-de-confidentialite",
+  // Tant que l'entité légale est incomplète, la page reste hors index :
+  // une mention légale à trous indexée nuit plus qu'elle ne sert.
+  noindex: hasLegalPlaceholders(),
 });
 
 export default function ConfidentialitePage() {

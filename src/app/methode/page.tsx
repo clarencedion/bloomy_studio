@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
@@ -102,52 +103,69 @@ export default function MethodePage() {
 
       <section className="py-16 sm:py-24">
         <Container>
-          <div className="space-y-6">
+          {/*
+            Cinq phases, cinq lignes — pas cinq cartes empilées. Le chiffre
+            devient l'ancrage visuel de la colonne de gauche, ce qui donne à la
+            page le rythme d'un déroulé plutôt que celui d'une pile de blocs.
+          */}
+          <ol className="border-t border-hairline">
             {phases.map((phase) => (
-              <article
-                key={phase.num}
-                className="rounded-sm border border-hairline bg-paper p-7 sm:p-9"
-              >
-                <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <div className="flex items-baseline gap-4">
-                    <span className="step-num text-2xl" aria-hidden="true">
+              <li key={phase.num} className="border-b border-hairline">
+                <div className="grid gap-x-10 gap-y-6 py-10 sm:py-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+                  <div className="flex gap-6">
+                    <span
+                      aria-hidden="true"
+                      className="text-display-lg leading-none text-hairline"
+                    >
                       {phase.num}
                     </span>
-                    <h2 className="text-display-md">{phase.name}</h2>
+                    <div>
+                      <h2 className="text-display-md">{phase.name}</h2>
+                      <p className="caption mt-2">{phase.duration}</p>
+                      <p className="mt-6 text-[0.95rem]">
+                        <span className="plate-label block">Livrable</span>
+                        <span className="mt-1.5 block leading-relaxed text-ink-soft">
+                          {phase.deliverable}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm font-medium text-ink-soft">{phase.duration}</p>
+
+                  <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div>
+                      <h3 className="plate-label text-sage-deep">Votre rôle</h3>
+                      <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">
+                        {phase.you}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="plate-label text-rose">Notre travail</h3>
+                      <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">
+                        {phase.us}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-6 grid gap-6 lg:grid-cols-2">
-                  <div className="border-l-2 border-sage pl-4">
-                    <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-sage-deep">
-                      Votre rôle
-                    </h3>
-                    <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-soft">
-                      {phase.you}
-                    </p>
-                  </div>
-                  <div className="border-l-2 border-rose pl-4">
-                    <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-rose">
-                      Notre travail
-                    </h3>
-                    <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-soft">
-                      {phase.us}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-6 border-t border-hairline pt-4 text-sm">
-                  <span className="font-semibold">Livrable :</span>{" "}
-                  <span className="text-ink-soft">{phase.deliverable}</span>
-                </p>
-              </article>
+              </li>
             ))}
-          </div>
+          </ol>
         </Container>
       </section>
+
+      <div className="band-drift relative h-40 overflow-hidden sm:h-56">
+        <Image
+          src="/photos/papier-soie-square.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
 
       <section className="border-y border-hairline bg-rose-veil/40 py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="left"
             eyebrow="Nos principes"
             title="Quatre engagements non négociables"
           />

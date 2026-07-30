@@ -128,14 +128,14 @@ export const mvpOffer: Offer = {
   includes: [
     "Atelier de cadrage : problème, cible, parcours critique",
     "Maquettes UX/UI des écrans clés",
-    "Application web (ou PWA) sur Next.js + Firebase",
+    "Application Flutter (iOS, Android, web) ou Next.js, sur Firebase",
     "Authentification, base de données, paiements si nécessaires",
     "Tableau de bord d'administration",
     "Mesure d'usage et déploiement production",
     "Un cycle d'itération après les premiers retours utilisateurs",
   ],
   excludes: [
-    "Applications natives iOS/Android complètes (PWA d'abord)",
+    "Publication sur les stores et fonctionnalités système avancées",
     "Fonctionnalités secondaires avant validation du cœur du produit",
   ],
   process: "6 à 10 semaines selon le périmètre validé ensemble.",

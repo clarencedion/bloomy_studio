@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
@@ -35,6 +37,19 @@ export function Frictions() {
             <h2 className="text-display-lg mt-6">
               Votre métier est remarquable. Votre présence en ligne, rarement.
             </h2>
+            {/*
+              La colonne de gauche restait vide sous le titre. Un fragment de
+              matière la referme sans ajouter une ligne à lire — et il refroidit
+              une page qui, sans lui, n'est que texte sur ivoire.
+            */}
+            <Image
+              src="/photos/eau-tiges-square.webp"
+              alt=""
+              width={1200}
+              height={1200}
+              sizes="(min-width: 1024px) 20rem, 100vw"
+              className="mt-10 hidden aspect-square w-full max-w-xs rounded-sm object-cover lg:block"
+            />
           </div>
 
           <ul className="border-t border-hairline">

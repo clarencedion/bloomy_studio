@@ -144,7 +144,7 @@ export function AuditForm() {
       action={formAction}
       onInput={onFirstInteraction}
       noValidate={false}
-      className="rounded-sm border border-hairline bg-paper-warm p-6 sm:p-9"
+      className="rounded-sm border border-hairline bg-paper-soft p-6 sm:p-9"
     >
       {/* Progression */}
       <ol className="flex gap-2" aria-label="Étapes du formulaire">

@@ -41,7 +41,12 @@ function Field({ label, value }: { label: string; value: string }) {
 function ProduitPanel() {
   return (
     <div className="grid gap-4 p-4 sm:grid-cols-[7rem_minmax(0,1fr)] sm:p-5">
-      <div className="grid aspect-square place-items-center rounded-sm bg-sage-veil text-sage-deep">
+      {/*
+        Taille fixe sous 640 px : en une seule colonne, `aspect-square` étirait
+        la vignette sur toute la largeur du téléphone — un carré vert de 370 px
+        avec une fleur minuscule au centre.
+      */}
+      <div className="grid size-24 place-items-center rounded-sm bg-sage-veil text-sage-deep sm:size-auto sm:aspect-square">
         <Sprig name="renoncule" size={44} />
       </div>
       <div className="grid gap-2.5">
@@ -163,7 +168,7 @@ export function AdminDemo() {
                     type="button"
                     onClick={() => select(t.id)}
                     aria-pressed={current}
-                    className={`min-h-11 rounded-full border px-4 py-2 text-[0.85rem] font-semibold transition-colors duration-150 ${
+                    className={`press min-h-11 rounded-full border px-4 py-2 text-[0.85rem] font-semibold ${
                       current
                         ? "border-cream bg-cream text-plum"
                         : "border-cream/25 text-cream/80 hover:border-cream/60 hover:text-cream"

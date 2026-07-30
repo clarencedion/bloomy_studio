@@ -22,16 +22,23 @@ export function LegalShell({ title, path, updatedAt, children }: Props) {
             { name: title, path },
           ]}
         />
+        {/*
+          Bandeau destiné au visiteur, pas à l'équipe : aucun chemin de fichier
+          ni référence de dépôt ne doit fuiter sur une page publique — c'est le
+          signal le plus sûr d'un site inachevé. La consigne interne vit dans
+          `docs/content-checklist.md`, et la page passe en `noindex` tant que
+          des champs manquent (voir `legalMetadata`).
+        */}
         {hasLegalPlaceholders() && (
           <div
             role="note"
             className="mt-8 rounded-sm border border-error/40 bg-error/5 px-5 py-4 text-sm leading-relaxed"
           >
-            <strong>Document de travail.</strong> Cette page contient des
-            champs <strong>[À COMPLÉTER]</strong> et doit être finalisée puis
-            validée par un professionnel du droit avant la mise en production
-            publique. Voir <code>src/lib/legal.ts</code> et{" "}
-            <code>docs/content-checklist.md</code>.
+            <strong>Document en cours de finalisation.</strong> Certaines
+            informations légales de la société sont en cours de publication.
+            Pour toute question d&apos;ordre juridique ou contractuel dans
+            l&apos;intervalle, écrivez-nous : la réponse vous sera faite par
+            écrit.
           </div>
         )}
         <h1 className="text-display-lg mt-8">{title}</h1>

@@ -65,7 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
             ]}
           />
           <header className="mt-8">
-            <p className="plate-label">
+            <p className="plate-label flex flex-wrap items-center gap-x-2">
               <time dateTime={post.datePublished}>
                 {dateFormatter.format(new Date(post.datePublished))}
               </time>

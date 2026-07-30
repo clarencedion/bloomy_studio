@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
@@ -44,6 +45,7 @@ export default function AProposPage() {
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
             <div className="prose-links">
               <SectionHead
+          align="left"
                 eyebrow="L'histoire"
                 title="Du comptoir des fleuristes au studio"
               />
@@ -53,8 +55,8 @@ export default function AProposPage() {
                   transmission florale prélèvent des commissions importantes sur
                   le travail des artisans, standardisent leurs catalogues et
                   s&apos;interposent entre eux et leurs clients.{" "}
-                  {site.founders[0].name} et {site.founders[1].name} ont
-                  construit l&apos;inverse — une plateforme où le client compose
+                  {site.founders[0].name} et {site.founders[1].name}{" "}
+                  ont construit l&apos;inverse — une plateforme où le client compose
                   son bouquet fleur par fleur, où le prix est transparent, et où
                   l&apos;artisan ne reverse aucune commission.
                 </p>
@@ -82,42 +84,53 @@ export default function AProposPage() {
 
             {/* Équipe — sans photos tant qu'aucune vraie photo n'existe */}
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                L&apos;équipe fondatrice
-              </h2>
-              <ul className="mt-5 space-y-5">
+              {/* Pas de boîtes : deux noms posés sur un filet, comme un ours
+                  de magazine. Tant qu'aucun portrait réel n'existe, la
+                  typographie porte seule — une carte vide autour d'un nom
+                  souligne surtout ce qui manque. */}
+              <h2 className="plate-label">L&apos;équipe fondatrice</h2>
+              <ul className="mt-6 border-t border-hairline">
                 {site.founders.map((f) => (
-                  <li key={f.name} className="rounded-sm border border-hairline bg-paper p-6">
+                  <li key={f.name} className="border-b border-hairline py-5">
                     <p className="text-display-sm">{f.name}</p>
-                    <p className="mt-1 text-sm text-ink-soft">{f.role} — Bloomy & Bloomy Studio</p>
+                    <p className="mt-1 text-[0.9rem] text-ink-soft">
+                      {f.role} — Bloomy & Bloomy Studio
+                    </p>
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 rounded-sm border border-hairline bg-cream-deep/50 p-6 text-sm leading-relaxed text-ink-soft">
-                <p className="font-semibold text-ink">Où nous trouver</p>
-                <p className="mt-2">
-                  {site.city}, France — et partout où travaille un fleuriste :
-                  la méthode fonctionne aussi bien en boutique qu&apos;à
-                  distance.
-                </p>
-                <p className="mt-2">
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="text-rose underline underline-offset-4"
-                  >
-                    {site.email}
-                  </a>
-                </p>
-              </div>
+
+              <h2 className="plate-label mt-12">Où nous trouver</h2>
+              <p className="mt-4 leading-relaxed text-ink-soft">
+                {site.city}, France — et partout où travaille un fleuriste : la
+                méthode fonctionne aussi bien en boutique qu&apos;à distance.
+              </p>
+              <a
+                href={`mailto:${site.email}`}
+                className="link-live mt-4 inline-block font-semibold text-rose"
+              >
+                {site.email}
+              </a>
             </div>
           </div>
         </Container>
       </section>
 
       {/* Écosystème */}
+      <div className="band-drift relative h-48 overflow-hidden sm:h-72">
+        <Image
+          src="/photos/atelier-matieres-wide.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
+
       <section className="border-y border-hairline bg-paper py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="L'écosystème"
             title="Deux activités, une même mission"
             lede="Rendre leur indépendance numérique aux artisans. La plateforme et le studio s'en occupent chacun à leur manière — et restent volontairement distincts."
@@ -162,6 +175,7 @@ export default function AProposPage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Concrètement"
             title="Ce que cette double casquette change pour vous"
           />

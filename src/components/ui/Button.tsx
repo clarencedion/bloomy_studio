@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 type Variant = "primary" | "outline" | "onInk" | "ghost";
 
 const base =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 text-[0.95rem] font-semibold transition-colors duration-150";
+  "press inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 text-[0.95rem] font-semibold transition-colors duration-150";
 
 /** L'encre porte l'action, la fleur porte le survol : un seul point de couleur. */
 const variants: Record<Variant, string> = {

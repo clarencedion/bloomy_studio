@@ -8,10 +8,10 @@
  * et à quoi ça ressemble — la typographie et la lumière portent le reste.
  *
  * Rôles de couleur (à respecter) :
- *   cream      l'ivoire chaud — fond de page ; sur aplat sombre, couleur du texte
- *   cream-deep panneaux et bandes en léger retrait
- *   paper-warm surface légèrement rosée : encarts, formulaires
- *   ink        anthracite chaud — titres et corps, jamais du noir pur
+ *   cream      l'ivoire refroidi — fond de page ; sur aplat sombre, couleur du texte
+ *   cream-deep panneaux et bandes en léger retrait, gris pierre
+ *   paper-soft surface neutre en léger retrait : encarts, formulaires
+ *   ink        anthracite dense — titres et corps, jamais du noir pur
  *   rose       LE bourgogne : la seule couleur d'action. Liens, boutons, aplat
  *              de conversion. Une seule couleur d'action par page.
  *   plum       prune profond : surface sombre et chaude, jamais un texte de
@@ -26,37 +26,48 @@
  * Les variantes -deep sont les seules autorisées pour du texte (≥ 4.5:1).
  */
 @theme {
-  /* Papier — ivoire chaud. La lumière est la matière du site. */
-  --color-cream: #faf7f1;
-  --color-cream-deep: #f3ede4;
+  /*
+   * Papier — ivoire refroidi. La version précédente tirait sur le beige et,
+   * combinée au prune et au bourgogne, donnait un ensemble chaud sur chaud
+   * qui écœurait à la lecture longue. On garde la chaleur du papier, on
+   * retire le jaune : la palette s'aligne sur la photographie du site, gris
+   * pierre et vert désaturé.
+   */
+  --color-cream: #faf9f6;
+  --color-cream-deep: #f0eee9;
   --color-paper: #ffffff;
-  --color-paper-warm: #fcf6f4;
+  --color-paper-soft: #f7f6f3;
 
-  /* Anthracite chaud, jamais du noir pur */
-  --color-ink: #1b181c;
-  --color-ink-soft: #57525a;
-  --color-ink-faint: #6e6873;
+  /* Anthracite dense, jamais du noir pur */
+  --color-ink: #17161a;
+  --color-ink-soft: #55535c;
+  --color-ink-faint: #6b6974;
 
   /* La fleur : un bourgogne de dahlia. Unique couleur d'action. */
   --color-rose: #8a2145;
   --color-rose-deep: #6e1836;
-  --color-rose-veil: #f8ecef;
+  --color-rose-veil: #f6eef1;
 
-  /* Prune profond — surfaces sombres et composants d'interface. 13:1 sur ivoire. */
-  --color-plum: #43203a;
-  --color-plum-soft: #5a2e4d;
+  /*
+   * Aubergine-anthracite — surfaces sombres et composants d'interface.
+   * L'ancien prune (#43203A) était sucré et occupait deux bandes pleines :
+   * c'est lui qui rendait la page lourde. Celui-ci est froid et dense,
+   * 13,7:1 sous du crème.
+   */
+  --color-plum: #2e2733;
+  --color-plum-soft: #443c4b;
 
-  /* Accent floral vif — ponctuel, 5:1 sur ivoire. */
-  --color-bloom: #c43060;
+  /* Accent floral — ponctuel, 6,1:1 sur ivoire. Moins bonbon que #C43060. */
+  --color-bloom: #b3234f;
 
   /* Vert botanique désaturé — tiges, feuillages, pictogrammes */
   --color-sage: #8da089;
   --color-sage-deep: #3b5a45;
-  --color-sage-veil: #edf1ea;
+  --color-sage-veil: #ebefe9;
 
-  /* Filets */
-  --color-hairline: #eae2d8;
-  --color-hairline-dark: #33272f;
+  /* Filets — refroidis eux aussi, sinon ils ramènent le beige par la bande */
+  --color-hairline: #e4e1db;
+  --color-hairline-dark: #3a3340;
 
   --color-error: #a32433;
 
@@ -266,6 +277,104 @@ body::before {
 .rule {
   border: 0;
   border-top: 1px solid var(--color-hairline);
+}
+
+/*
+ * Micro-interactions — le détail qui sépare un site fini d'un gabarit.
+ *
+ * Règle de durée : 120 ms pour ce qui suit le curseur (couleur, opacité),
+ * 180 ms pour ce qui bouge (élévation, translation). Au-delà de 200 ms, une
+ * interface paraît molle ; en dessous de 100 ms, elle paraît nerveuse.
+ * Tout est neutralisé par `prefers-reduced-motion` plus bas.
+ */
+
+/* Lien vers un site livré : le soulignement se déroule, la flèche avance. */
+.link-live {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 180ms var(--ease-soft);
+  padding-bottom: 2px;
+}
+
+.link-live:hover,
+.link-live:focus-visible {
+  background-size: 100% 1px;
+}
+
+.link-live-arrow {
+  display: inline-block;
+  transition: transform 180ms var(--ease-soft);
+}
+
+.link-live:hover .link-live-arrow {
+  transform: translate(2px, -2px);
+}
+
+/*
+ * Surface interactive : cartes et panneaux cliquables. Une seule classe pour
+ * que l'élévation soit identique partout — c'est la cohérence qui se lit
+ * comme du soin, pas l'amplitude du mouvement.
+ */
+.lift {
+  transition:
+    transform 180ms var(--ease-soft),
+    box-shadow 180ms var(--ease-soft),
+    border-color 120ms var(--ease-soft);
+}
+
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* L'enfoncement : ce qui répond au doigt autant qu'à la souris. */
+.press {
+  transition: transform 120ms var(--ease-soft), background-color 120ms var(--ease-soft);
+}
+
+.press:active {
+  transform: scale(0.98);
+}
+
+/*
+ * Bande photographique à dérive lente.
+ *
+ * Pilotée par `animation-timeline: view()` : c'est le navigateur qui lie
+ * l'animation à la position de l'élément dans le viewport, sans une ligne de
+ * JavaScript et sans écouteur de défilement. Là où ce n'est pas supporté, la
+ * bande reste simplement fixe — aucune dépendance, aucun saut.
+ *
+ * L'amplitude est volontairement faible (±6 %). Au-delà, la parallaxe devient
+ * un effet qu'on remarque ; ici elle donne juste de la profondeur.
+ */
+.band-drift {
+  overflow: hidden;
+}
+
+.band-drift > * {
+  height: 118%;
+  top: -9%;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .band-drift > * {
+      animation: band-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    @keyframes band-drift {
+      from {
+        transform: translateY(-6%);
+      }
+      to {
+        transform: translateY(6%);
+      }
+    }
+  }
 }
 
 /* Liens éditoriaux dans la prose */

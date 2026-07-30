@@ -35,8 +35,8 @@ export function ProductLab() {
             <p className="mt-5 leading-relaxed text-cream/75">
               Bloomy est notre plateforme : on y compose son bouquet fleur par
               fleur chez un artisan, on choisit le retrait ou la livraison, et le
-              fleuriste pilote son catalogue depuis son tableau de bord. Web et
-              mobile, en production.
+              fleuriste pilote son catalogue depuis son tableau de bord.
+              Développée en Flutter sur Firebase, en production.
             </p>
 
             <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-cream/15 pt-8">
@@ -49,8 +49,9 @@ export function ProductLab() {
             </dl>
 
             <p className="mt-8 text-[0.85rem] text-cream/55">
-              Next.js, Firebase, applications web installables. La technologie
-              vient après la question — jamais l&apos;inverse.
+              Flutter pour le multiplateforme, Next.js pour le web, Firebase pour
+              les données et le temps réel. La technologie vient après la
+              question — jamais l&apos;inverse.
             </p>
 
             <Link

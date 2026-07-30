@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
-    "captures": "node scripts/capture-realisations.mjs"
+    "captures": "node scripts/capture-realisations.mjs",
+    "images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@fontsource/cal-sans": "^5.3.0",

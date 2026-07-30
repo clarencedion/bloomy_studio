@@ -40,9 +40,9 @@ function ProductProof() {
 }
 
 export const metadata = pageMetadata({
-  title: "Développement MVP : votre produit en production sur Firebase",
+  title: "Développement de MVP : Flutter, Next.js et Firebase",
   description:
-    "Développement de MVP web et PWA sur Next.js et Firebase : cadrage produit, UX, authentification, paiements, admin et mise en production. Par les créateurs de Bloomy.",
+    "Développement de MVP sur Flutter, Next.js et Firebase : cadrage produit, UX, authentification, paiements, admin et mise en production. Par les créateurs de Bloomy.",
   path: "/developpement-mvp",
 });
 
@@ -62,7 +62,7 @@ const steps = [
   },
   {
     title: "Construction",
-    body: "Application web ou PWA sur Next.js et Firebase : authentification, base de données temps réel, paiements si nécessaires, tableau de bord d'administration. Un socle éprouvé — celui sur lequel Bloomy tourne en production.",
+    body: "Flutter quand le produit doit vivre sur iOS, Android et le web avec une seule base de code ; Next.js quand il doit d'abord être rapide et indexable. Firebase dans les deux cas pour l'authentification, les données temps réel et les paiements. C'est le socle sur lequel Bloomy tourne en production.",
   },
   {
     title: "Mise en production et mesure",
@@ -72,16 +72,18 @@ const steps = [
 
 const faq = [
   {
-    question: "Pourquoi Firebase et une PWA plutôt qu'une app native ?",
+    question: "Flutter, Next.js ou une application web : comment choisissez-vous ?",
     answer: (
       <p>
-        Parce qu&apos;un MVP doit d&apos;abord vérifier qu&apos;il intéresse
-        quelqu&apos;un. Une application web installable (PWA) se déploie en
-        heures, se corrige en continu et évite les délais de validation des
-        stores — pour une fraction du coût de deux applications natives. Si la
-        traction le justifie, le passage au natif se fait ensuite, sur des
-        bases validées. C&apos;est le chemin que nous connaissons : Bloomy
-        fonctionne ainsi.
+        Par le produit, jamais par préférence. <strong>Flutter</strong> quand
+        l&apos;expérience doit vivre sur iOS, Android et le web avec une seule
+        base de code — c&apos;est le choix que nous avons fait pour{" "}
+        <a href="https://bloomy.one">Bloomy</a>, en production.{" "}
+        <strong>Next.js</strong> quand le produit doit d&apos;abord être rapide,
+        léger et indexable par Google. <strong>Firebase</strong> dans les deux
+        cas pour l&apos;authentification, les données temps réel et les
+        paiements. Nous vous dirons lequel s&apos;impose au cadrage, avec les
+        arguments.
       </p>
     ),
   },
@@ -90,11 +92,11 @@ const faq = [
     answer: (
       <p>
         Non, et c&apos;est volontaire. Nous prenons peu de projets MVP en
-        parallèle de notre activité principale, et uniquement lorsque notre
-        stack (Next.js, Firebase, web mobile-first) est la bonne réponse. Si
-        votre projet exige du temps réel embarqué, du jeu vidéo ou une équipe
-        de quinze personnes, nous vous le dirons au premier appel — et nous
-        vous orienterons si nous le pouvons.
+        parallèle de notre activité principale, et uniquement lorsque Flutter,
+        Next.js et Firebase sont la bonne réponse. Si votre projet exige de
+        l&apos;embarqué temps réel, du jeu vidéo ou une équipe de quinze
+        personnes, nous vous le dirons au premier appel — et nous vous
+        orienterons si nous le pouvons.
       </p>
     ),
   },
@@ -131,7 +133,7 @@ export default function MvpPage() {
         data={serviceSchema({
           name: "Développement de MVP",
           description:
-            "Développement de MVP web et PWA sur Next.js et Firebase : cadrage, UX, construction, mise en production et itération.",
+            "Développement de MVP sur Flutter, Next.js et Firebase : cadrage, UX, construction, mise en production et itération.",
           path: "/developpement-mvp",
           serviceType: "Développement d'application web",
           audience: "Fondateurs et porteurs de projet",
@@ -144,7 +146,7 @@ export default function MvpPage() {
         lede={
           <>
             Nous développons des MVP resserrés sur l&apos;essentiel, en
-            production sur Next.js et Firebase. Pas une agence logicielle
+            production sur Flutter, Next.js et Firebase. Pas une agence logicielle
             illimitée : une petite équipe qui a construit et opère{" "}
             <a href="https://bloomy.one">sa propre plateforme</a>{" "}— et qui
             applique à votre produit ce qu&apos;elle a appris sur le sien.
@@ -156,18 +158,27 @@ export default function MvpPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Le déroulé"
             title="Du problème au produit en production"
             lede="Quatre phases, chacune conclue par un livrable concret que vous validez. Le périmètre est défini ensemble au cadrage — et défendu ensuite contre la tentation d'ajouter « juste une fonctionnalité »."
           />
-          <ol className="mt-12 grid gap-8 md:grid-cols-2">
+          {/* Une vraie séquence : elle a donc le droit d'être numérotée, et
+              le numéro devient l'élément de composition plutôt qu'une pastille
+              dans un coin de carte. */}
+          <ol className="mt-14 border-t border-hairline">
             {steps.map((s, i) => (
-              <li key={s.title} className="rounded-sm border border-hairline bg-paper p-7">
-                <p className="step-num text-xl" aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3 className="text-display-md mt-2">{s.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink-soft">{s.body}</p>
+              <li key={s.title} className="border-b border-hairline">
+                <div className="grid gap-x-8 gap-y-3 py-8 sm:grid-cols-[4rem_minmax(0,0.75fr)_minmax(0,1.25fr)] sm:py-10">
+                  <p
+                    aria-hidden="true"
+                    className="text-display-lg leading-none text-hairline"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="text-display-sm">{s.title}</h3>
+                  <p className="leading-relaxed text-ink-soft">{s.body}</p>
+                </div>
               </li>
             ))}
           </ol>
@@ -180,6 +191,7 @@ export default function MvpPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <SectionHead
+          align="left"
                 eyebrow="L'offre"
                 title={mvpOffer.name}
               />
@@ -229,6 +241,7 @@ export default function MvpPage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Stack, propriété, suite du projet"
             className="mb-10"

@@ -1,9 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { SiteGallery } from "@/components/visuals/ShowcaseSites";
@@ -168,6 +170,7 @@ export default function FleuristesPage() {
       <section className="border-b border-hairline bg-cream-deep py-14 sm:py-20">
         <Container width="wide">
           <SectionHead
+          align="center"
             eyebrow="Sites livrés"
             title="Quatre boutiques, quatre univers"
             lede="Aucun modèle décliné : chaque site part de la boutique, de ses matières et de sa façon de vendre."
@@ -180,27 +183,32 @@ export default function FleuristesPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Votre métier, pas un secteur"
             title="Un site de fleuriste se pense autour de vos vraies journées"
             lede="Un prestataire généraliste voit un « commerce de détail ». Nous voyons des arrivages du matin, des pics saisonniers, des mariages sur dossier et des familles en deuil qui commandent depuis un téléphone."
           />
-          <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {seasons.map((s) => (
-              <article key={s.title} className="border-t border-hairline pt-5">
-                <h3 className="text-display-sm">{s.title}</h3>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-ink-soft">
-                  {s.body}
-                </p>
-              </article>
-            ))}
-          </div>
+          <EditorialList className="mt-12" items={seasons} />
         </Container>
       </section>
+
+      {/* Respiration : la matière du métier, en bande fine. Pas une vignette
+          décorative — elle sépare deux blocs de texte denses. */}
+      <div className="band-drift relative h-48 overflow-hidden sm:h-64">
+        <Image
+          src="/photos/comptoir-matin-wide.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
 
       {/* Les 4 piliers → spokes */}
       <section className="border-y border-hairline bg-paper py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Ce que nous construisons"
             title="Le système complet, brique par brique"
             lede="Chaque brique a sa page dédiée — parce que chaque sujet mérite mieux que trois lignes dans une liste."
@@ -210,7 +218,7 @@ export default function FleuristesPage() {
               <Link
                 key={p.href}
                 href={p.href}
-                className="group flex flex-col rounded-sm border border-hairline bg-cream p-7 transition-colors hover:border-rose"
+                className="lift group flex flex-col rounded-sm border border-hairline bg-cream p-7 hover:border-rose"
               >
                 <h3 className="text-display-md transition-colors group-hover:text-rose">
                   {p.title}
@@ -259,6 +267,7 @@ export default function FleuristesPage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Questions de fleuristes, réponses concrètes"
             className="mb-10"

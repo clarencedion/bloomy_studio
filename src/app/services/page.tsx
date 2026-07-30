@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { pageMetadata } from "@/lib/seo";
@@ -55,61 +56,67 @@ export default function ServicesPage() {
               </>
             }
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {/*
+            Trois offres, trois lignes pleine largeur — et non trois cartes
+            identiques côte à côte. Une fiche technique dense répétée trois fois
+            se lit comme un tableau comparatif de fournisseur d'accès : on ne
+            retient rien. Ici, le nom et le prix tiennent une colonne étroite,
+            le contenu s'étale à droite, et l'offre mise en avant se signale par
+            un simple filet bourgogne plutôt qu'un aplat rose.
+          */}
+          <div className="mt-14 border-t border-hairline">
             {floristOffers.map((offer) => (
               <article
                 key={offer.id}
-                className={`flex flex-col rounded-sm border p-7 ${
-                  offer.highlight
-                    ? "border-rose bg-rose-veil/60"
-                    : "border-hairline bg-paper"
+                className={`grid gap-x-12 gap-y-7 border-b border-hairline py-10 sm:py-14 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] ${
+                  offer.highlight ? "border-l-2 border-l-rose pl-6 sm:pl-8" : ""
                 }`}
               >
-                {offer.highlight && (
-                  <p className="mb-3 w-fit rounded-sm bg-rose px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-cream">
-                    La plus demandée
+                <div>
+                  {offer.highlight ? (
+                    <p className="plate-label text-rose">La plus demandée</p>
+                  ) : null}
+                  <h3 className={`text-display-lg ${offer.highlight ? "mt-2" : ""}`}>
+                    {offer.name}
+                  </h3>
+                  <p className="mt-4 max-w-sm leading-relaxed text-ink-soft">
+                    {offer.audience}
                   </p>
-                )}
-                <h3 className="text-display-md">{offer.name}</h3>
-                <p className="mt-2 text-sm font-medium text-rose">
-                  {offer.audience}
-                </p>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">
-                  {offer.summary}
-                </p>
-
-                <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                  Inclus
-                </h4>
-                <ul className="mt-3 flex-1 space-y-2 text-sm">
-                  {offer.includes.map((item) => (
-                    <li key={item} className="flex gap-2.5">
-                      <span aria-hidden="true" className="mt-0.5 text-sage-deep">
-                        ✓
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-
-                <h4 className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                  Non inclus
-                </h4>
-                <ul className="mt-2 space-y-1.5 text-sm text-ink-soft">
-                  {offer.excludes.map((item) => (
-                    <li key={item} className="flex gap-2.5">
-                      <span aria-hidden="true">—</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="mt-6 border-t border-hairline pt-4 text-sm">
-                  <span className="text-lg font-semibold">
+                  <p className="text-display-sm mt-8 text-rose">
                     {offer.price ?? "Sur devis"}
-                  </span>
-                  <span className="mt-1 block text-ink-soft">{offer.process}</span>
-                </p>
+                  </p>
+                  <p className="caption mt-1.5">{offer.process}</p>
+                </div>
+
+                <div>
+                  <p className="lede max-w-xl">{offer.summary}</p>
+                  <div className="mt-9 grid gap-x-10 gap-y-7 sm:grid-cols-2">
+                    <div>
+                      <h4 className="plate-label">Inclus</h4>
+                      <ul className="mt-4 space-y-2.5 text-[0.95rem]">
+                        {offer.includes.map((item) => (
+                          <li key={item} className="flex gap-2.5">
+                            <span aria-hidden="true" className="mt-0.5 text-sage-deep">
+                              ✓
+                            </span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="plate-label">Non inclus</h4>
+                      <ul className="mt-4 space-y-2 text-[0.95rem] text-ink-soft">
+                        {offer.excludes.map((item) => (
+                          <li key={item} className="flex gap-2.5">
+                            <span aria-hidden="true" className="mt-0.5">—</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
@@ -120,20 +127,16 @@ export default function ServicesPage() {
       <section className="border-y border-hairline bg-paper py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Compléments"
             title="À ajouter selon vos besoins"
             lede="Chaque complément se greffe sur une offre ou se prend séparément. Là aussi : devis détaillé, périmètre écrit."
           />
-          <div className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-            {addOns.map((a) => (
-              <div key={a.name} className="border-t border-hairline pt-4">
-                <h3 className="font-semibold">{a.name}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
-                  {a.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          <EditorialList
+            className="mt-10"
+            dense
+            items={addOns.map((a) => ({ title: a.name, body: a.description }))}
+          />
         </Container>
       </section>
 
@@ -141,6 +144,7 @@ export default function ServicesPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="left"
             eyebrow="Autres métiers"
             title="Salons de coiffure et produits digitaux"
           />

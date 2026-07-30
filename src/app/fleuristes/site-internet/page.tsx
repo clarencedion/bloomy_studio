@@ -136,6 +136,7 @@ export default function SiteInternetPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <SectionHead
+          align="split"
                 eyebrow="Ce que vous recevez"
                 title="Six éléments, aucun superflu"
                 lede="Chaque élément répond à un problème que nous avons observé chez de vrais fleuristes — pas à une case de plaquette commerciale."
@@ -166,6 +167,7 @@ export default function SiteInternetPage() {
       <section className="border-y border-hairline bg-sage-veil/50 py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="left"
             eyebrow="Le déroulé"
             title="Quatre semaines, quatre jalons validés ensemble"
           />
@@ -204,6 +206,7 @@ export default function SiteInternetPage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Avant de vous décider"
             className="mb-10"

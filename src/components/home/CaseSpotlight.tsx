@@ -82,22 +82,34 @@ export function CaseSpotlight() {
             </BrowserFrame>
 
             {site.mobile ? (
-              <div className="mt-6 flex items-center gap-6">
-                <div className="w-32 shrink-0">
-                  <PhoneFrame>
-                    <Image
-                      src={site.mobile.image}
-                      alt={site.mobile.alt}
-                      width={site.mobile.width}
-                      height={site.mobile.height}
-                      sizes="8rem"
-                      className="h-auto w-full"
-                    />
-                  </PhoneFrame>
+              <div className="mt-6">
+                <div className="flex items-stretch gap-5">
+                  <div className="w-32 shrink-0">
+                    <PhoneFrame>
+                      <Image
+                        src={site.mobile.image}
+                        alt={site.mobile.alt}
+                        width={site.mobile.width}
+                        height={site.mobile.height}
+                        sizes="8rem"
+                        className="h-auto w-full"
+                      />
+                    </PhoneFrame>
+                  </div>
+                  {/* Fragment de matière : il refroidit la colonne et rappelle
+                      d'où vient le métier. Décoratif, donc alt vide. */}
+                  <Image
+                    src="/photos/feuillage-macro-tall.webp"
+                    alt=""
+                    width={1122}
+                    height={1402}
+                    sizes="(min-width: 1024px) 14rem, 40vw"
+                    className="min-w-0 flex-1 rounded-sm object-cover"
+                  />
                 </div>
-                <p className="caption max-w-xs">
-                  La commande se termine au téléphone, dans la rue, à la sortie du
-                  travail — c&apos;est là que le site est le plus utilisé.
+                <p className="caption mt-3">
+                  La commande se termine au téléphone, dans la rue, à la sortie
+                  du travail — c&apos;est là que le site est le plus utilisé.
                 </p>
               </div>
             ) : null}

@@ -104,6 +104,7 @@ export default function HomePage() {
       >
         <Container width="wide">
           <SectionHead
+          align="center"
             eyebrow="Nos réalisations"
             title="Quatre boutiques, quatre univers"
             lede="Aucun modèle décliné : chaque site part de la boutique, de ses matières et de sa façon de vendre."
@@ -142,6 +143,7 @@ export default function HomePage() {
       <section className="border-t border-hairline py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Ce qu'on nous demande"
             className="mb-10"

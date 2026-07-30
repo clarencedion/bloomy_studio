@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
@@ -7,6 +8,14 @@ export default function NotFound() {
   return (
     <section className="py-20 sm:py-32">
       <Container width="narrow" className="text-center">
+        <Image
+          src="/photos/tige-coupee-square.webp"
+          alt=""
+          width={1200}
+          height={1200}
+          sizes="9rem"
+          className="mx-auto mb-10 size-36 rounded-sm object-cover"
+        />
         <Eyebrow>Erreur 404</Eyebrow>
         <h1 className="text-display-xl mt-6">
           Cette page s&apos;est fanée — ou n&apos;a jamais existé.

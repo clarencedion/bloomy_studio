@@ -78,33 +78,22 @@ Consultation des leads : console Firebase → Firestore → collection `leads` (
 
 `track()` (`src/lib/analytics.ts`) est le seul point d'entrée. Événements : `cta_audit_click`, `audit_start`, `audit_step`, `audit_submit`, `contact_submit`, `case_study_view`, `pricing_view`, `email_click`, `phone_click`, `calendly_click`. Rien ne part sans consentement **et** sans `NEXT_PUBLIC_GA_ID`.
 
-## Déploiement — `bloomystudio.web.app`
+## Déploiement — `studio.bloomy.one`
 
-Cible : le site Hosting **`bloomystudio`** du projet **`bloomy-antigravity`** (déjà créé, il ne sert rien aujourd'hui). `.firebaserc` déclare la cible `studio` qui pointe dessus.
-
-**Pourquoi pas un simple `firebase deploy --only hosting`** : l'intégration « web frameworks » du CLI Firebase couvre Next.js **12 – 15.0**, ce projet est en **16.2.11**. Et un export statique n'est pas envisageable — les formulaires d'audit et de contact sont des Server Actions, ils exigent un serveur.
-
-La voie retenue est donc **App Hosting** (support officiel de Next 16) **derrière Firebase Hosting**, qui réécrit tout le trafic vers le service Cloud Run du backend. C'est ce que décrit `firebase.json`.
+Le site tourne sur un backend **Firebase App Hosting** (`bloomystudio`, europe-west4, projet `bloomy-antigravity`), et **`studio.bloomy.one` est rattaché directement à ce backend**. Pas de réécriture Firebase Hosting dans la chaîne : c'est plus simple, plus rapide d'un saut réseau, et cela évite d'ouvrir l'invocation publique du service Cloud Run.
 
 ```bash
-# 1. Backend App Hosting — id `bloomystudio`, région europe-west1
-#    (l'id et la région doivent correspondre au bloc `run` de firebase.json).
-#    Requiert le plan Blaze et un dépôt GitHub connecté.
-firebase apphosting:backends:create --project bloomy-antigravity --location europe-west1
-
-# 2. Réécriture Hosting → backend, sur le site bloomystudio
-firebase deploy --only hosting:studio --project bloomy-antigravity
-
-# 3. Règles Firestore (destination des leads)
-firebase deploy --only firestore:rules --project bloomy-antigravity
+# Déploiement depuis la source locale (pas besoin de pousser sur GitHub)
+firebase deploy --only apphosting --project bloomy-antigravity
 ```
 
-1. La configuration runtime est dans `apphosting.yaml` (instances, `NEXT_PUBLIC_SITE_URL`, secrets commentés).
-2. Secrets : `firebase apphosting:secrets:set RESEND_API_KEY` puis décommenter le bloc correspondant.
-3. Domaine : `NEXT_PUBLIC_SITE_URL` vaut `https://bloomystudio.web.app`. Pour basculer plus tard sur un domaine propre, le changer dans `apphosting.yaml` **avant** le build, puis l'associer dans la console.
-4. Après mise en ligne : rediriger `bloomy.one/consulting/` en **301** vers le nouveau domaine, déclarer le sitemap dans Search Console.
+1. Configuration runtime dans `apphosting.yaml` : instances, `NEXT_PUBLIC_SITE_URL`, secrets commentés.
+2. Secrets : `firebase apphosting:secrets:set RESEND_API_KEY`, puis décommenter le bloc correspondant.
+3. **`NEXT_PUBLIC_SITE_URL` doit toujours valoir le domaine réellement servi.** Il alimente les canoniques, le sitemap et le robots.txt : pointé vers un domaine mort, il rend le site inindexable. À changer dans `apphosting.yaml` **avant** le build.
+4. Le site Firebase Hosting `bloomystudio` n'est plus dans la chaîne — le bloc `hosting` a été retiré de `firebase.json` pour qu'un déploiement ne republie pas une réécriture obsolète. `bloomystudio.web.app` renvoie donc 404, ce qui est sans conséquence tant que rien n'y pointe.
+5. Après mise en ligne : rediriger `bloomy.one/consulting/` en **301**, déclarer le sitemap dans Search Console.
 
-Environnements de préversion : créer un second backend (`studio-staging`) pointant sur une branche `staging` — App Hosting gère la séparation.
+> **Ne jamais déployer `firestore.rules` sur `bloomy-antigravity`.** Ce projet héberge la **production de Bloomy** (bloomy.web.app). Le fichier de ce dépôt refuse tout accès client (`allow read, write: if false`) — correct pour une vitrine dont les leads passent par le SDK Admin, catastrophique appliqué à la base de l'application Bloomy. Aucun bloc `firestore` ne figure dans `firebase.json` : un `firebase deploy` sans `--only` ne peut pas le faire par accident.
 
 ## Captures des réalisations
 

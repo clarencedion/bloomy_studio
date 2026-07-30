@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { BrowserFrame } from "@/components/visuals/DeviceFrame";
+import { LiveSiteLink } from "@/components/ui/LiveSiteLink";
+import { BrowserFrame, PhoneFrame } from "@/components/visuals/DeviceFrame";
 import { track } from "@/lib/analytics";
 import { floristSites } from "@/lib/portfolio";
 
@@ -23,6 +24,7 @@ const SIZES = "(min-width: 1024px) 44rem, 100vw";
 
 export function WorkShowcase() {
   const [active, setActive] = useState(0);
+  const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
 
   const select = (index: number) => {
     setActive(index);
@@ -30,8 +32,8 @@ export function WorkShowcase() {
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-center lg:gap-10">
-      <ul className="hidden lg:flex lg:flex-col lg:gap-2">
+    <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-10">
+      <ul className="hidden lg:flex lg:flex-col lg:gap-2 lg:pt-14">
         {floristSites.map((s, i) => {
           const current = i === active;
           return (
@@ -40,10 +42,10 @@ export function WorkShowcase() {
                 type="button"
                 onClick={() => select(i)}
                 aria-pressed={current}
-                className={`w-full rounded-sm border px-4 py-3.5 text-left transition-all duration-200 ${
+                className={`lift press w-full rounded-sm border px-4 py-3.5 text-left ${
                   current
                     ? "border-rose bg-paper shadow-lift"
-                    : "border-hairline hover:-translate-y-0.5 hover:border-ink/30 hover:bg-paper"
+                    : "border-hairline hover:border-ink/30 hover:bg-paper"
                 }`}
               >
                 <span className="block font-semibold">{s.name}</span>
@@ -57,6 +59,35 @@ export function WorkShowcase() {
       </ul>
 
       <div className="space-y-10 lg:space-y-0">
+        {/*
+          Bascule ordinateur / mobile — visible en desktop seulement, là où il
+          y a la place. Elle n'est pas décorative : la qualité mobile est un
+          argument de vente que le visiteur peut ici vérifier lui-même, sur un
+          site réel. Les deux captures existent, rien n'est simulé.
+        */}
+        <div className="mb-5 hidden items-center gap-1 lg:flex">
+          {(
+            [
+              ["desktop", "Ordinateur"],
+              ["mobile", "Mobile"],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setDevice(id)}
+              aria-pressed={device === id}
+              className={`press rounded-full px-3.5 py-1.5 text-[0.78rem] font-semibold transition-colors ${
+                device === id
+                  ? "bg-ink text-cream"
+                  : "text-ink-faint hover:text-ink"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         {floristSites.map((s, i) => (
           <figure
             key={s.slug}
@@ -64,16 +95,36 @@ export function WorkShowcase() {
               i === active ? "animate-[fade-in_220ms_var(--ease-soft)]" : "lg:hidden"
             }
           >
-            <BrowserFrame label={`${s.name} — ${s.city}`}>
-              <Image
-                src={s.image}
-                alt={s.alt}
-                width={s.width}
-                height={s.height}
-                sizes={SIZES}
-                className="h-auto w-full"
-              />
-            </BrowserFrame>
+            {/* Mobile : la pile montre toujours la capture desktop, qui donne
+                la vue d'ensemble du design. La bascule ne vaut qu'en desktop. */}
+            <div className={device === "mobile" ? "lg:hidden" : ""}>
+              <BrowserFrame label={`${s.name} — ${s.city}`}>
+                <Image
+                  src={s.image}
+                  alt={s.alt}
+                  width={s.width}
+                  height={s.height}
+                  sizes={SIZES}
+                  className="h-auto w-full"
+                />
+              </BrowserFrame>
+            </div>
+
+            {s.mobile && device === "mobile" ? (
+              <div className="mx-auto hidden w-64 lg:block">
+                <PhoneFrame>
+                  <Image
+                    src={s.mobile.image}
+                    alt={s.mobile.alt}
+                    width={s.mobile.width}
+                    height={s.mobile.height}
+                    sizes="16rem"
+                    className="h-auto w-full"
+                  />
+                </PhoneFrame>
+              </div>
+            ) : null}
+
             <figcaption className="mt-4">
               <p className="text-display-sm">
                 {s.name} <span className="text-ink-faint">· {s.city}</span>
@@ -81,6 +132,7 @@ export function WorkShowcase() {
               <p className="mt-2 max-w-md text-[0.92rem] leading-relaxed text-ink-soft">
                 {s.note}
               </p>
+              <LiveSiteLink site={s} className="mt-4" />
             </figcaption>
           </figure>
         ))}

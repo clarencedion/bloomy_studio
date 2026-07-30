@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { OrdersPeek } from "@/components/visuals/AdminPreview";
@@ -141,20 +142,12 @@ export default function EcommercePage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Ce que votre boutique en ligne sait faire"
             title="Conçue autour de six réalités du métier"
             lede="Chaque fonctionnalité existe parce qu'un vrai fleuriste en a eu besoin — jamais parce qu'elle remplissait une grille tarifaire."
           />
-          <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <article key={f.title} className="border-t border-hairline pt-5">
-                <h3 className="text-display-sm">{f.title}</h3>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-ink-soft">
-                  {f.body}
-                </p>
-              </article>
-            ))}
-          </div>
+          <EditorialList className="mt-12" items={features} />
 
           {/* Ce que le fleuriste voit le matin : la contrepartie concrète des
               six fonctionnalités ci-dessus, montrée plutôt que promise. */}
@@ -181,6 +174,7 @@ export default function EcommercePage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
               <SectionHead
+          align="left"
                 eyebrow="Le calcul"
                 title="Une commission économisée est une marge retrouvée"
               />
@@ -229,6 +223,7 @@ export default function EcommercePage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Ce que les fleuristes nous demandent"
             className="mb-10"

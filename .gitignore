@@ -47,3 +47,10 @@ next-env.d.ts
 # secrets
 service-account*.json
 !.env.example
+
+# firebase
+/.firebase/
+firebase-debug.log*
+
+# images sources (non optimisées)
+/public/photos/_raw/

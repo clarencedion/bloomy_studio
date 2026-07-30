@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { SiteGallery } from "@/components/visuals/ShowcaseSites";
@@ -127,20 +128,12 @@ export default function SalonsPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Ce que nous construisons"
             title="Huit sujets propres au métier de la coiffure"
             lede="Un salon ne se vend pas comme une boutique de fleurs : réservation, équipe, avant/après, recrutement. La page que vous lisez a été écrite pour votre métier — le site que nous vous livrerons aussi."
           />
-          <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {features.map((f) => (
-              <article key={f.title} className="border-t border-hairline pt-5">
-                <h3 className="text-display-sm">{f.title}</h3>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-ink-soft">
-                  {f.body}
-                </p>
-              </article>
-            ))}
-          </div>
+          <EditorialList className="mt-12" items={features} />
         </Container>
       </section>
 
@@ -153,6 +146,7 @@ export default function SalonsPage() {
       <section className="border-y border-hairline bg-cream-deep py-16 sm:py-20">
         <Container width="wide">
           <SectionHead
+          align="split"
             eyebrow="Notre travail"
             title="Ce que nous livrons, en ligne aujourd'hui"
             lede="Nos sites livrés sont pour l'instant des boutiques de fleuristes : nous préférons vous montrer du travail réel plutôt qu'une maquette de salon. Le soin, la structure et le niveau de finition sont les mêmes."
@@ -165,6 +159,7 @@ export default function SalonsPage() {
       <section className="border-y border-hairline bg-paper py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Ce que les salons nous demandent"
             className="mb-10"

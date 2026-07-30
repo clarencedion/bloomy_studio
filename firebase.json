@@ -1,19 +1,15 @@
 {
-  "hosting": {
-    "target": "studio",
-    "public": "public",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "bloomystudio",
-          "region": "europe-west1"
-        }
-      }
+  "apphosting": {
+    "backendId": "bloomystudio",
+    "rootDir": "/",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      ".next",
+      "test-results",
+      "playwright-report",
+      "public/photos/_raw"
     ]
-  },
-  "firestore": {
-    "rules": "firestore.rules"
   }
 }

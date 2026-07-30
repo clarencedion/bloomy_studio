@@ -14,9 +14,10 @@ type Props = {
  * Bande de conversion finale — section 12 de la direction artistique.
  *
  * Le seul moment où l'on demande quelque chose, et le seul endroit où une
- * photographie occupe tout l'écran. Le voile prune à 90 % n'est pas un effet
- * de style : c'est ce qui garantit le contraste du texte quelle que soit la
- * zone de l'image, y compris la plus claire.
+ * photographie occupe tout l'écran. Le cadrage privilégie la droite de
+ * l'image, déjà sombre, et le voile prune à 80 % achève le contraste : le
+ * texte reste lisible, la matière reste visible. Un voile plus opaque
+ * effaçait la photo, ce qui revenait à ne pas en avoir.
  *
  * Jamais de fausse urgence : ni compte à rebours, ni places restantes.
  */
@@ -27,15 +28,21 @@ export function CtaBand({
 }: Props) {
   return (
     <section className="on-ink relative overflow-hidden bg-plum text-cream">
-      {/* Décorative : le sens est entièrement porté par le texte. */}
-      <Image
-        src="/photos/bouquet-eclat-de-saison.webp"
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover"
-      />
-      <div aria-hidden="true" className="absolute inset-0 bg-plum/85" />
+      {/*
+        La dérive est isolée dans son propre conteneur : appliquée à la section,
+        elle étirerait aussi le voile et le contenu, qui sont ses autres enfants
+        directs.
+      */}
+      <div aria-hidden="true" className="band-drift absolute inset-0">
+        <Image
+          src="/photos/cta-final-hero.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-[70%_center]"
+        />
+      </div>
+      <div aria-hidden="true" className="absolute inset-0 bg-plum/80" />
 
       <Container className="relative py-16 sm:py-24">
         <div className="mx-auto max-w-2xl text-center">
@@ -46,7 +53,7 @@ export function CtaBand({
               href="/audit"
               event="cta_audit_click"
               placement={placement}
-              className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-cream px-8 py-3.5 font-semibold text-plum transition-colors hover:bg-rose hover:text-cream sm:w-auto"
+              className="press inline-flex min-h-13 w-full items-center justify-center rounded-full bg-cream px-8 py-3.5 font-semibold text-plum transition-colors hover:bg-rose hover:text-cream sm:w-auto"
             >
               Recevoir mon diagnostic gratuit
             </CtaLink>

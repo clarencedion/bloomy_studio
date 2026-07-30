@@ -28,6 +28,7 @@ export function MethodSteps() {
     <section className="py-16 sm:py-24">
       <Container>
         <SectionHead
+          align="center"
           eyebrow="La méthode"
           title="Quatre étapes, et vous validez chacune"
         />
@@ -50,7 +51,7 @@ export function MethodSteps() {
             href="/audit"
             event="cta_audit_click"
             placement="home_method"
-            className="inline-flex min-h-13 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-cream transition-colors hover:bg-rose-deep"
+            className="press inline-flex min-h-13 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-cream transition-colors hover:bg-rose-deep"
           >
             Recevoir mon diagnostic gratuit
           </CtaLink>

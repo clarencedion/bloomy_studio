@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
@@ -137,6 +138,7 @@ export default function SeoLocalPage() {
           <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr]">
             <div>
               <SectionHead
+          align="left"
                 eyebrow="Pourquoi c'est décisif"
                 title="« Fleuriste » se cherche d'abord sur Maps"
               />
@@ -201,26 +203,19 @@ export default function SeoLocalPage() {
       <section className="border-y border-hairline bg-paper py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="Notre travail"
             title="Six leviers, appliqués sans raccourci"
             lede="Rien d'ésotérique : les fondamentaux publics du référencement local, appliqués avec la rigueur que la plupart des prestataires s'épargnent."
           />
-          <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {levers.map((l) => (
-              <article key={l.title} className="border-t border-hairline pt-5">
-                <h3 className="text-display-sm">{l.title}</h3>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-ink-soft">
-                  {l.body}
-                </p>
-              </article>
-            ))}
-          </div>
+          <EditorialList className="mt-12" items={levers} />
         </Container>
       </section>
 
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Parlons franchement de Google"
             className="mb-10"

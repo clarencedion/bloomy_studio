@@ -37,13 +37,21 @@ export type ShowcaseSite = {
   height: number;
   /** Alt descriptif (10–125 caractères, règle seo-images). */
   alt: string;
+  /**
+   * Adresse publique du site livré. C'est elle qui transforme la perception :
+   * un prospect méfiant peut vérifier en un clic que ce n'est pas une
+   * maquette. On pointe le domaine propre du client quand il existe, sinon
+   * l'adresse Firebase — jamais une URL de préproduction.
+   */
+  liveUrl: string;
   /** Capture mobile réelle du même site. */
   mobile?: { image: string; width: number; height: number; alt: string };
 };
 
-export const showcaseSites: ShowcaseSite[] = [
+export const showcaseSites = [
   {
     slug: "monloup",
+    liveUrl: "https://monloup.web.app",
     name: "Monloup",
     city: "Roanne",
     sector: "fleuriste",
@@ -62,6 +70,7 @@ export const showcaseSites: ShowcaseSite[] = [
   },
   {
     slug: "maison-hortense",
+    liveUrl: "https://chezmaisonhortense.fr",
     name: "Maison Hortense",
     city: "Saint-Nauphary",
     sector: "fleuriste",
@@ -80,6 +89,7 @@ export const showcaseSites: ShowcaseSite[] = [
   },
   {
     slug: "kl-fleurs",
+    liveUrl: "https://klfleursevenementiel.fr",
     name: "KL Fleurs & Événementiel",
     city: "Reims",
     sector: "fleuriste",
@@ -98,6 +108,7 @@ export const showcaseSites: ShowcaseSite[] = [
   },
   {
     slug: "maison-orpha",
+    liveUrl: "https://maisonorpha.web.app",
     name: "Maison Orpha",
     city: "Reims",
     sector: "fleuriste",
@@ -116,6 +127,7 @@ export const showcaseSites: ShowcaseSite[] = [
   },
   {
     slug: "flovia",
+    liveUrl: "https://flovia.web.app",
     name: "Flōvia",
     city: "Micro-villages flottants",
     sector: "autre",
@@ -132,11 +144,14 @@ export const showcaseSites: ShowcaseSite[] = [
       alt: "Version mobile du site de Flōvia, micro-villages flottants sur l'eau.",
     },
   },
-];
+] as const satisfies readonly ShowcaseSite[];
 
 /** Les vitrines florales seules — ce que montrent les pages fleuristes. */
 export const floristSites = showcaseSites.filter((s) => s.sector === "fleuriste");
 
-export function getShowcaseSite(slug: string): ShowcaseSite | undefined {
+/** Slugs connus — littéraux, pour que `getShowcaseSite` refuse une faute de frappe. */
+export type ShowcaseSlug = (typeof showcaseSites)[number]["slug"];
+
+export function getShowcaseSite(slug: ShowcaseSlug): ShowcaseSite | undefined {
   return showcaseSites.find((s) => s.slug === slug);
 }

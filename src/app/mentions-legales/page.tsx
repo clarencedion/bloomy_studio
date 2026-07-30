@@ -1,6 +1,6 @@
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
-import { hosting, legalEntity } from "@/lib/legal";
+import { hasLegalPlaceholders, hosting, legalEntity } from "@/lib/legal";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
@@ -8,6 +8,9 @@ export const metadata = pageMetadata({
   description:
     "Mentions légales du site Bloomy Studio : éditeur, directeur de la publication, hébergeur et propriété intellectuelle.",
   path: "/mentions-legales",
+  // Tant que l'entité légale est incomplète, la page reste hors index :
+  // une mention légale à trous indexée nuit plus qu'elle ne sert.
+  noindex: hasLegalPlaceholders(),
 });
 
 export default function MentionsLegalesPage() {
@@ -54,7 +57,8 @@ export default function MentionsLegalesPage() {
 
       <h2>Responsabilité</h2>
       <p>
-        {site.name} s&apos;efforce d&apos;assurer l&apos;exactitude des
+        {site.name}{" "}
+        s&apos;efforce d&apos;assurer l&apos;exactitude des
         informations publiées sur le Site, sans pouvoir la garantir de manière
         absolue. Les liens externes proposés n&apos;engagent pas la
         responsabilité de l&apos;éditeur quant à leur contenu.

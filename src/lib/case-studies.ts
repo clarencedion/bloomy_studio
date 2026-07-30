@@ -53,7 +53,7 @@ export const caseStudies: CaseStudy[] = [
     visualDirection:
       "Un univers chaleureux et artisanal, à rebours des plateformes froides du secteur : crème, lilas et vert botanique, illustrations douces, vocabulaire du métier.",
     technical:
-      "Application web et mobile sur infrastructure Firebase : catalogue temps réel par boutique, composition fleur par fleur avec budget dynamique, click-and-collect et livraison locale, tableau de bord fleuriste pour gérer stock et commandes.",
+      "Application multiplateforme développée en Flutter sur infrastructure Firebase : catalogue temps réel par boutique, composition fleur par fleur avec budget dynamique, click-and-collect et livraison locale, tableau de bord fleuriste pour gérer stock et commandes.",
     seoWork:
       "Architecture de pages par ville et par boutique partenaire, fiches structurées, données locales cohérentes entre le site et les fiches Google des boutiques.",
     conversionWork:

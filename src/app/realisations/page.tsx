@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
+import { LiveSiteLink } from "@/components/ui/LiveSiteLink";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -50,6 +51,7 @@ export default function RealisationsPage() {
       <section className="border-b border-hairline py-16 sm:py-20">
         <Container width="wide">
           <SectionHead
+          align="center"
             eyebrow="Sites livrés"
             title="Cinq sites, cinq univers"
             lede="Chaque site part du lieu lui-même — son nom, ses couleurs, sa façon de vendre. Quatre fleuristes et, pour finir, un projet qui n'a rien de floral : la méthode ne change pas."
@@ -77,7 +79,8 @@ export default function RealisationsPage() {
                     <p className="plate-label">{site.city}</p>
                     <h3 className="text-display-lg mt-3">{site.name}</h3>
                     <p className="mt-4 leading-relaxed text-ink-soft">{site.note}</p>
-                    <p className="caption mt-5">{site.focus}</p>
+                    <LiveSiteLink site={site} className="mt-6" />
+                    <p className="caption mt-4">{site.focus}</p>
                   </div>
                 </article>
               </Reveal>
@@ -89,16 +92,17 @@ export default function RealisationsPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="left"
             eyebrow="Études de cas"
             title="Racontées en entier, résultats vérifiables"
             className="mb-12"
           />
-          <div className="space-y-8">
+          <div className="border-t border-hairline">
             {studies.map((cs) => (
               <Link
                 key={cs.slug}
                 href={`/realisations/${cs.slug}`}
-                className="group grid gap-6 rounded-sm border border-hairline bg-paper p-7 transition-colors hover:border-rose sm:p-9 lg:grid-cols-[1.3fr_1fr]"
+                className="group grid gap-x-12 gap-y-6 border-b border-hairline py-10 sm:py-14 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]"
               >
                 <div>
                   <p className="plate-label">

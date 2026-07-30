@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
@@ -106,26 +107,17 @@ export default function MaintenancePage() {
             progressent chaque mois au lieu de s&apos;éroder.
           </>
         }
-        visual={<SiteShowpiece slug="kl-fleuriste" eager />}
+        visual={<SiteShowpiece slug="kl-fleurs" eager />}
       />
 
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="left"
             eyebrow="Ce qui est inclus"
             title="Quatre engagements, tenus chaque mois"
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {included.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-sm border border-hairline bg-paper p-7"
-              >
-                <h3 className="text-display-sm">{item.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink-soft">{item.body}</p>
-              </article>
-            ))}
-          </div>
+          <EditorialList className="mt-12" items={included} />
         </Container>
       </section>
 
@@ -133,6 +125,7 @@ export default function MaintenancePage() {
       <section className="border-y border-hairline bg-sage-veil/50 py-16 sm:py-24">
         <Container>
           <SectionHead
+          align="split"
             eyebrow="L'année d'un fleuriste"
             title="Nous travaillons avec votre calendrier, pas contre lui"
             lede="Chaque échéance est préparée en amont. Voici à quoi ressemble une année d'accompagnement type."
@@ -158,6 +151,7 @@ export default function MaintenancePage() {
       <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
+          align="left"
             eyebrow="Vos questions"
             title="Engagement, pannes, reprise de l'existant"
             className="mb-10"
