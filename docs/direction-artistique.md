@@ -573,14 +573,22 @@ Défauts corrigés au passage : `--color-lilac-deep` inexistant, classe morte
 bourgogne et vert profond illisibles sur bande sombre, couleur en dur
 `bg-[#2b2733]`, et les espaces supprimés par JSX après un lien.
 
+- Portfolio réel : cinq sites capturés depuis leur version en ligne, desktop
+  **et** mobile (`npm run captures`). Quatre vitrines florales — Monloup,
+  Maison Hortense, KL Fleurs, Maison Orpha — et Flōvia, hors du monde floral.
+  Le champ `sector` sépare les deux : les pages fleuristes ne montrent que les
+  vitrines florales, `/realisations` montre tout.
+- Le téléphone apparaît désormais dans le hero et dans l'étude de cas : la
+  composition desktop + mobile + tableau de bord est complète.
+
 Reste à faire :
 
-1. Brancher les captures mobiles dès réception des URL (sections 1, 2, 5).
-2. Photographies d'atelier après shooting (sections 5 et 12).
-3. Entrée `case-studies.ts` pour Monloup — le CTA de la section 5 pointera
+1. Photographies d'atelier après shooting (sections 5 et 12).
+2. Entrée `case-studies.ts` pour Monloup — le CTA de la section 5 pointera
    alors vers l'étude de cas plutôt que vers `/realisations`.
-4. Répercussion du système sur les pages piliers et spokes.
-5. Témoignages réels dans `ProofRow`, à l'obtention des autorisations écrites.
+3. Témoignages réels dans `ProofRow`, à l'obtention des autorisations écrites.
+4. Déploiement : backend App Hosting à créer (plan Blaze + dépôt GitHub), puis
+   la réécriture Hosting déjà décrite dans `firebase.json`.
 
 À chaque lot : `npm run lint && npm run typecheck && npm test && npm run build`,
 puis `npm run e2e`, puis vérification visuelle réelle en desktop **et** mobile.

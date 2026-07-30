@@ -5,16 +5,16 @@ import { useState } from "react";
 
 import { BrowserFrame } from "@/components/visuals/DeviceFrame";
 import { track } from "@/lib/analytics";
-import { showcaseSites } from "@/lib/portfolio";
+import { floristSites } from "@/lib/portfolio";
 
 /**
  * Vitrine — section 2 de la direction artistique.
  *
- * Le travail avant le discours : trois sites livrés, trois univers graphiques
- * différents. C'est la preuve que rien n'est décliné d'un modèle, et c'est la
+ * Le travail avant le discours : quatre boutiques livrées, quatre univers
+ * graphiques différents. C'est la preuve que rien n'est décliné d'un modèle, et c'est la
  * réponse à la seule question du visiteur — « est-ce que c'est beau ? ».
  *
- * Un seul arbre pour les deux mises en page : les trois captures existent une
+ * Un seul arbre pour les deux mises en page : chaque capture existe une seule
  * fois dans le DOM. Mobile, elles s'empilent et rien n'est à toucher pour tout
  * voir ; desktop, la sélection n'en montre qu'une, en grand.
  */
@@ -26,13 +26,13 @@ export function WorkShowcase() {
 
   const select = (index: number) => {
     setActive(index);
-    track("showcase_project_view", { project: showcaseSites[index].slug });
+    track("showcase_project_view", { project: floristSites[index].slug });
   };
 
   return (
     <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-center lg:gap-10">
       <ul className="hidden lg:flex lg:flex-col lg:gap-2">
-        {showcaseSites.map((s, i) => {
+        {floristSites.map((s, i) => {
           const current = i === active;
           return (
             <li key={s.slug}>
@@ -57,7 +57,7 @@ export function WorkShowcase() {
       </ul>
 
       <div className="space-y-10 lg:space-y-0">
-        {showcaseSites.map((s, i) => (
+        {floristSites.map((s, i) => (
           <figure
             key={s.slug}
             className={

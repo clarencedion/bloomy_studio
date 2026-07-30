@@ -169,7 +169,7 @@ export default function FleuristesPage() {
         <Container width="wide">
           <SectionHead
             eyebrow="Sites livrés"
-            title="Trois boutiques, trois univers"
+            title="Quatre boutiques, quatre univers"
             lede="Aucun modèle décliné : chaque site part de la boutique, de ses matières et de sa façon de vendre."
           />
           <SiteGallery className="mt-12" />

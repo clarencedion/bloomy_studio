@@ -2,12 +2,12 @@ import Image from "next/image";
 
 import { Sprig, type SpecimenName } from "@/components/visuals/Botanical";
 import { BrowserFrame } from "@/components/visuals/DeviceFrame";
-import { getShowcaseSite, showcaseSites } from "@/lib/portfolio";
+import { floristSites, getShowcaseSite } from "@/lib/portfolio";
 
 /**
- * Vitrine : trois sites réellement livrés par le studio, montrés plutôt que
- * décrits. C'est la réponse à la seule question qu'un fleuriste se pose en
- * arrivant — « ils font quoi, et est-ce que c'est beau ? ».
+ * Vitrine : les sites de fleuristes réellement livrés par le studio, montrés
+ * plutôt que décrits. C'est la réponse à la seule question qu'un fleuriste se
+ * pose en arrivant — « ils font quoi, et est-ce que c'est beau ? ».
  *
  * Les captures viennent de `lib/portfolio.ts` : uniquement des projets du
  * studio, jamais une boutique partenaire de la marketplace.
@@ -24,7 +24,7 @@ function SiteCard({
   eager?: boolean;
   className?: string;
 }) {
-  const site = showcaseSites[index];
+  const site = floristSites[index];
   return (
     <figure className={className}>
       <BrowserFrame label={`${site.name} — ${site.city}`}>
@@ -113,13 +113,13 @@ export function SiteCardSingle({
 }
 
 /**
- * Galerie complète : les trois sites côte à côte, sans rognage. Sert aux
- * pages où l'on a la place de tout montrer (réalisations, page service).
+ * Galerie complète : les vitrines florales côte à côte, sans rognage. Sert aux
+ * pages où l'on a la place de tout montrer.
  */
 export function SiteGallery({ className = "" }: { className?: string }) {
   return (
-    <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${className}`}>
-      {showcaseSites.map((site, i) => (
+    <div className={`grid gap-6 sm:grid-cols-2 ${className}`}>
+      {floristSites.map((site, i) => (
         <SiteCard key={site.name} index={i} />
       ))}
     </div>

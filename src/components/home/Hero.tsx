@@ -6,7 +6,7 @@ import { CtaLink } from "@/components/ui/CtaLink";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { OrdersPeek } from "@/components/visuals/AdminPreview";
 import { BrowserFrame, PhoneFrame } from "@/components/visuals/DeviceFrame";
-import { showcaseSites } from "@/lib/portfolio";
+import { floristSites } from "@/lib/portfolio";
 
 /**
  * Hero — section 1 de la direction artistique.
@@ -26,7 +26,7 @@ const REASSURANCE = [
 ];
 
 function HeroComposition() {
-  const site = showcaseSites[0];
+  const site = floristSites[0];
   return (
     <div className="relative pb-12 sm:pb-16">
       <BrowserFrame label={`${site.name} — ${site.city}`}>

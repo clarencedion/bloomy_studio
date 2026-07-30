@@ -14,7 +14,7 @@ import { showcaseSites } from "@/lib/portfolio";
 export const metadata = pageMetadata({
   title: "Réalisations : sites de fleuristes conçus par Bloomy Studio",
   description:
-    "Les sites livrés par Bloomy Studio — Monloup à Roanne, Maison Hortense, KL Fleuriste à Reims — et la plateforme florale bloomy.one construite par l'équipe.",
+    "Les sites livrés par Bloomy Studio : Monloup, Maison Hortense, KL Fleurs, Maison Orpha et Flōvia — et la plateforme florale bloomy.one construite par l'équipe.",
   path: "/realisations",
 });
 
@@ -34,9 +34,10 @@ export default function RealisationsPage() {
         title="Des sites en ligne, pas des maquettes"
         lede={
           <>
-            Trois boutiques de fleuristes livrées, et la plateforme florale que
-            nous construisons nous-mêmes. Pas de logos décoratifs, pas de
-            pourcentages sortis de nulle part : ce que vous voyez est en ligne.
+            Quatre boutiques de fleuristes, un concept touristique, et la
+            plateforme florale que nous construisons nous-mêmes. Pas de logos
+            décoratifs, pas de pourcentages sortis de nulle part : ce que vous
+            voyez est en ligne.
           </>
         }
       />
@@ -50,8 +51,8 @@ export default function RealisationsPage() {
         <Container width="wide">
           <SectionHead
             eyebrow="Sites livrés"
-            title="Trois boutiques, trois univers"
-            lede="Chaque site part de la boutique elle-même — son nom, ses couleurs, sa façon de vendre. Aucun gabarit repris d'un projet à l'autre."
+            title="Cinq sites, cinq univers"
+            lede="Chaque site part du lieu lui-même — son nom, ses couleurs, sa façon de vendre. Quatre fleuristes et, pour finir, un projet qui n'a rien de floral : la méthode ne change pas."
             className="mb-14"
           />
           <div className="space-y-16 sm:space-y-24">
