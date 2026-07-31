@@ -55,6 +55,12 @@ for (const path of INDEXABLE_PAGES) {
     );
     expect(overflow, `overflow horizontal de ${overflow}px sur ${path}`).toBeLessThanOrEqual(0);
 
+    // Espace après un lien (AGENTS.md) : un </a> rendu ne doit jamais coller à
+    // la ponctuation ou au mot qui suit — sinon JSX a mangé l'espace littéral.
+    const html = await page.content();
+    const glued = html.match(/<\/a>(—|:|[A-Za-zÀ-ÿ])/g);
+    expect(glued, `lien collé au texte suivant sur ${path} : ${glued?.join(", ")}`).toBeNull();
+
     // Pas d'erreur console critique.
     expect(errors, `erreurs console sur ${path} : ${errors.join(" | ")}`).toEqual([]);
   });

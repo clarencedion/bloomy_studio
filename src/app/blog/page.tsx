@@ -9,7 +9,7 @@ import { blogPosts } from "@/lib/blog";
 export const metadata = pageMetadata({
   title: "Blog : conseils digitaux concrets pour fleuristes",
   description:
-    "Guides pratiques pour fleuristes et commerces locaux : site internet, Google Maps, vente en ligne, saisons. Écrits par l'équipe de la plateforme Bloomy.",
+    "Guides pratiques pour fleuristes : site internet, Google Maps, vente en ligne, saisons — écrits par l'équipe de la plateforme Bloomy.",
   path: "/blog",
 });
 

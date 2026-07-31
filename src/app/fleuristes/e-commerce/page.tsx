@@ -15,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Site e-commerce fleuriste : click-and-collect & livraison",
   description:
-    "Boutique en ligne pensée pour le métier de fleuriste : catalogue saisonnier, click-and-collect, livraison locale par zones, paiement sécurisé, 0 commission.",
+    "Boutique en ligne pensée pour le métier de fleuriste : catalogue saisonnier, click-and-collect, livraison locale, paiement sécurisé, 0 commission.",
   path: "/fleuristes/e-commerce",
 });
 

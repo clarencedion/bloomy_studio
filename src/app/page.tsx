@@ -19,7 +19,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Bloomy Studio — Sites e-commerce & SEO local pour fleuristes",
   description:
-    "Sites e-commerce, SEO local et outils sur mesure pour fleuristes. Une présence en ligne aussi soignée que votre boutique, conçue par l'équipe de Bloomy.",
+    "Sites e-commerce, SEO local et outils sur mesure pour fleuristes, conçus par l'équipe de Bloomy pour une présence aussi soignée que votre boutique.",
   path: "/",
 });
 
@@ -65,16 +65,6 @@ const faq = [
         Instagram touche ceux qui vous suivent déjà. Votre site et votre fiche
         Google captent ceux qui tapent « fleuriste + votre ville » au moment où
         ils veulent acheter — mariage, deuil, entreprises.
-      </p>
-    ),
-  },
-  {
-    question: "Pourrai-je modifier mon site moi-même ?",
-    answer: (
-      <p>
-        Oui, c&apos;est un principe de conception. Prix, produits, horaires,
-        fermetures : tout ce qui change souvent se modifie sans nous, depuis
-        votre téléphone. Formation incluse à la livraison.
       </p>
     ),
   },

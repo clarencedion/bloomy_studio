@@ -338,45 +338,6 @@ body::before {
   transform: scale(0.98);
 }
 
-/*
- * Bande photographique à dérive lente.
- *
- * Pilotée par `animation-timeline: view()` : c'est le navigateur qui lie
- * l'animation à la position de l'élément dans le viewport, sans une ligne de
- * JavaScript et sans écouteur de défilement. Là où ce n'est pas supporté, la
- * bande reste simplement fixe — aucune dépendance, aucun saut.
- *
- * L'amplitude est volontairement faible (±6 %). Au-delà, la parallaxe devient
- * un effet qu'on remarque ; ici elle donne juste de la profondeur.
- */
-.band-drift {
-  overflow: hidden;
-}
-
-.band-drift > * {
-  height: 118%;
-  top: -9%;
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .band-drift > * {
-      animation: band-drift linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
-    }
-
-    @keyframes band-drift {
-      from {
-        transform: translateY(-6%);
-      }
-      to {
-        transform: translateY(6%);
-      }
-    }
-  }
-}
-
 /* Liens éditoriaux dans la prose */
 .prose-links a {
   color: var(--color-rose);

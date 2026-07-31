@@ -11,7 +11,7 @@ import { site } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "À propos : l'équipe Bloomy derrière le studio, à Nantes",
   description:
-    "Bloomy Studio est le studio digital de l'équipe qui construit bloomy.one, la plateforme florale nantaise. Qui nous sommes, pourquoi les fleuristes, comment nous travaillons.",
+    "Bloomy Studio, le studio digital de l'équipe derrière bloomy.one, plateforme florale nantaise : pourquoi les fleuristes, comment nous travaillons.",
   path: "/a-propos",
 });
 
@@ -117,7 +117,7 @@ export default function AProposPage() {
       </section>
 
       {/* Écosystème */}
-      <div className="band-drift relative h-48 overflow-hidden sm:h-72">
+      <div className="relative h-48 overflow-hidden sm:h-72">
         <Image
           src="/photos/atelier-matieres-wide.webp"
           alt=""

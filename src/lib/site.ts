@@ -9,7 +9,6 @@ export const SITE_URL = (
 
 export const site = {
   name: "Bloomy Studio",
-  legalName: "Bloomy Studio", // [À COMPLÉTER] dénomination sociale exacte — voir lib/legal.ts
   tagline: "Le studio digital qui fait fleurir les fleuristes.",
   description:
     "Sites e-commerce, SEO local et outils sur mesure pour fleuristes, conçus avec une véritable expertise du secteur floral. Basé à Nantes, actif partout en France.",

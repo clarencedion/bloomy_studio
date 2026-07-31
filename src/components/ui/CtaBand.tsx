@@ -28,12 +28,7 @@ export function CtaBand({
 }: Props) {
   return (
     <section className="on-ink relative overflow-hidden bg-plum text-cream">
-      {/*
-        La dérive est isolée dans son propre conteneur : appliquée à la section,
-        elle étirerait aussi le voile et le contenu, qui sont ses autres enfants
-        directs.
-      */}
-      <div aria-hidden="true" className="band-drift absolute inset-0">
+      <div aria-hidden="true" className="absolute inset-0">
         <Image
           src="/photos/cta-final-hero.webp"
           alt=""

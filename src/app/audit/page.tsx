@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Audit gratuit : votre site et votre visibilité locale",
   description:
-    "Demandez votre diagnostic gratuit : analyse humaine de votre site, de votre fiche Google et de votre visibilité locale, avec des priorités concrètes sous 48 h.",
+    "Demandez votre diagnostic gratuit : analyse humaine de votre site, votre fiche Google et votre visibilité locale, priorités concrètes sous 48 h.",
   path: "/audit",
 });
 

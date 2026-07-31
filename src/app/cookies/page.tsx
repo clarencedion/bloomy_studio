@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Politique cookies",
   description:
-    "Les cookies utilisés par Bloomy Studio : strictement nécessaires et, avec votre accord uniquement, mesure d'audience anonymisée. Modifiez votre choix à tout moment.",
+    "Les cookies utilisés par Bloomy Studio : strictement nécessaires, et mesure d'audience anonymisée avec votre accord, modifiable à tout moment.",
   path: "/cookies",
   // Tant que l'entité légale est incomplète, la page reste hors index :
   // une mention légale à trous indexée nuit plus qu'elle ne sert.

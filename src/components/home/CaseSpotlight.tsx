@@ -108,8 +108,9 @@ export function CaseSpotlight() {
                   />
                 </div>
                 <p className="caption mt-3">
-                  La commande se termine au téléphone, dans la rue, à la sortie
-                  du travail — c&apos;est là que le site est le plus utilisé.
+                  Un principe appliqué ici comme ailleurs : la commande doit
+                  pouvoir se terminer au téléphone, entre deux clients au
+                  comptoir.
                 </p>
               </div>
             ) : null}

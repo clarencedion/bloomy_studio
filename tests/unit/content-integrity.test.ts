@@ -29,6 +29,10 @@ const KNOWN_ROUTES = new Set([
 ]);
 
 describe("intégrité des liens internes", () => {
+  it("la navigation principale ne dépasse jamais six entrées (AGENTS.md)", () => {
+    expect(mainNav.length).toBeLessThanOrEqual(6);
+  });
+
   it("la navigation principale ne pointe que vers des routes existantes", () => {
     for (const item of mainNav) {
       expect(KNOWN_ROUTES.has(item.href), `route inconnue : ${item.href}`).toBe(true);

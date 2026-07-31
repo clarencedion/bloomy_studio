@@ -15,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Agence web pour fleuristes — site, e-commerce, SEO local",
   description:
-    "Bloomy Studio conçoit sites, boutiques en ligne et visibilité Google pour fleuristes indépendants. Une expertise née de la plateforme florale bloomy.one.",
+    "Bloomy Studio conçoit sites, boutiques en ligne et visibilité Google pour fleuristes indépendants, avec l'expertise de la plateforme bloomy.one.",
   path: "/fleuristes",
 });
 
@@ -194,7 +194,7 @@ export default function FleuristesPage() {
 
       {/* Respiration : la matière du métier, en bande fine. Pas une vignette
           décorative — elle sépare deux blocs de texte denses. */}
-      <div className="band-drift relative h-48 overflow-hidden sm:h-64">
+      <div className="relative h-48 overflow-hidden sm:h-64">
         <Image
           src="/photos/comptoir-matin-wide.webp"
           alt=""

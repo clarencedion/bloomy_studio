@@ -42,7 +42,7 @@ function ProductProof() {
 export const metadata = pageMetadata({
   title: "Développement de MVP : Flutter, Next.js et Firebase",
   description:
-    "Développement de MVP sur Flutter, Next.js et Firebase : cadrage produit, UX, authentification, paiements, admin et mise en production. Par les créateurs de Bloomy.",
+    "Développement de MVP sur Flutter, Next.js et Firebase : cadrage, UX, authentification, paiements et mise en production, par les créateurs de Bloomy.",
   path: "/developpement-mvp",
 });
 

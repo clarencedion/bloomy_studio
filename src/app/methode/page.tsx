@@ -152,7 +152,7 @@ export default function MethodePage() {
         </Container>
       </section>
 
-      <div className="band-drift relative h-40 overflow-hidden sm:h-56">
+      <div className="relative h-40 overflow-hidden sm:h-56">
         <Image
           src="/photos/papier-soie-square.webp"
           alt=""

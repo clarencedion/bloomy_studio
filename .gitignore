@@ -52,5 +52,5 @@ service-account*.json
 /.firebase/
 firebase-debug.log*
 
-# images sources (non optimisées)
-/public/photos/_raw/
+# images sources (non optimisées) — hors public/ : jamais servies statiquement
+/assets/photos-raw/

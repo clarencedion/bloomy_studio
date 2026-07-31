@@ -5,7 +5,7 @@ import { join, parse } from "node:path";
 /**
  * Optimisation des images déposées à la main.
  *
- * Déposer les fichiers bruts (PNG/JPG) dans `public/photos/_raw/`, lancer
+ * Déposer les fichiers bruts (PNG/JPG) dans `assets/photos-raw/`, lancer
  * `npm run images` : chaque fichier est redimensionné à sa largeur cible,
  * converti en WebP sous son budget de poids, et écrit dans `public/photos/`.
  *
@@ -16,10 +16,13 @@ import { join, parse } from "node:path";
  *   *-square  1200 px, < 120 Ko   (carrés, vignettes)
  *   défaut    1600 px, < 150 Ko
  *
- * Le fichier source n'est jamais modifié : `_raw/` reste la référence.
+ * Le fichier source n'est jamais modifié : `assets/photos-raw/` reste la
+ * référence. Ce dossier vit hors de `public/` volontairement : un déploiement
+ * depuis la source locale (voir README) embarque aussi les fichiers
+ * gitignorés sous `public/` — des PNG sources de 2-3 Mo n'ont rien à y faire.
  */
 
-const RAW = "public/photos/_raw";
+const RAW = "assets/photos-raw";
 const OUT = "public/photos";
 
 const PROFILES = [

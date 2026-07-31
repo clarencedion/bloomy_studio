@@ -11,7 +11,7 @@ import { addOns, floristOffers, mvpOffer } from "@/lib/offers";
 export const metadata = pageMetadata({
   title: "Services et offres : site, e-commerce, SEO local, MVP",
   description:
-    "Les offres Bloomy Studio en détail : Essentiel, Boutique et Croissance pour fleuristes, MVP Sprint pour fondateurs, et services complémentaires. Devis transparents.",
+    "Les offres Bloomy Studio : Essentiel, Boutique et Croissance pour fleuristes, MVP Sprint pour fondateurs, et les services complémentaires en détail.",
   path: "/services",
 });
 

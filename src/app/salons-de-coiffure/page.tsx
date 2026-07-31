@@ -14,7 +14,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Création de site pour salon de coiffure, image premium",
   description:
-    "Sites pour salons de coiffure : identité premium, menu de prestations pensé mobile, réservation intégrée, SEO local et recrutement. Sans dépendre des plateformes.",
+    "Sites pour salons de coiffure : identité premium, prestations mobile, réservation intégrée, SEO local et recrutement, sans dépendre des plateformes.",
   path: "/salons-de-coiffure",
 });
 

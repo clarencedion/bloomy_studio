@@ -15,7 +15,7 @@ import { showcaseSites } from "@/lib/portfolio";
 export const metadata = pageMetadata({
   title: "Réalisations : sites de fleuristes conçus par Bloomy Studio",
   description:
-    "Les sites livrés par Bloomy Studio : Monloup, Maison Hortense, KL Fleurs, Maison Orpha et Flōvia — et la plateforme florale bloomy.one construite par l'équipe.",
+    "Les sites livrés par Bloomy Studio : Monloup, Maison Hortense, KL Fleurs, Maison Orpha, Flōvia — et bloomy.one, la plateforme florale de l'équipe.",
   path: "/realisations",
 });
 

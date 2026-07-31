@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Reveal } from "@/components/ui/Reveal";
 
 type Props = {
   crumbs: { name: string; path: string }[];
@@ -39,7 +40,7 @@ export function PageHero({ crumbs, eyebrow, title, lede, children, visual }: Pro
           </p>
           {children}
         </div>
-        {visual ? <div className="fade-up-late mt-12">{visual}</div> : null}
+        {visual ? <Reveal className="mt-12">{visual}</Reveal> : null}
       </Container>
     </section>
   );

@@ -12,7 +12,7 @@ import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Maintenance site fleuriste : un site vivant, pas livré-oublié",
+  title: "Maintenance de site fleuriste : vivant, pas livré-oublié",
   description:
     "Maintenance et accompagnement pour fleuristes : mises à jour, sauvegardes, pages saisonnières prêtes avant les pics et rapport mensuel lisible.",
   path: "/fleuristes/maintenance",
@@ -27,19 +27,19 @@ const crumbs = [
 const included = [
   {
     title: "Le socle technique, surveillé",
-    body: "Mises à jour de sécurité, sauvegardes automatiques, surveillance de disponibilité et de vitesse. Si quelque chose casse un dimanche de fête des mères, nous le savons avant vous.",
+    body: "Mises à jour de sécurité, sauvegardes automatiques, surveillance de disponibilité et de vitesse. Si quelque chose casse un dimanche de fête des mères, nous le savons avant vous. Le nom de domaine et le certificat de sécurité sont renouvelés avant échéance — jamais découverts expirés après coup.",
   },
   {
     title: "Les petites évolutions, sans devis surprise",
-    body: "Changer une photo, ajouter une prestation, corriger un texte : les demandes courantes sont incluses dans le forfait, avec un délai annoncé. Les évolutions plus lourdes font l'objet d'un chiffrage clair, avant de commencer.",
+    body: "Changer une photo, ajouter une prestation, corriger un texte : les demandes courantes sont incluses dans le forfait, avec un délai annoncé le jour même. Les évolutions plus lourdes — une nouvelle page, une fonctionnalité — font l'objet d'un chiffrage clair, avant de commencer.",
   },
   {
     title: "Le calendrier floral, anticipé",
-    body: "Nous connaissons vos échéances : Saint-Valentin, fête des grands-mères, fête des mères, Toussaint. Les pages et les créneaux sont prêts trois semaines avant — vous validez, c'est en ligne.",
+    body: "Nous connaissons vos échéances : Saint-Valentin, fête des grands-mères, fête des mères, Toussaint. Les pages et les créneaux sont prêts trois semaines avant — vous validez, c'est en ligne. Rien ne se découvre la veille.",
   },
   {
     title: "Un rapport mensuel qui se lit en cinq minutes",
-    body: "Visites, appels, itinéraires, commandes, position locale : l'essentiel, en français, avec ce que nous proposons de faire le mois suivant. Vous savez toujours ce que votre site vous rapporte.",
+    body: "Visites, appels, itinéraires, commandes, position locale : l'essentiel, en français, avec ce que nous proposons de faire le mois suivant. Toujours le même jour, toujours le même format — pas de jargon à décoder pour savoir ce que votre site vous rapporte.",
   },
 ];
 
@@ -75,6 +75,18 @@ const faq = [
         S&apos;il ne l&apos;est pas, nous vous expliquons pourquoi et ce que
         coûterait sa remise à niveau — ou sa{" "}
         <Link href="/fleuristes/site-internet">reconstruction</Link>.
+      </p>
+    ),
+  },
+  {
+    question: "Combien de temps avant que l'accompagnement soit vraiment utile ?",
+    answer: (
+      <p>
+        Dès le premier mois : l&apos;audit initial identifie déjà ce qui
+        freine votre visibilité ou votre vitesse, et le premier rapport arrive
+        avant la fin du mois. Le bénéfice s&apos;installe ensuite avec le
+        calendrier — c&apos;est un accompagnement, pas une intervention
+        ponctuelle.
       </p>
     ),
   },
@@ -142,6 +154,39 @@ export default function MaintenancePage() {
               <li key={month} className="grid gap-2 py-5 sm:grid-cols-[200px_1fr] sm:gap-8">
                 <h3 className="step-num text-lg">{month}</h3>
                 <p className="text-[0.95rem] leading-relaxed text-ink-soft">{body}</p>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </section>
+
+      {/* Démarrage */}
+      <section className="py-16 sm:py-24">
+        <Container>
+          <SectionHead
+          align="left"
+            eyebrow="Le démarrage"
+            title="Trois étapes avant le rythme de croisière"
+          />
+          <ol className="mt-10 grid gap-8 sm:grid-cols-3">
+            {[
+              [
+                "Audit initial",
+                "Sécurité, vitesse, contenus obsolètes, cohérence de la fiche Google : nous partons d'un état des lieux complet, pas d'une supposition.",
+              ],
+              [
+                "Premier mois calé",
+                "Le calendrier saisonnier de votre boutique est posé sur les douze mois à venir, et les évolutions en attente sont priorisées avec vous.",
+              ],
+              [
+                "Rythme de croisière",
+                "Rapport mensuel, échéances anticipées, petites évolutions traitées au fil de l'eau. C'est le mois type de l'accompagnement.",
+              ],
+            ].map(([title, body], i) => (
+              <li key={title as string}>
+                <span className="step-num">{i + 1}</span>
+                <h3 className="text-display-sm mt-3">{title}</h3>
+                <p className="mt-2 leading-relaxed text-ink-soft">{body}</p>
               </li>
             ))}
           </ol>

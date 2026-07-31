@@ -48,12 +48,6 @@ export function ProductLab() {
               ))}
             </dl>
 
-            <p className="mt-8 text-[0.85rem] text-cream/55">
-              Flutter pour le multiplateforme, Next.js pour le web, Firebase pour
-              les données et le temps réel. La technologie vient après la
-              question — jamais l&apos;inverse.
-            </p>
-
             <Link
               href="/developpement-mvp"
               className="mt-8 inline-flex min-h-12 items-center rounded-full bg-cream px-7 py-3 font-semibold text-plum transition-colors hover:bg-rose hover:text-cream"

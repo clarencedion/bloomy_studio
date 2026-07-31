@@ -14,7 +14,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "SEO local fleuriste : Google Maps & fiche Google travaillées",
   description:
-    "Référencement local pour fleuristes : fiche Google Business Profile complète, avis réguliers, pages services et données cohérentes pour être trouvé dans votre ville.",
+    "Référencement local pour fleuristes : fiche Google Business Profile complète, avis réguliers, pages services et données cohérentes pour votre ville.",
   path: "/fleuristes/seo-local",
 });
 

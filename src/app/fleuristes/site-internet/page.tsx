@@ -42,11 +42,11 @@ const deliverables = [
   },
   {
     title: "Une base technique rapide et saine",
-    body: "Chargement rapide, images optimisées, structure comprise par Google, sécurité et sauvegardes. L'invisible qui fait la différence durable.",
+    body: "Chargement rapide, images optimisées, structure comprise par Google, sécurité et sauvegardes. L'invisible qui fait la différence durable — un visiteur qui attend ne devient jamais un client.",
   },
   {
     title: "La connexion à votre fiche Google",
-    body: "Site et fiche Google Business Profile racontent la même chose : mêmes horaires, mêmes services, même adresse. Cette cohérence est un fondement du référencement local.",
+    body: "Site et fiche Google Business Profile racontent la même chose : mêmes horaires, mêmes services, même adresse. Cette cohérence est un fondement du référencement local, détaillé sur notre page dédiée.",
   },
 ];
 
@@ -83,6 +83,17 @@ const faq = [
         ajouter le catalogue, le click-and-collect et le paiement se fait sans
         refonte. Beaucoup de nos échanges commencent par un site vitrine et
         grandissent ensuite.
+      </p>
+    ),
+  },
+  {
+    question: "J'ai déjà un site, qu'est-ce qui se passe pour Google ?",
+    answer: (
+      <p>
+        Les pages qui ont de la valeur (celles que Google connaît déjà, celles
+        que vos clients ont mises en favori) sont redirigées vers leur
+        nouvelle adresse plutôt que supprimées — c&apos;est ce qui évite de
+        perdre en une nuit une visibilité construite pendant des années.
       </p>
     ),
   },
@@ -161,6 +172,15 @@ export default function SiteInternetPage() {
               </article>
             ))}
           </div>
+          <p className="prose-links mt-12 max-w-2xl leading-relaxed text-ink-soft">
+            Ce site convient aux boutiques qui vendent déjà au comptoir et
+            veulent qu&apos;on cesse de leur faire honte en ligne — la vitrine
+            d&apos;abord, la vente en ligne ensuite si le besoin se confirme.
+            Si commander depuis le site est votre priorité immédiate dès le
+            lancement, notre offre{" "}
+            <Link href="/fleuristes/e-commerce">e-commerce</Link>{" "}est le
+            point de départ le plus direct.
+          </p>
         </Container>
       </section>
 
@@ -175,19 +195,19 @@ export default function SiteInternetPage() {
             {[
               [
                 "Semaine 1 — Cadrage",
-                "Visite (ou visio) de votre boutique, revue de vos services et de votre clientèle, collecte des contenus existants. Vous validez l'architecture des pages.",
+                "Visite (ou visio) de votre boutique, revue de vos services et de votre clientèle, collecte des contenus existants. Vous validez l'architecture des pages avant qu'une seule ligne de design ne soit dessinée.",
               ],
               [
                 "Semaine 2 — Direction visuelle",
-                "Deux pistes d'identité, appliquées à votre page d'accueil réelle. Vous choisissez, nous affinons.",
+                "Deux pistes d'identité, appliquées à votre page d'accueil réelle plutôt qu'à une maquette abstraite. Vous choisissez, nous affinons jusqu'à ce que ça vous ressemble vraiment.",
               ],
               [
                 "Semaine 3 — Construction",
-                "Toutes les pages sont montées avec vos contenus réels. Vous suivez l'avancement sur un lien privé.",
+                "Toutes les pages sont montées avec vos contenus réels, pas du texte de remplissage. Vous suivez l'avancement sur un lien privé, à votre rythme.",
               ],
               [
                 "Semaine 4 — Lancement",
-                "Tests mobiles, connexion de la fiche Google, mise en ligne, formation d'une heure. Le site est à vous.",
+                "Tests mobiles, connexion de la fiche Google, mise en ligne, formation d'une heure sur votre propre contenu. Le site est à vous, avec ses accès.",
               ],
             ].map(([t, b]) => (
               <li key={t} className="grid gap-2 py-5 sm:grid-cols-[220px_1fr] sm:gap-8">
