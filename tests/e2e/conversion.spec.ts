@@ -91,7 +91,14 @@ test("navigation mobile : le menu s'ouvre, navigue et se referme", async ({
   await page.getByRole("button", { name: "Ouvrir le menu" }).click();
   const menu = page.getByRole("dialog", { name: "Menu" });
   await expect(menu).toBeVisible();
-  await menu.getByRole("link", { name: "Fleuristes", exact: true }).click();
+
+  // Le menu mobile est groupé (Produits, Secteurs) et chaque lien porte une
+  // ligne d'explication : on cible donc la destination, pas un libellé exact,
+  // sinon le test casse à la première reformulation.
+  await expect(menu.getByRole("heading", { name: "Produits" })).toBeVisible();
+  await expect(menu.getByRole("heading", { name: "Secteurs" })).toBeVisible();
+
+  await menu.locator('a[href="/fleuristes"]').first().click();
   await expect(page).toHaveURL(/\/fleuristes$/);
   await expect(menu).toBeHidden();
 });

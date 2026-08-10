@@ -21,11 +21,11 @@ import { mvpOffer } from "@/lib/offers";
  */
 function ProductProof() {
   return (
-    <figure className="mx-auto max-w-xs">
+    <figure className="mx-auto max-w-2xl">
       <BloomyAppShot />
       <figcaption className="caption mx-auto mt-6 max-w-lg text-center">
-        bloomy.one, conçu, développé et opéré par l&apos;équipe — en production
-        sur iOS et Android.
+        bloomy.one, conçu, développé et opéré par l&apos;équipe — en
+        production, sur le web comme sur iOS et Android.
       </figcaption>
     </figure>
   );

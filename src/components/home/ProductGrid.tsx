@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { SketchFor } from "@/components/visuals/SketchFor";
 import { products, tintClass } from "@/lib/products";
 
 /**
@@ -36,8 +37,9 @@ export function ProductGrid() {
                   href={p.href}
                   className={`lift group flex h-full flex-col rounded-sm border border-hairline p-7 ${tintClass[p.tint]}`}
                 >
-                  <p className="plate-label">{p.name}</p>
-                  <h3 className="text-display-md mt-4 transition-colors group-hover:text-rose">
+                  <SketchFor name={p.sketch} className="text-ink" size={104} />
+                  <p className="plate-label mt-5">{p.name}</p>
+                  <h3 className="text-display-md mt-2 transition-colors group-hover:text-rose">
                     {p.promise}
                   </h3>
                   <p className="mt-3 leading-relaxed text-ink-soft">{p.body}</p>

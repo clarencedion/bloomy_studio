@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { blogPosts, getBlogPost } from "@/lib/blog";
 import { caseStudies, publishedCaseStudies } from "@/lib/case-studies";
 import { floristOffers, mvpOffer } from "@/lib/offers";
-import { footerNav, mainNav } from "@/lib/site";
+import { footerNav, mainNav, mainNavLinks } from "@/lib/site";
 
 /** Routes existantes du site (doit refléter src/app). */
 const KNOWN_ROUTES = new Set([
@@ -15,6 +15,7 @@ const KNOWN_ROUTES = new Set([
   "/fleuristes/maintenance",
   "/salons-de-coiffure",
   "/developpement-mvp",
+  "/sites-internet",
   "/micro-saas",
   "/services",
   "/realisations",
@@ -30,13 +31,26 @@ const KNOWN_ROUTES = new Set([
 ]);
 
 describe("intégrité des liens internes", () => {
-  it("la navigation principale ne dépasse jamais six entrées (AGENTS.md)", () => {
+  it("la barre de navigation ne dépasse jamais six entrées visibles", () => {
+    // Ce sont les entrées de premier niveau qui débordent la barre, pas les
+    // liens repliés dans un menu déroulant.
     expect(mainNav.length).toBeLessThanOrEqual(6);
   });
 
   it("la navigation principale ne pointe que vers des routes existantes", () => {
-    for (const item of mainNav) {
+    for (const item of mainNavLinks) {
       expect(KNOWN_ROUTES.has(item.href), `route inconnue : ${item.href}`).toBe(true);
+    }
+  });
+
+  it("chaque menu déroulant a un identifiant unique et au moins deux entrées", () => {
+    const menus = mainNav.filter((e) => e.kind === "menu");
+    const ids = menus.map((m) => m.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const m of menus) {
+      // Un menu déroulant d'une seule entrée est un lien déguisé : il ajoute
+      // un geste sans rien organiser.
+      expect(m.items.length, `menu trop court : ${m.id}`).toBeGreaterThanOrEqual(2);
     }
   });
 

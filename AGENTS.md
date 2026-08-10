@@ -6,12 +6,30 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Bloomy Studio — règles projet
 
-Site vitrine de Bloomy Studio (Next.js 16 App Router, TS strict, Tailwind v4).
-Références : `docs/direction-artistique.md` (visuel, accueil, animations —
-fait autorité) et `docs/bloomy-studio-blueprint.md` (SEO, offres, légal).
+Site du studio de développement Bloomy Studio (Next.js 16 App Router, TS
+strict, Tailwind v4). Références : `docs/direction-artistique.md` (visuel,
+accueil, animations) et `docs/bloomy-studio-blueprint.md` (SEO, offres, légal),
+complétées par `docs/refonte-suivi.md` qui retrace les décisions récentes et
+**prime en cas de contradiction**.
 Spécificités Next 16 : `params` asynchrones, Turbopack par défaut, pas de
 `next lint`, et **`priority` déprécié sur `next/image`** — utiliser
 `loading="eager"` + `fetchPriority="high"` sur l'unique image LCP.
+
+## Positionnement (décidé le 2026-08-10, remplace la doctrine précédente)
+
+Le site se présente comme une **agence de développement généraliste et
+moderne**, pas comme un spécialiste mono-métier. Conséquences :
+
+- L'accueil vend d'abord **ce que le studio construit** — sites & e-commerce,
+  MVP, micro SaaS — puis **pour quels métiers**. La spécialisation fleuriste
+  reste le savoir-faire le plus profond et garde ses pages dédiées, mais elle
+  n'occupe plus le premier écran ni 75 % du discours.
+- La navigation croise les deux axes avec **deux menus déroulants** (Produits,
+  Secteurs) : voir `mainNav` dans `lib/site.ts`. La limite de six entrées
+  s'applique aux entrées **visibles de la barre**, pas aux liens repliés.
+- Toute page produit générique (`/sites-internet`, `/developpement-mvp`,
+  `/micro-saas`) doit renvoyer vers sa déclinaison métier quand elle existe,
+  et inversement.
 
 ## Règles permanentes
 

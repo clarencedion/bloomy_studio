@@ -9,6 +9,7 @@ const INDEXABLE_PAGES = [
   "/fleuristes/maintenance",
   "/salons-de-coiffure",
   "/developpement-mvp",
+  "/sites-internet",
   "/micro-saas",
   "/services",
   "/realisations",

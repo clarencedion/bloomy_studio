@@ -55,10 +55,10 @@ export function ProductLab() {
             </Link>
           </div>
 
-          <figure className="mx-auto w-full max-w-[20rem]">
+          <figure className="mx-auto w-full">
             <BloomyAppShot />
             <figcaption className="caption mt-4 text-center">
-              L&apos;application Bloomy, en production sur iOS et Android
+              bloomy.one, en production — notre propre produit
             </figcaption>
           </figure>
         </div>

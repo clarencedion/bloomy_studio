@@ -25,6 +25,8 @@ export type Product = {
   cta: string;
   /** Teinte de carte (token `--color-tint-*`). Jamais une couleur d'action. */
   tint: "kraft" | "soie" | "eau";
+  /** Illustration à l'encre associée (voir components/visuals/Sketch.tsx). */
+  sketch: "site" | "mvp" | "saas";
 };
 
 export const products: Product[] = [
@@ -34,9 +36,10 @@ export const products: Product[] = [
     promise: "Un site qui vend pendant que vous composez",
     body: "Vitrine ou boutique en ligne, conçue autour de votre métier plutôt que d'un template. Vous restez propriétaire de tout, et vous modifiez vos contenus vous-même.",
     detail: "Quatre semaines, quatre jalons validés ensemble.",
-    href: "/fleuristes/site-internet",
+    href: "/sites-internet",
     cta: "Voir l'approche",
     tint: "kraft",
+    sketch: "site",
   },
   {
     id: "mvp",
@@ -47,6 +50,7 @@ export const products: Product[] = [
     href: "/developpement-mvp",
     cta: "Voir la démarche",
     tint: "eau",
+    sketch: "mvp",
   },
   {
     id: "micro-saas",
@@ -57,6 +61,7 @@ export const products: Product[] = [
     href: "/micro-saas",
     cta: "Découvrir Bloomy",
     tint: "soie",
+    sketch: "saas",
   },
 ];
 
@@ -67,6 +72,7 @@ export type Sector = {
   body: string;
   href: string;
   tint: "kraft" | "soie" | "feuille" | "eau" | "lin";
+  sketch: "bouquet" | "salon" | "boutique";
 };
 
 export const sectors: Sector[] = [
@@ -76,6 +82,7 @@ export const sectors: Sector[] = [
     body: "Arrivages du matin, pics de saison, mariages sur dossier et commandes de deuil passées depuis un téléphone.",
     href: "/fleuristes",
     tint: "soie",
+    sketch: "bouquet",
   },
   {
     id: "salons",
@@ -83,6 +90,7 @@ export const sectors: Sector[] = [
     body: "Un menu de prestations lisible sur mobile, la réservation intégrée, et le recrutement qui compte autant que les clients.",
     href: "/salons-de-coiffure",
     tint: "feuille",
+    sketch: "salon",
   },
   {
     id: "autres",
@@ -90,6 +98,7 @@ export const sectors: Sector[] = [
     body: "Ateliers, artisans, lieux : le même travail d'image et de conversion, avec le vocabulaire de votre métier.",
     href: "/realisations",
     tint: "lin",
+    sketch: "boutique",
   },
 ];
 

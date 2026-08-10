@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { SketchFor } from "@/components/visuals/SketchFor";
 import { sectors, tintClass } from "@/lib/products";
 
 /**
@@ -71,7 +72,8 @@ export function SectorGrid() {
                     href={s.href}
                     className={`lift group flex h-full flex-col rounded-sm border border-hairline p-7 ${tintClass[s.tint]}`}
                   >
-                    <h3 className="text-display-sm transition-colors group-hover:text-rose">
+                    <SketchFor name={s.sketch} size={84} className="text-ink" />
+                    <h3 className="text-display-sm mt-4 transition-colors group-hover:text-rose">
                       {s.name}
                     </h3>
                     <p className="mt-2.5 leading-relaxed text-ink-soft">{s.body}</p>

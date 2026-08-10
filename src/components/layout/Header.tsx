@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
+import { NavMenu } from "@/components/layout/NavMenu";
 import { mainNav } from "@/lib/site";
 import { track } from "@/lib/analytics";
 
@@ -73,21 +74,32 @@ export function Header() {
 
         <nav aria-label="Navigation principale" className="hidden lg:block">
           <ul className="flex items-center gap-5 xl:gap-7">
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={`text-[0.92rem] font-medium transition-colors hover:text-rose ${
-                    isActive(item.href)
-                      ? "text-rose underline decoration-2 underline-offset-8"
-                      : "text-ink"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {mainNav.map((entry) =>
+              entry.kind === "menu" ? (
+                <li key={entry.id}>
+                  <NavMenu
+                    label={entry.label}
+                    intro={entry.intro}
+                    items={entry.items}
+                    isActive={isActive}
+                  />
+                </li>
+              ) : (
+                <li key={entry.href}>
+                  <Link
+                    href={entry.href}
+                    aria-current={isActive(entry.href) ? "page" : undefined}
+                    className={`text-[0.92rem] font-medium transition-colors hover:text-rose ${
+                      isActive(entry.href)
+                        ? "text-rose underline decoration-2 underline-offset-8"
+                        : "text-ink"
+                    }`}
+                  >
+                    {entry.label}
+                  </Link>
+                </li>
+              ),
+            )}
           </ul>
         </nav>
 
@@ -161,22 +173,65 @@ export function Header() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
-              <ul className="divide-y divide-hairline border-y border-hairline">
-                {mainNav.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="flex min-h-14 items-center justify-between text-lg font-medium"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      {item.label}
-                      <span aria-hidden="true" className="text-rose">
-                        →
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {/*
+                Sur mobile, pas de menu déroulant : tout est déplié. Un
+                accordéon ajouterait un geste pour cacher six liens qui
+                tiennent à l'écran — la profondeur sert la barre desktop,
+                elle ne sert pas le pouce.
+              */}
+              <div className="max-h-[calc(100dvh-9rem)] overflow-y-auto pb-8">
+                {mainNav.map((entry) =>
+                  entry.kind === "menu" ? (
+                    <section key={entry.id} className="mb-7">
+                      <h2 className="plate-label">{entry.label}</h2>
+                      <ul className="mt-3 divide-y divide-hairline border-y border-hairline">
+                        {entry.items.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="flex min-h-14 items-center justify-between gap-4 py-3"
+                            >
+                              <span>
+                                <span
+                                  className="block text-lg font-medium"
+                                  style={{ fontFamily: "var(--font-display)" }}
+                                >
+                                  {item.label}
+                                </span>
+                                <span className="mt-0.5 block text-[0.85rem] leading-snug text-ink-soft">
+                                  {item.hint}
+                                </span>
+                              </span>
+                              <span aria-hidden="true" className="text-rose">
+                                →
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null,
+                )}
+
+                <ul className="divide-y divide-hairline border-y border-hairline">
+                  {mainNav
+                    .filter((e) => e.kind === "link")
+                    .map((entry) => (
+                      <li key={entry.href}>
+                        <Link
+                          href={entry.href}
+                          className="flex min-h-14 items-center justify-between text-lg font-medium"
+                          style={{ fontFamily: "var(--font-display)" }}
+                        >
+                          {entry.label}
+                          <span aria-hidden="true" className="text-rose">
+                            →
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </div>
               <Link
                 href="/audit"
                 onClick={() => track("cta_audit_click", { placement: "mobile_menu" })}

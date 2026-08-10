@@ -146,10 +146,10 @@ export default function MicroSaasPage() {
               </div>
             </div>
 
-            <figure className="mx-auto w-full max-w-[19rem]">
+            <figure className="mx-auto w-full">
               <BloomyAppShot />
               <figcaption className="caption mt-4 text-center">
-                L&apos;application Bloomy, sur iOS et Android
+                bloomy.one — la plateforme, en production
               </figcaption>
             </figure>
           </div>

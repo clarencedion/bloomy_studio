@@ -41,27 +41,78 @@ export const site = {
 
 export type NavItem = { label: string; href: string };
 
+/** Entrée de menu déroulant : un intitulé, une ligne d'explication, une cible. */
+export type NavLeaf = NavItem & { hint: string };
+
 /**
- * Navigation principale — six entrées, pas plus : au-delà, plus rien ne se
- * distingue. L'ordre suit la valeur commerciale (spécialisation fleuriste,
- * puis offres, puis capacité produit).
+ * Entrée de navigation : soit un lien simple, soit un menu déroulant.
  *
- * « Applications & MVP » y figure parce que c'est la troisième activité du
- * studio, et qu'elle n'était atteignable que depuis le pied de page.
- * « Méthode » en est sortie : c'est une page de réassurance qu'on atteint en
- * contexte (accueil, FAQ, pied de page), pas une porte d'entrée.
+ * Le studio vend deux axes qui se croisent — **ce qu'on construit** (site,
+ * MVP, micro SaaS) et **pour quel métier** (fleuristes, coiffure, autres
+ * commerces). Une barre plate obligeait à choisir un des deux axes et à
+ * enterrer l'autre dans le pied de page. Deux menus déroulants les exposent
+ * tous les deux sans dépasser cinq entrées visibles.
  */
-export const mainNav: NavItem[] = [
-  { label: "Fleuristes", href: "/fleuristes" },
-  { label: "Services", href: "/services" },
-  { label: "MVP", href: "/developpement-mvp" },
-  // Le blog cède sa place au troisième produit : il reste atteignable depuis
-  // le pied de page et depuis chaque page pilier, alors qu'un produit qu'on
-  // ne trouve pas en navigation n'existe pas commercialement.
-  { label: "Micro SaaS", href: "/micro-saas" },
-  { label: "Réalisations", href: "/realisations" },
-  { label: "À propos", href: "/a-propos" },
+export type NavEntry =
+  | { kind: "link"; label: string; href: string }
+  | { kind: "menu"; label: string; id: string; intro: string; items: NavLeaf[] };
+
+export const mainNav: NavEntry[] = [
+  {
+    kind: "menu",
+    label: "Produits",
+    id: "produits",
+    intro: "Ce que nous construisons.",
+    items: [
+      {
+        label: "Sites internet & e-commerce",
+        href: "/sites-internet",
+        hint: "Vitrine ou boutique en ligne, sur mesure.",
+      },
+      {
+        label: "MVP",
+        href: "/developpement-mvp",
+        hint: "Une première version qui tient devant de vrais utilisateurs.",
+      },
+      {
+        label: "Micro SaaS",
+        href: "/micro-saas",
+        hint: "Nos propres produits, en abonnement.",
+      },
+    ],
+  },
+  {
+    kind: "menu",
+    label: "Secteurs",
+    id: "secteurs",
+    intro: "Les métiers dont nous connaissons déjà le vocabulaire.",
+    items: [
+      {
+        label: "Fleuristes",
+        href: "/fleuristes",
+        hint: "Notre spécialité : saisons, deuil, mariages, click-and-collect.",
+      },
+      {
+        label: "Salons de coiffure",
+        href: "/salons-de-coiffure",
+        hint: "Prestations lisibles sur mobile et réservation intégrée.",
+      },
+      {
+        label: "Autres commerces",
+        href: "/realisations",
+        hint: "Ateliers, artisans et lieux : voir ce que nous avons livré.",
+      },
+    ],
+  },
+  { kind: "link", label: "Réalisations", href: "/realisations" },
+  { kind: "link", label: "Méthode", href: "/methode" },
+  { kind: "link", label: "À propos", href: "/a-propos" },
 ];
+
+/** Tous les liens de la navigation, à plat — sert aux tests d'intégrité. */
+export const mainNavLinks: NavItem[] = mainNav.flatMap((e) =>
+  e.kind === "link" ? [{ label: e.label, href: e.href }] : e.items,
+);
 
 export const footerNav = {
   fleuristes: [

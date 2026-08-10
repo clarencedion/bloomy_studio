@@ -23,6 +23,7 @@ const staticPaths = [
   "/fleuristes/maintenance",
   "/salons-de-coiffure",
   "/developpement-mvp",
+  "/sites-internet",
   "/micro-saas",
   "/services",
   "/realisations",

@@ -5,6 +5,8 @@ import { BrowserFrame } from "@/components/visuals/DeviceFrame";
 import {
   floristSites,
   getShowcaseSite,
+  showcaseSites,
+  type ShowcaseSite,
   type ShowcaseSlug,
 } from "@/lib/portfolio";
 
@@ -18,17 +20,16 @@ import {
  */
 
 function SiteCard({
-  index,
+  site,
   eager = false,
   className = "",
 }: {
-  index: number;
+  site: ShowcaseSite;
   /** Next 16 : remplace `priority`, déprécié. Réservé à une capture au-dessus
    *  de la ligne de flottaison, et à une seule par page. */
   eager?: boolean;
   className?: string;
 }) {
-  const site = floristSites[index];
   return (
     <figure className={className}>
       <BrowserFrame label={`${site.name} — ${site.city}`}>
@@ -60,9 +61,9 @@ export function ShowcaseSites() {
   return (
     <div className="overflow-hidden rounded-sm border border-hairline bg-cream-deep p-4 sm:p-8">
       <div className="flex items-start justify-center gap-5 sm:gap-7">
-        <SiteCard index={1} className="hidden w-[24rem] shrink-0 lg:block" />
-        <SiteCard index={0} eager className="w-full max-w-[32rem] shrink-0 lg:w-[32rem]" />
-        <SiteCard index={2} className="hidden w-[24rem] shrink-0 lg:block" />
+        <SiteCard site={floristSites[1]} className="hidden w-[24rem] shrink-0 lg:block" />
+        <SiteCard site={floristSites[0]} eager className="w-full max-w-[32rem] shrink-0 lg:w-[32rem]" />
+        <SiteCard site={floristSites[2]} className="hidden w-[24rem] shrink-0 lg:block" />
       </div>
     </div>
   );
@@ -118,18 +119,30 @@ export function SiteCardSingle({
   index?: number;
   className?: string;
 }) {
-  return <SiteCard index={index} className={className} />;
+  return <SiteCard site={floristSites[index]} className={className} />;
 }
 
 /**
- * Galerie complète : les vitrines florales côte à côte, sans rognage. Sert aux
- * pages où l'on a la place de tout montrer.
+ * Galerie complète : les captures côte à côte, sans rognage. Sert aux pages
+ * où l'on a la place de tout montrer.
+ *
+ * `scope` décide du portfolio montré. Les pages métier restent sur
+ * `fleuriste` — un écolodge au milieu de quatre boutiques brouillerait la
+ * spécialisation qu'elles servent à démontrer. Les pages produit, elles,
+ * s'adressent à tout le monde et montrent l'ensemble.
  */
-export function SiteGallery({ className = "" }: { className?: string }) {
+export function SiteGallery({
+  className = "",
+  scope = "fleuriste",
+}: {
+  className?: string;
+  scope?: "fleuriste" | "tous";
+}) {
+  const sites = scope === "tous" ? showcaseSites : floristSites;
   return (
     <div className={`grid gap-6 sm:grid-cols-2 ${className}`}>
-      {floristSites.map((site, i) => (
-        <SiteCard key={site.name} index={i} />
+      {sites.map((site) => (
+        <SiteCard key={site.slug} site={site} />
       ))}
     </div>
   );
