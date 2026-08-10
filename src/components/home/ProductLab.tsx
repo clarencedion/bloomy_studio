@@ -2,8 +2,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { PhoneFrame } from "@/components/visuals/DeviceFrame";
-import { BloomyComposer } from "@/components/visuals/ShowcaseSites";
+import { BloomyAppShot } from "@/components/visuals/ProductShot";
 
 /**
  * Applications & MVP — section 9 de la direction artistique.
@@ -56,12 +55,10 @@ export function ProductLab() {
             </Link>
           </div>
 
-          <figure className="mx-auto w-full max-w-[17rem]">
-            <PhoneFrame>
-              <BloomyComposer bare />
-            </PhoneFrame>
+          <figure className="mx-auto w-full max-w-[20rem]">
+            <BloomyAppShot />
             <figcaption className="caption mt-4 text-center">
-              Aperçu du composeur de bouquet de bloomy.one
+              L&apos;application Bloomy, en production sur iOS et Android
             </figcaption>
           </figure>
         </div>

@@ -9,6 +9,7 @@ const INDEXABLE_PAGES = [
   "/fleuristes/maintenance",
   "/salons-de-coiffure",
   "/developpement-mvp",
+  "/micro-saas",
   "/services",
   "/realisations",
   "/realisations/bloomy-plateforme-florale",

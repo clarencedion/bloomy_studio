@@ -6,34 +6,26 @@ import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { OrdersPeek } from "@/components/visuals/AdminPreview";
-import { PhoneFrame } from "@/components/visuals/DeviceFrame";
-import { BloomyComposer } from "@/components/visuals/ShowcaseSites";
+import { BloomyAppShot } from "@/components/visuals/ProductShot";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 import { mvpOffer } from "@/lib/offers";
 
 /**
  * Preuve d'ouverture de la page : le produit de l'équipe, pas une promesse.
- * L'application côté client et le tableau de bord côté professionnel — les
- * deux moitiés de tout produit que nous construisons. Étiquetés « Aperçu ».
+ *
+ * C'était auparavant deux interfaces redessinées en HTML — un faux composeur
+ * et un faux tableau de bord. Un studio qui vend sa capacité à construire des
+ * produits ne peut pas le prouver avec un décor : on montre la capture réelle
+ * de l'application, telle qu'elle est en production.
  */
 function ProductProof() {
   return (
-    <figure className="mx-auto max-w-3xl">
-      <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:items-end sm:gap-10">
-        <div className="w-full max-w-[18rem]">
-          <PhoneFrame>
-            <BloomyComposer bare />
-          </PhoneFrame>
-        </div>
-        <div className="w-full max-w-[18rem]">
-          <OrdersPeek />
-        </div>
-      </div>
+    <figure className="mx-auto max-w-xs">
+      <BloomyAppShot />
       <figcaption className="caption mx-auto mt-6 max-w-lg text-center">
-        Aperçus de bloomy.one : l&apos;application de commande et le tableau de
-        bord professionnel — conçus, développés et opérés par l&apos;équipe.
+        bloomy.one, conçu, développé et opéré par l&apos;équipe — en production
+        sur iOS et Android.
       </figcaption>
     </figure>
   );

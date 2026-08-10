@@ -777,6 +777,68 @@ Ajouter une entrée par session. Ne jamais supprimer une entrée passée.
 | 2026-07-31 | Refonte complète (brief ci-dessus) + création d'un fichier de suivi pour continuité inter-conversation | Lecture de l'état actuel du dépôt (routes, `docs/`, historique git). Création de ce fichier (`docs/refonte-suivi.md`). **Aucun changement de code, de contenu ou de design n'a encore été fait pour ce brief.** | Phase 1 (audit formel page par page par rapport au brief), Phase 2 (stratégie créative : concept en une phrase, principes, matrice de références), puis Phases 3–5 (design, build, QA) — voir §1 « Required workflow ». |
 | 2026-07-31 | « on y va tu fais tout » — exécution autonome des Phases 1–5 | **Conclusion stratégique (Phase 2) :** le système « atelier clair » documenté dans `AGENTS.md`/`direction-artistique.md` est déjà cohérent, discipliné et conforme à l'esprit anti-patterns-IA du brief (pas de glassmorphism, pas de bento, pas de gradient, pas de preuve inventée) — décision : **évoluer/corriger l'existant plutôt que le remplacer**, conformément à la clause du brief « if the existing identity is strong, evolve it rather than replacing it blindly ». Audit complet (3 agents en parallèle : contenu/SEO, système de design/animation, tests/intégrité) puis corrections réelles : <br>• **Budget d'animation** — `band-drift` (parallaxe scroll sur 4 bandes photo) supprimé de `globals.css` et de ses 4 usages : ce pattern n'est pas dans les 5 animations autorisées par `direction-artistique.md` §4.4 et recoupe l'interdit explicite « parallaxe lourde ». `fade-up-late` restreint au Hero (`PageHero.tsx` utilise désormais `<Reveal>`, déjà comptée dans le budget, au lieu de réutiliser l'animation d'entrée du hero sur chaque page intérieure). <br>• **Discipline `bloom`** vérifiée : n'apparaît que via la pastille `.pill` (un usage explicitement sanctionné par la règle), jamais combiné à un autre usage bloom dans un même écran — conforme, aucun changement. <br>• **Hygiène technique** : `public/photos/_raw/` (18 Mo de PNG sources, gitignorés mais servis publiquement lors d'un déploiement depuis la source locale) déplacé vers `assets/photos-raw/`, hors de `public/` ; script `optimize-images.mjs` et `.gitignore` mis à jour. Deux photos orphelines supprimées. Champ mort `site.legalName` supprimé (jamais lu, redondant avec `legal.ts`). <br>• **SEO** : titles/descriptions hors clou (50–60/130–150 car.) corrigés sur 11 pages + 2 articles de blog (mesuré précisément par script, pas à l'estimation). <br>• **Intégrité du contenu** : légende de `CaseSpotlight` reformulée (affirmation d'usage non vérifiable → principe de conception assumé, cohérent avec la règle « aucune preuve inventée »). URLs `liveUrl` du portfolio vérifiées par fetch réel (domaine perso + repli `.web.app` = même site, conforme). <br>• **Tests de garde-fou ajoutés** (rules d'`AGENTS.md` jusqu'ici non testées) : `mainNav.length <= 6`, budget de poids `< 100 Ko` sur `public/realisations/*.webp`, présence de `"server-only"` sur les modules sensibles (nouveau fichier `tests/unit/build-hygiene.test.ts`), et règle d'espacement après un lien (`</a>` collé au texte suivant) vérifiée sur le HTML rendu de chaque route dans `tests/e2e/site.spec.ts`. <br>• **Contenu** : accueil dégraissé (~65 mots, FAQ redondante avec la démo d'administration retirée, aparté technique de `ProductLab` coupé — sans toucher à une section). Les 3 articles de blog étoffés de ~650–900 mots chacun (contenu réel : pièges UX, accessibilité, calendrier de visibilité, exemple de calcul chiffré explicitement labellisé illustratif, questions à poser à une plateforme) pour dépasser 1500 mots (mesuré par script sur le texte réellement rendu). `/fleuristes/maintenance` et `/fleuristes/site-internet` étoffées (nouvelle section « démarrage » à 3 étapes, nouveau FAQ, paragraphe de positionnement) pour dépasser 800 mots. <br>• **Vérification** : `npm run lint`, `typecheck`, `test` (26 tests, tous verts), `build` et `e2e` (55 passés / 1 skip) tous verts. Contrôle visuel réel via Playwright (desktop + mobile, `prefers-reduced-motion: reduce` pour vérifier le contenu sans dépendre du timing du scroll-reveal) sur l'accueil, les deux pages fleuristes étoffées et un article de blog — rendu conforme au système, aucune régression. | **Non fait dans cette session, à faire ensuite si l'utilisateur le souhaite :** (1) pages légales toujours `noindex` — `lib/legal.ts` a besoin de vraies données d'entité (SIREN, forme juridique, adresse du siège...) qu'aucune IA ne peut inventer ; (2) le reste du site (`/services`, `/salons-de-coiffure`, `/realisations`, `/methode`, `/a-propos`, etc.) n'a pas eu la même passe de relecture ligne à ligne que les pages touchées ici — l'audit initial n'a rien signalé de cassé dessus, mais elles n'ont pas été retravaillées activement ; (3) Phase 5 du brief demande aussi un test de compatibilité multi-navigateurs (Safari/iOS réel) — seul Chromium a été testé ici, conformément à `playwright.config.ts` actuel. |
 
+### Session 2026-08-10 — « le site n'a pas d'âme et fait trop IA »
+
+**Diagnostic demandé par l'utilisateur, puis appliqué.** Références données :
+`acctual.com` (design aimé) et `swap-commerce.com` (complétude/structure).
+Les deux ont été capturées et analysées avec Playwright.
+
+**Causes identifiées (dans l'ordre d'impact) :**
+
+1. **Les visuels étaient codés.** `AdminPreview.tsx`, `BloomyComposer`,
+   `OrdersPeek` et `Botanical.tsx` (fleurs SVG) étaient des interfaces et des
+   illustrations redessinées en HTML/CSS — de faux tableaux de bord, que le
+   brief d'origine interdisait explicitement. Trois des douze sections de
+   l'accueil reposaient dessus.
+2. **Les vraies photos étaient gâchées.** `atelier-matieres-wide.webp`
+   (ciseaux, ficelle, papier kraft) et `comptoir-matin-wide.webp` (comptoir +
+   téléphone) — exactement la « scène de bureau » d'Acctual en version
+   fleuriste — servaient de bandelettes décoratives de 48 px.
+3. **Monochromie.** La règle « une seule couleur d'action » avait été étendue
+   de fait à toute la palette : beige, gris, bordeaux. Acctual utilise six
+   teintes pastel de fond.
+4. **Trop de texte** : chaque section suivait le même gabarit titre +
+   paragraphe + liste.
+5. **Aucun humain, aucune matière** — alors que le métier vendu est le plus
+   sensoriel qui soit.
+
+**Cause racine :** le site n'avait aucune métaphore physique. Il appliquait un
+règlement (`AGENTS.md`) au lieu d'incarner une idée. Un site conforme, pas un
+site habité.
+
+**Corrections apportées :**
+
+- **Actifs réels récupérés** : capture de l'app bloomy.one
+  (`public/produit/composer-app.webp`), mascotte, et surtout les **vrais
+  portraits de l'équipe** (`public/equipe/clarence.webp`, `tom.webp`) qui
+  existaient sur bloomy.one sans être utilisés. Plus deux photographies
+  humaines sous licence Unsplash (fleuriste en boutique, mains qui composent),
+  créditées dans `docs/credits-photos.md`.
+- **Faux visuels supprimés du dépôt** : `AdminPreview.tsx`, `Botanical.tsx`,
+  `AdjacentSectors.tsx` et `BloomyComposer` (tronqué de `ShowcaseSites.tsx`).
+  Remplacés par `ProductShot.tsx`, qui affiche la capture réelle.
+- **Palette élargie** : cinq teintes de matière (`--color-tint-kraft`, `soie`,
+  `feuille`, `eau`, `lin`) en **fond de carte uniquement** — la couleur
+  d'action reste le bourgogne seul, la règle n'est pas cassée.
+- **Échelle `text-display-2xl`** construite (documentée en §4.2 mais absente
+  du CSS jusqu'ici) et appliquée au hero.
+- **Nouvelles sections d'accueil** : `ProductGrid` (Sites / MVP / Micro SaaS)
+  et `SectorGrid` (Fleuristes en vedette avec photo, puis salons et autres
+  métiers), `StudioTeam` (les deux visages). `AdminDemo` passe du faux
+  tableau de bord à la photographie du comptoir.
+- **Nouvelle route `/micro-saas`** + entrée de navigation (le blog cède sa
+  place, comme la règle des six entrées l'exige) + sitemap + tests.
+
+**Vérification :** lint, typecheck, 23 tests unitaires, build, et 57 tests e2e
+(desktop + mobile) tous verts. Contrôle visuel réel desktop et mobile.
+
+**Piège rencontré, à retenir :** un ancien `next start` restait accroché au
+port 3000 et servait un build périmé dont le chunk CSS renvoyait 500 — d'où
+des captures où *aucun* utilitaire Tailwind ne s'appliquait et une page de
+26 500 px. Toujours `lsof -ti:3000 | xargs kill -9` avant de relancer, et
+vérifier que le CSS servi n'est pas vide avant de conclure à un bug de mise
+en page.
+
 ## 4. Prochaine étape suggérée
 
 Le gros du travail mécanique/structurel (Phases 1–5 au sens restreint :

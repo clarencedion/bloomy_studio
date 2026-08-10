@@ -15,6 +15,7 @@ const KNOWN_ROUTES = new Set([
   "/fleuristes/maintenance",
   "/salons-de-coiffure",
   "/developpement-mvp",
+  "/micro-saas",
   "/services",
   "/realisations",
   "/a-propos",

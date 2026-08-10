@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -7,7 +8,6 @@ import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { OrdersPeek } from "@/components/visuals/AdminPreview";
 import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
@@ -163,7 +163,19 @@ export default function EcommercePage() {
                 heure ? ».
               </p>
             </div>
-            <OrdersPeek />
+            {/*
+              Photographie réelle plutôt qu'un tableau de bord redessiné en
+              HTML : nous n'avons pas de capture d'administration client à
+              montrer, et en inventer une reviendrait à fabriquer une preuve.
+            */}
+            <Image
+              src="/photos/comptoir-matin-wide.webp"
+              alt="Un téléphone posé sur le comptoir d'une boutique, à côté d'un seau de fleurs."
+              width={1800}
+              height={1200}
+              sizes="(min-width: 1024px) 18rem, 100vw"
+              className="h-full w-full rounded-sm object-cover"
+            />
           </div>
         </Container>
       </section>

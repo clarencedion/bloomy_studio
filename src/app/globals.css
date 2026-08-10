@@ -65,6 +65,25 @@
   --color-sage-deep: #3b5a45;
   --color-sage-veil: #ebefe9;
 
+  /*
+   * Teintes de carte — la correction du défaut « site monochrome ».
+   *
+   * La règle « une seule couleur d'action » reste vraie : ces teintes ne sont
+   * jamais un lien, un bouton ni un état. Ce sont des **fonds de carte**, qui
+   * servent à distinguer un métier d'un autre et un produit d'un autre. Sans
+   * elles, chaque énumération devenait un mur beige et le site n'avait plus de
+   * couleur que dans les photos.
+   *
+   * Chacune est tirée d'une matière du métier plutôt que d'une palette d'UI :
+   * papier kraft, papier de soie, feuillage, eau, lin. Toutes tiennent le texte
+   * `ink` au-dessus de 12:1.
+   */
+  --color-tint-kraft: #f3ece1;
+  --color-tint-soie: #f7e9ec;
+  --color-tint-feuille: #e9efe8;
+  --color-tint-eau: #e6ecf0;
+  --color-tint-lin: #f0eee9;
+
   /* Filets — refroidis eux aussi, sinon ils ramènent le beige par la bande */
   --color-hairline: #e4e1db;
   --color-hairline-dark: #3a3340;
@@ -156,6 +175,20 @@ body::before {
  * descriptifs des pages de référencement passaient à quatre lignes et le titre
  * devenait un mur plutôt qu'une phrase.
  */
+/*
+ * Échelle « statement » — réservée au hero de l'accueil et au titre d'une
+ * page pilier. Documentée dans direction-artistique.md §4.2 mais jamais
+ * construite jusqu'ici : c'est elle qui porte le geste éditorial (Craft,
+ * Attio) plutôt que la prudence d'un titre de page de référencement.
+ */
+.text-display-2xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 1.5rem + 4.6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.026em;
+  font-weight: 400;
+}
+
 .text-display-xl {
   font-family: var(--font-display);
   font-size: clamp(2.3rem, 1.4rem + 3.2vw, 3.75rem);
@@ -248,6 +281,25 @@ body::before {
   border-color: color-mix(in srgb, var(--color-cream) 22%, transparent);
   background: color-mix(in srgb, var(--color-cream) 8%, transparent);
   box-shadow: none;
+}
+
+/*
+ * Bourgogne plein écran — le geste éditorial le plus fort du système, réservé
+ * à un seul moment par page (un pull-quote, une bande de transition). Mêmes
+ * règles de contraste que `.on-ink`, sur `--color-rose` au lieu de `--color-plum`.
+ */
+.on-rose .plate-label {
+  color: color-mix(in srgb, var(--color-cream) 70%, transparent);
+}
+
+.on-rose .pill {
+  border-color: color-mix(in srgb, var(--color-cream) 28%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 10%, transparent);
+  box-shadow: none;
+}
+
+.on-rose .pill::before {
+  background: var(--color-cream);
 }
 
 /* Numéro d'étape — réservé aux séquences réelles (la méthode). */

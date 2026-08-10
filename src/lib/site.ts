@@ -24,9 +24,14 @@ export const site = {
     name: "Bloomy",
     url: "https://bloomy.one",
   },
+  /*
+   * Portraits réels, repris du produit bloomy.one — détourés sur fond
+   * transparent. Ce sont les seules photographies de personnes réelles du
+   * site : elles montrent l'équipe elle-même, jamais un client.
+   */
   founders: [
-    { name: "Clarence Dion", role: "Co-fondateur" },
-    { name: "Tom Rodrigues", role: "Co-fondateur" },
+    { name: "Clarence Dion", role: "Co-fondateur", photo: "/equipe/clarence.webp" },
+    { name: "Tom Rodrigues", role: "Co-fondateur", photo: "/equipe/tom.webp" },
   ],
   social: {
     instagram: null as string | null,
@@ -49,9 +54,12 @@ export type NavItem = { label: string; href: string };
 export const mainNav: NavItem[] = [
   { label: "Fleuristes", href: "/fleuristes" },
   { label: "Services", href: "/services" },
-  { label: "Applications & MVP", href: "/developpement-mvp" },
+  { label: "MVP", href: "/developpement-mvp" },
+  // Le blog cède sa place au troisième produit : il reste atteignable depuis
+  // le pied de page et depuis chaque page pilier, alors qu'un produit qu'on
+  // ne trouve pas en navigation n'existe pas commercialement.
+  { label: "Micro SaaS", href: "/micro-saas" },
   { label: "Réalisations", href: "/realisations" },
-  { label: "Blog", href: "/blog" },
   { label: "À propos", href: "/a-propos" },
 ];
 
@@ -66,6 +74,7 @@ export const footerNav = {
     { label: "Tous les services", href: "/services" },
     { label: "Salons de coiffure", href: "/salons-de-coiffure" },
     { label: "Développement MVP", href: "/developpement-mvp" },
+    { label: "Micro SaaS", href: "/micro-saas" },
     { label: "Notre méthode", href: "/methode" },
     { label: "Réalisations", href: "/realisations" },
     { label: "À propos", href: "/a-propos" },

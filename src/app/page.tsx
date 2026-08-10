@@ -1,14 +1,16 @@
 import Link from "next/link";
 
-import { AdjacentSectors } from "@/components/home/AdjacentSectors";
 import { AdminDemo } from "@/components/home/AdminDemo";
 import { CaseSpotlight } from "@/components/home/CaseSpotlight";
 import { Frictions } from "@/components/home/Frictions";
 import { Hero } from "@/components/home/Hero";
 import { MethodSteps } from "@/components/home/MethodSteps";
 import { NeedsGrid } from "@/components/home/NeedsGrid";
+import { ProductGrid } from "@/components/home/ProductGrid";
 import { ProductLab } from "@/components/home/ProductLab";
 import { ProofRow } from "@/components/home/ProofRow";
+import { SectorGrid } from "@/components/home/SectorGrid";
+import { StudioTeam } from "@/components/home/StudioTeam";
 import { WorkShowcase } from "@/components/home/WorkShowcase";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
@@ -105,28 +107,34 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* 3 — Nommer le problème sans vendre dans la foulée. */}
+      {/* 3 — Répondre tout de suite à « vous faites quoi, exactement ? ». */}
+      <ProductGrid />
+
+      {/* 4 — Nommer le problème sans vendre dans la foulée. */}
       <Frictions />
 
-      {/* 4 — L'offre, organisée par objectif du client. */}
+      {/* 5 — À qui l'on s'adresse, le métier principal en tête. */}
+      <SectorGrid />
+
+      {/* 6 — L'offre fleuriste, organisée par objectif du client. */}
       <NeedsGrid />
 
-      {/* 5 — Une transformation racontée, décision par décision. */}
+      {/* 7 — Une transformation racontée, décision par décision. */}
       <CaseSpotlight />
 
-      {/* 6 — « Je ne saurai pas m'en servir » : la seule réponse est de montrer. */}
+      {/* 8 — « Je ne saurai pas m'en servir » : montrer l'endroit, pas une capture inventée. */}
       <AdminDemo />
 
-      {/* 7 — Lever le risque, puis demander le diagnostic. */}
+      {/* 9 — Lever le risque, puis demander le diagnostic. */}
       <MethodSteps />
 
-      {/* 8 — Deux lignes pour le visiteur qui n'est pas fleuriste. */}
-      <AdjacentSectors />
-
-      {/* 9 — La profondeur technique, découverte après la crédibilité métier. */}
+      {/* 10 — Notre propre produit : la preuve qu'on sait construire, pas seulement livrer. */}
       <ProductLab />
 
-      {/* 10 — Des faits, pas des témoignages : aucun n'est autorisé à ce jour. */}
+      {/* 11 — Les visages derrière le studio. Deux personnes, nommées. */}
+      <StudioTeam />
+
+      {/* 12 — Des faits, pas des témoignages : aucun n'est autorisé à ce jour. */}
       <ProofRow />
 
       {/* 11 — Les objections restantes, repliées. */}
