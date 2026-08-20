@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CtaLink } from "@/components/ui/CtaLink";
 import { BrowserFrame, PhoneFrame } from "@/components/visuals/DeviceFrame";
-import { floristSites } from "@/lib/portfolio";
+import { getShowcaseSite } from "@/lib/portfolio";
 
 /**
  * Hero — l'ouverture d'une agence de développement, pas d'un spécialiste
@@ -23,10 +23,7 @@ import { floristSites } from "@/lib/portfolio";
 const PREUVES = ["Sites & e-commerce", "MVP", "Micro SaaS"];
 
 export function Hero() {
-  // Volontairement différent du site mis en avant par la vitrine et par
-  // l'étude de cas : la même capture répétée trois fois donnait l'impression
-  // d'un portfolio d'un seul projet.
-  const site = floristSites[1];
+  const site = getShowcaseSite("maison-hortense")!;
 
   return (
     <section className="relative overflow-hidden pb-16 pt-12 sm:pt-16">

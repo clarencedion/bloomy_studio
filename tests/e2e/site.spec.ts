@@ -92,3 +92,31 @@ test("le JSON-LD Organization est rendu côté serveur", async ({ request }) => 
   expect(html).toContain('"@type":"ProfessionalService"');
   expect(html).toContain("Clarence Dion");
 });
+
+test("la page réalisations permet de filtrer les projets par catégorie", async ({ page }) => {
+  await page.goto("/realisations");
+
+  // Par défaut, l'onglet Fleuristes est actif (16 sites)
+  const cards = page.locator("#portfolio-grid article");
+  await expect(cards).toHaveCount(16);
+
+  // Filtrer par Hôtellerie & Tourisme (1 projet : FLÖVIA)
+  await page.getByRole("tab", { name: /Hôtellerie/ }).click();
+  await expect(cards).toHaveCount(1);
+  await expect(page.locator("#portfolio-grid")).toContainText("FLÖVIA");
+
+  // Filtrer par Conseil & Stratégie B2B (1 projet : ACT4RESULTS)
+  await page.getByRole("tab", { name: /Conseil/ }).click();
+  await expect(cards).toHaveCount(1);
+  await expect(page.locator("#portfolio-grid")).toContainText("ACT4RESULTS");
+
+  // Filtrer par Horticulture & Pépinières (1 projet : Pépinières Raffard)
+  await page.getByRole("tab", { name: /Horticulture/ }).click();
+  await expect(cards).toHaveCount(1);
+  await expect(page.locator("#portfolio-grid")).toContainText("Pépinières Raffard");
+
+  // Afficher Tous les projets (19 projets)
+  await page.getByRole("tab", { name: /Tous les projets/ }).click();
+  await expect(cards).toHaveCount(19);
+});
+

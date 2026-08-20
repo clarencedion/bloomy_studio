@@ -15,6 +15,31 @@
  * n'est mesuré ni autorisé à ce jour.
  */
 
+export type PortfolioCategory =
+  | "all"
+  | "ecommerce-retail"
+  | "floristry"
+  | "hospitality"
+  | "consulting"
+  | "events-creative"
+  | "horticulture";
+
+export type CategoryFilter = {
+  id: PortfolioCategory;
+  label: string;
+  shortLabel?: string;
+};
+
+export const portfolioCategories: readonly CategoryFilter[] = [
+  { id: "floristry", label: "Fleuristes", shortLabel: "Fleuristes" },
+  { id: "all", label: "Tous les projets", shortLabel: "Tous" },
+  { id: "ecommerce-retail", label: "E-commerce & Boutiques", shortLabel: "E-commerce" },
+  { id: "events-creative", label: "Événementiel & Studio créatif", shortLabel: "Événementiel" },
+  { id: "hospitality", label: "Hôtellerie & Tourisme", shortLabel: "Hôtellerie" },
+  { id: "consulting", label: "Conseil & Stratégie B2B", shortLabel: "Conseil" },
+  { id: "horticulture", label: "Horticulture & Pépinières", shortLabel: "Horticulture" },
+] as const;
+
 export type ShowcaseSite = {
   /** Identifiant stable — sert de clé et de valeur d'événement analytics. */
   slug: string;
@@ -27,6 +52,12 @@ export type ShowcaseSite = {
    * la spécialisation qu'elles servent à démontrer.
    */
   sector: "fleuriste" | "autre";
+  /** Libellé détaillé de secteur pour l'affichage de badge. */
+  sectorLabel: string;
+  /** Catégorie principale du projet. */
+  category: PortfolioCategory;
+  /** Catégories d'appartenance pour le filtrage multi-critères. */
+  categories: readonly PortfolioCategory[];
   /** Ce que le site fait, en trois mots — sert d'étiquette sous la capture. */
   focus: string;
   /** Une phrase sur ce qui a été livré, vérifiable sur la capture. */
@@ -48,13 +79,42 @@ export type ShowcaseSite = {
   mobile?: { image: string; width: number; height: number; alt: string };
 };
 
+/**
+ * Portfolio complet : les 19 projets réels ordonnés avec une alternance
+ * de secteurs pour valoriser immédiatement la diversité du studio.
+ */
 export const showcaseSites = [
+  {
+    slug: "act4results",
+    liveUrl: "https://act4results.web.app",
+    name: "ACT4RESULTS",
+    city: "Paris · Conseil B2B",
+    sector: "autre",
+    sectorLabel: "Conseil stratégique & B2B",
+    category: "consulting",
+    categories: ["consulting"],
+    focus: "Performance & transformation des ventes",
+    note: "Conseil en performance commerciale, transformation des ventes et accompagnement stratégique des équipes B2B.",
+    image: "/realisations/act4results.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site d'ACT4RESULTS, conseil en performance commerciale et transformation des ventes, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/act4results-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site d'ACT4RESULTS.",
+    },
+  },
   {
     slug: "monloup",
     liveUrl: "https://monloup.web.app",
     name: "Monloup",
     city: "Roanne",
     sector: "fleuriste",
+    sectorLabel: "Boutique en ligne & Artisanat",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
     focus: "Boutique en ligne & livraison",
     note: "Boutique, location, mariages et deuil : chaque service a sa page et son parcours de commande.",
     image: "/realisations/monloup.webp",
@@ -69,13 +129,126 @@ export const showcaseSites = [
     },
   },
   {
+    slug: "flovia",
+    liveUrl: "https://flovia.web.app",
+    name: "FLÖVIA",
+    city: "Micro-villages flottants",
+    sector: "autre",
+    sectorLabel: "Hôtellerie & Tourisme",
+    category: "hospitality",
+    categories: ["hospitality"],
+    focus: "Tourisme & immersion",
+    note: "Écolodges flottants et hébergements touristiques durables : expérience immersive et réservation en ligne.",
+    image: "/realisations/flovia.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de FLÖVIA, micro-villages flottants et écolodges sur l'eau, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/flovia-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de FLÖVIA, micro-villages flottants sur l'eau.",
+    },
+  },
+  {
+    slug: "fleurs-ditalie",
+    liveUrl: "https://fleurs-ditalie.web.app",
+    name: "Fleurs d'Italie",
+    city: "Paris",
+    sector: "fleuriste",
+    sectorLabel: "Maison florale d'exception",
+    category: "floristry",
+    categories: ["floristry", "ecommerce-retail"],
+    focus: "Maison florale haut de gamme",
+    note: "Fleuriste d'exception parisien : univers raffiné, compositions florales sur mesure et service premium.",
+    image: "/realisations/fleurs-ditalie.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Fleurs d'Italie, fleuriste d'exception à Paris, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/fleurs-ditalie-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Fleurs d'Italie à Paris.",
+    },
+  },
+  {
+    slug: "pepinieres-raffard",
+    liveUrl: "https://pepinieres-raffard.web.app",
+    name: "Pépinières Raffard",
+    city: "Châtenoy",
+    sector: "autre",
+    sectorLabel: "Horticulture & Pépinière",
+    category: "horticulture",
+    categories: ["horticulture"],
+    focus: "Producteur de rosiers depuis 1935",
+    note: "Pépinière spécialiste et producteur de rosiers : mise en valeur du savoir-faire horticole et catalogue des variétés.",
+    image: "/realisations/pepinieres-raffard.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site des Pépinières Raffard, producteur de rosiers et pépinière horticole, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/pepinieres-raffard-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site des Pépinières Raffard.",
+    },
+  },
+  {
+    slug: "flowers-madness",
+    liveUrl: "https://flowersmadness.web.app",
+    name: "Flowers Madness",
+    city: "Lyon",
+    sector: "fleuriste",
+    sectorLabel: "Scénographie & Événementiel",
+    category: "events-creative",
+    categories: ["events-creative", "floristry"],
+    focus: "Scénographie & design floral",
+    note: "Design floral contemporain et scénographies végétales sur mesure pour événements et mariages.",
+    image: "/realisations/flowers-madness.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Flowers Madness, fleuriste événementiel et scénographe à Lyon, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/flowers-madness-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Flowers Madness à Lyon.",
+    },
+  },
+  {
+    slug: "la-cle-des-champs",
+    liveUrl: "https://lacledeschamps.web.app",
+    name: "La Clé des Champs & des Thés",
+    city: "Bellegarde",
+    sector: "fleuriste",
+    sectorLabel: "Concept store fleurs & thés",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Fleurs, thés & décoration",
+    note: "Concept store chaleureux réunissant art floral, thés d'exception et objets de décoration pour la maison.",
+    image: "/realisations/la-cle-des-champs.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de La Clé des Champs & des Thés à Bellegarde, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/la-cle-des-champs-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de La Clé des Champs & des Thés.",
+    },
+  },
+  {
     slug: "maison-hortense",
-    liveUrl: "https://chezmaisonhortense.fr",
+    liveUrl: "https://maisonhortense.web.app",
     name: "Maison Hortense",
     city: "Saint-Nauphary",
     sector: "fleuriste",
-    focus: "Vitrine & mariages",
-    note: "Une vitrine éditoriale ivoire et lilas, avec la boutique et les ateliers dans le même parcours.",
+    sectorLabel: "Maison florale contemporaine",
+    category: "floristry",
+    categories: ["floristry"],
+    focus: "Maison florale contemporaine",
+    note: "Maison florale contemporaine et élégante réunissant boutique d'artisan, mariages et ateliers de composition.",
     image: "/realisations/maison-hortense.webp",
     width: 1600,
     height: 1000,
@@ -88,22 +261,25 @@ export const showcaseSites = [
     },
   },
   {
-    slug: "kl-fleurs",
-    liveUrl: "https://klfleursevenementiel.fr",
-    name: "KL Fleurs & Événementiel",
-    city: "Reims",
+    slug: "artistfloral",
+    liveUrl: "https://artistfloral.web.app",
+    name: "Artistfloral",
+    city: "Vertou",
     sector: "fleuriste",
-    focus: "Scénographie & événementiel",
-    note: "Un aplat vert signature et un chemin dédié aux événements, à côté de la boutique.",
-    image: "/realisations/kl-fleurs.webp",
+    sectorLabel: "Studio créatif & Ateliers",
+    category: "events-creative",
+    categories: ["events-creative", "floristry"],
+    focus: "Ateliers & créations artisanales",
+    note: "Studio floral artisanal, ateliers d'art floral et scénographie florale sur mesure pour les mariages.",
+    image: "/realisations/artistfloral.webp",
     width: 1600,
     height: 1000,
-    alt: "Site de KL Fleurs & Événementiel à Reims, conçu par Bloomy Studio.",
+    alt: "Site d'Artistfloral, studio floral artisanal et ateliers à Vertou, conçu par Bloomy Studio.",
     mobile: {
-      image: "/realisations/kl-fleurs-mobile.webp",
+      image: "/realisations/artistfloral-mobile.webp",
       width: 780,
       height: 1688,
-      alt: "Version mobile du site de KL Fleurs & Événementiel à Reims.",
+      alt: "Version mobile du site d'Artistfloral à Vertou.",
     },
   },
   {
@@ -112,8 +288,11 @@ export const showcaseSites = [
     name: "Maison Orpha",
     city: "Reims",
     sector: "fleuriste",
-    focus: "Couleur & objets",
-    note: "Un rouge franc sur toute la page, assumé jusqu'au bout : la boutique vend des fleurs et des objets colorés.",
+    sectorLabel: "Fleuriste & Décoration",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Fleurs & objets de décoration",
+    note: "Fleuriste contemporain combinant art floral et sélection d'objets de décoration au cœur de Reims.",
     image: "/realisations/maison-orpha.webp",
     width: 1600,
     height: 1000,
@@ -126,22 +305,201 @@ export const showcaseSites = [
     },
   },
   {
-    slug: "flovia",
-    liveUrl: "https://flovia.web.app",
-    name: "Flōvia",
-    city: "Micro-villages flottants",
-    sector: "autre",
-    focus: "Tourisme & immersion",
-    note: "Hors du monde floral : une expérience sombre et cinématographique pour un concept d'écolodges sur l'eau.",
-    image: "/realisations/flovia.webp",
+    slug: "atelier-de-laurent",
+    liveUrl: "https://atelierdelaurent.web.app",
+    name: "Atelier de Laurent",
+    city: "Notre-Dame-de-Monts",
+    sector: "fleuriste",
+    sectorLabel: "Atelier floral d'artisan",
+    category: "floristry",
+    categories: ["floristry", "events-creative"],
+    focus: "Artisanat floral & sur-mesure",
+    note: "Atelier floral artisanal et compositions végétales sur mesure, inspirées du littoral vendéen.",
+    image: "/realisations/atelier-de-laurent.webp",
     width: 1600,
     height: 1000,
-    alt: "Site de Flōvia, micro-villages flottants et écolodges, conçu par Bloomy Studio.",
+    alt: "Site de L'Atelier de Laurent, artisan fleuriste à Notre-Dame-de-Monts, conçu par Bloomy Studio.",
     mobile: {
-      image: "/realisations/flovia-mobile.webp",
+      image: "/realisations/atelier-de-laurent-mobile.webp",
       width: 780,
       height: 1688,
-      alt: "Version mobile du site de Flōvia, micro-villages flottants sur l'eau.",
+      alt: "Version mobile du site de L'Atelier de Laurent.",
+    },
+  },
+  {
+    slug: "julius",
+    liveUrl: "https://fleuriste-julius.web.app",
+    name: "Julius",
+    city: "Toulouse",
+    sector: "fleuriste",
+    sectorLabel: "Artisan fleuriste",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Artisan fleuriste contemporain",
+    note: "Artisan fleuriste contemporain à Toulouse : fleurs de saison, sélection végétale et conseils d'artisan.",
+    image: "/realisations/julius.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Julius, artisan fleuriste à Toulouse, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/julius-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Julius à Toulouse.",
+    },
+  },
+  {
+    slug: "kl-fleurs",
+    liveUrl: "https://kl-fleurs.web.app",
+    name: "KL Fleurs & Événementiel",
+    city: "Reims",
+    sector: "fleuriste",
+    sectorLabel: "Fleurs & Événementiel",
+    category: "events-creative",
+    categories: ["events-creative", "floristry"],
+    focus: "Scénographie & événementiel",
+    note: "Créations florales et décoration événementielle sur mesure pour réceptions et entreprises.",
+    image: "/realisations/kl-fleurs.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de KL Fleurs & Événementiel à Reims, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/kl-fleurs-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de KL Fleurs & Événementiel à Reims.",
+    },
+  },
+  {
+    slug: "capifiore",
+    liveUrl: "https://capifiore.web.app",
+    name: "Capifiore",
+    city: "Cap Corse · Luri",
+    sector: "fleuriste",
+    sectorLabel: "Fleuriste de proximité",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Fleuriste insulaire & livraison",
+    note: "Artisane fleuriste installée au Cap Corse : créations florales locales et service de livraison sur l'île.",
+    image: "/realisations/capifiore.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Capifiore, artisane fleuriste au Cap Corse, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/capifiore-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Capifiore au Cap Corse.",
+    },
+  },
+  {
+    slug: "maison-de-rose",
+    liveUrl: "https://maisonderose.web.app",
+    name: "Maison de Rose",
+    city: "Paris & Île-de-France",
+    sector: "fleuriste",
+    sectorLabel: "Maison florale contemporaine",
+    category: "floristry",
+    categories: ["floristry"],
+    focus: "Boutique florale & bouquets sur mesure",
+    note: "Boutique florale contemporaine et bouquets sur mesure à Paris, Achères et Verneuil-sur-Seine.",
+    image: "/realisations/maison-de-rose.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Maison de Rose, fleuriste contemporain en Île-de-France, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/maison-de-rose-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Maison de Rose.",
+    },
+  },
+  {
+    slug: "la-fine-fleur",
+    liveUrl: "https://lafinefleur.web.app",
+    name: "La Fine Fleur",
+    city: "Muzillac",
+    sector: "fleuriste",
+    sectorLabel: "Artisan fleuriste",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Fleurs fraîches & arrangements",
+    note: "Artisan fleuriste et arrangements floraux personnalisés au cœur du Morbihan.",
+    image: "/realisations/la-fine-fleur.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de La Fine Fleur, artisan fleuriste à Muzillac, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/la-fine-fleur-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de La Fine Fleur à Muzillac.",
+    },
+  },
+  {
+    slug: "osmose-florale",
+    liveUrl: "https://osmoseflorale.web.app",
+    name: "Osmose Florale",
+    city: "Marboz",
+    sector: "fleuriste",
+    sectorLabel: "Design floral contemporain",
+    category: "floristry",
+    categories: ["floristry", "events-creative"],
+    focus: "Design floral & bouquets d'artisan",
+    note: "Créations florales contemporaines et bouquets d'artisan pour toutes les occasions.",
+    image: "/realisations/osmose-florale.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site d'Osmose Florale, fleuriste artisan à Marboz, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/osmose-florale-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site d'Osmose Florale à Marboz.",
+    },
+  },
+  {
+    slug: "aux-coquelicots",
+    liveUrl: "https://auxcoquelicots.web.app",
+    name: "Aux Coquelicots",
+    city: "Neufchef",
+    sector: "fleuriste",
+    sectorLabel: "Fleuriste de proximité",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Fleurs locales & compositions",
+    note: "Artisan fleuriste de proximité : compositions florales fraîches et livraison en Lorraine.",
+    image: "/realisations/aux-coquelicots.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site d'Aux Coquelicots, artisan fleuriste à Neufchef, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/aux-coquelicots-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site d'Aux Coquelicots à Neufchef.",
+    },
+  },
+  {
+    slug: "au-jardin-de-celine",
+    liveUrl: "https://aujardindeceline.web.app",
+    name: "Au Jardin de Céline",
+    city: "Massy",
+    sector: "fleuriste",
+    sectorLabel: "Artisan fleuriste",
+    category: "ecommerce-retail",
+    categories: ["ecommerce-retail", "floristry"],
+    focus: "Créations personnalisées & accueil",
+    note: "Artisan fleuriste proposant des créations florales personnalisées et un accompagnement sur mesure.",
+    image: "/realisations/au-jardin-de-celine.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site d'Au Jardin de Céline, fleuriste à Massy, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/au-jardin-de-celine-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site d'Au Jardin de Céline à Massy.",
     },
   },
 ] as const satisfies readonly ShowcaseSite[];
@@ -149,9 +507,29 @@ export const showcaseSites = [
 /** Les vitrines florales seules — ce que montrent les pages fleuristes. */
 export const floristSites = showcaseSites.filter((s) => s.sector === "fleuriste");
 
+/**
+ * 4 réalisations phares pour la vitrine d'accueil :
+ * diversité maximale de secteurs (Consulting, Hospitality, Horticulture, E-commerce)
+ * et de designs graphiques.
+ */
+export const homeFeaturedSites = [
+  showcaseSites.find((s) => s.slug === "act4results")!,
+  showcaseSites.find((s) => s.slug === "flovia")!,
+  showcaseSites.find((s) => s.slug === "pepinieres-raffard")!,
+  showcaseSites.find((s) => s.slug === "monloup")!,
+] as const satisfies readonly ShowcaseSite[];
+
 /** Slugs connus — littéraux, pour que `getShowcaseSite` refuse une faute de frappe. */
 export type ShowcaseSlug = (typeof showcaseSites)[number]["slug"];
 
 export function getShowcaseSite(slug: ShowcaseSlug): ShowcaseSite | undefined {
   return showcaseSites.find((s) => s.slug === slug);
+}
+
+/** Filtrer les sites par catégorie. */
+export function getSitesByCategory(category: PortfolioCategory): readonly ShowcaseSite[] {
+  if (category === "all") return showcaseSites;
+  return showcaseSites.filter((s) =>
+    (s.categories as readonly PortfolioCategory[]).includes(category),
+  );
 }

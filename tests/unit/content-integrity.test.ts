@@ -112,3 +112,57 @@ describe("intégrité du contenu", () => {
     }
   });
 });
+
+describe("intégrité du portfolio", () => {
+  it("contient les 19 projets sans doublon de slug ou d'URL", async () => {
+    const { showcaseSites } = await import("@/lib/portfolio");
+    expect(showcaseSites.length).toBe(19);
+
+    const slugs = showcaseSites.map((s) => s.slug);
+    expect(new Set(slugs).size).toBe(showcaseSites.length);
+
+    const urls = showcaseSites.map((s) => s.liveUrl);
+    expect(new Set(urls).size).toBe(showcaseSites.length);
+  });
+
+  it("exclut explicitement les URLs dupliquées interdites", async () => {
+    const { showcaseSites } = await import("@/lib/portfolio");
+    const urls = showcaseSites.map((s) => s.liveUrl);
+    for (const url of urls) {
+      expect(url).not.toContain("bloomy-fleuriste.web.app");
+      expect(url).not.toContain("fleursdelisa.web.app");
+    }
+  });
+
+  it("chaque projet a des métadonnées complètes et valides", async () => {
+    const { showcaseSites } = await import("@/lib/portfolio");
+    for (const s of showcaseSites) {
+      expect(s.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(s.name.length).toBeGreaterThan(0);
+      expect(s.city.length).toBeGreaterThan(0);
+      expect(s.liveUrl).toMatch(/^https:\/\//);
+      expect(s.focus.length).toBeGreaterThan(0);
+      expect(s.note.length).toBeGreaterThan(0);
+      expect(s.alt.length).toBeGreaterThanOrEqual(10);
+      expect(s.image).toMatch(/^\/realisations\/[a-z0-9-]+\.webp$/);
+      expect(s.categories.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("le filtrage par catégorie retourne les bons éléments pour tous les filtres", async () => {
+    const { portfolioCategories, getSitesByCategory, showcaseSites } = await import(
+      "@/lib/portfolio"
+    );
+    for (const cat of portfolioCategories) {
+      const filtered = getSitesByCategory(cat.id);
+      expect(filtered.length, `catégorie vide : ${cat.id}`).toBeGreaterThan(0);
+      if (cat.id === "all") {
+        expect(filtered.length).toBe(showcaseSites.length);
+      } else {
+        for (const site of filtered) {
+          expect(site.categories).toContain(cat.id);
+        }
+      }
+    }
+  });
+});

@@ -6,14 +6,14 @@ import { useState } from "react";
 import { LiveSiteLink } from "@/components/ui/LiveSiteLink";
 import { BrowserFrame, PhoneFrame } from "@/components/visuals/DeviceFrame";
 import { track } from "@/lib/analytics";
-import { floristSites } from "@/lib/portfolio";
+import { homeFeaturedSites } from "@/lib/portfolio";
 
 /**
  * Vitrine — section 2 de la direction artistique.
  *
- * Le travail avant le discours : quatre boutiques livrées, quatre univers
- * graphiques différents. C'est la preuve que rien n'est décliné d'un modèle, et c'est la
- * réponse à la seule question du visiteur — « est-ce que c'est beau ? ».
+ * Le travail avant le discours : quatre projets livrés, quatre secteurs
+ * et univers graphiques différents (Consulting B2B, Hébergement touristique,
+ * Pépinière horticole, E-commerce).
  *
  * Un seul arbre pour les deux mises en page : chaque capture existe une seule
  * fois dans le DOM. Mobile, elles s'empilent et rien n'est à toucher pour tout
@@ -28,13 +28,13 @@ export function WorkShowcase() {
 
   const select = (index: number) => {
     setActive(index);
-    track("showcase_project_view", { project: floristSites[index].slug });
+    track("showcase_project_view", { project: homeFeaturedSites[index].slug });
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-10">
-      <ul className="hidden lg:flex lg:flex-col lg:gap-2 lg:pt-14">
-        {floristSites.map((s, i) => {
+    <div className="lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-10">
+      <ul className="hidden lg:flex lg:flex-col lg:gap-2.5 lg:pt-14">
+        {homeFeaturedSites.map((s, i) => {
           const current = i === active;
           return (
             <li key={s.slug}>
@@ -48,8 +48,13 @@ export function WorkShowcase() {
                     : "border-hairline hover:border-ink/30 hover:bg-paper"
                 }`}
               >
-                <span className="block font-semibold">{s.name}</span>
-                <span className="mt-0.5 block text-[0.82rem] text-ink-soft">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="block font-semibold">{s.name}</span>
+                  <span className="plate-label text-[0.65rem] text-rose">
+                    {s.sectorLabel}
+                  </span>
+                </div>
+                <span className="mt-1 block text-[0.82rem] text-ink-soft">
                   {s.city} · {s.focus}
                 </span>
               </button>
@@ -88,7 +93,7 @@ export function WorkShowcase() {
           ))}
         </div>
 
-        {floristSites.map((s, i) => (
+        {homeFeaturedSites.map((s, i) => (
           <figure
             key={s.slug}
             className={
@@ -140,3 +145,4 @@ export function WorkShowcase() {
     </div>
   );
 }
+
