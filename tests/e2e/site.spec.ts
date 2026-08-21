@@ -96,9 +96,9 @@ test("le JSON-LD Organization est rendu côté serveur", async ({ request }) => 
 test("la page réalisations permet de filtrer les projets par catégorie", async ({ page }) => {
   await page.goto("/realisations");
 
-  // Par défaut, l'onglet Fleuristes est actif (16 sites)
+  // Par défaut, l'onglet Fleuristes est actif (15 sites)
   const cards = page.locator("#portfolio-grid article");
-  await expect(cards).toHaveCount(16);
+  await expect(cards).toHaveCount(15);
 
   // Filtrer par Hôtellerie & Tourisme (1 projet : FLÖVIA)
   await page.getByRole("tab", { name: /Hôtellerie/ }).click();

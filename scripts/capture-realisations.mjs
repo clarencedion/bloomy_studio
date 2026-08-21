@@ -1,6 +1,6 @@
 import { chromium } from "@playwright/test";
 import sharp from "sharp";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -12,8 +12,8 @@ const SITES = [
   ["act4results", "https://act4results.web.app/"],
   ["flovia", "https://flovia.web.app/"],
   ["pepinieres-raffard", "https://pepinieres-raffard.web.app/"],
+  ["rodolphe-dion-coiffure", "https://rodolphedioncoiffure.web.app/"],
   ["artistfloral", "https://artistfloral.web.app/"],
-  ["flowers-madness", "https://flowersmadness.web.app/"],
   ["kl-fleurs", "https://kl-fleurs.web.app/"],
   ["atelier-de-laurent", "https://atelierdelaurent.web.app/"],
   ["fleurs-ditalie", "https://fleurs-ditalie.web.app/"],
@@ -39,7 +39,7 @@ async function toWebp(pngPath, target, maxBytes) {
   for (const quality of [82, 74, 66, 58, 50, 42, 35, 28, 22, 18]) {
     const buf = await sharp(pngPath).webp({ quality, effort: 6 }).toBuffer();
     if (buf.length <= maxBytes || quality === 18) {
-      await sharp(buf).toFile(target);
+      await writeFile(target, buf);
       const meta = await sharp(buf).metadata();
       return { bytes: buf.length, quality, w: meta.width, h: meta.height };
     }

@@ -32,7 +32,7 @@ export function WorkShowcase() {
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-10">
+    <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-12">
       <ul className="hidden lg:flex lg:flex-col lg:gap-2.5 lg:pt-14">
         {homeFeaturedSites.map((s, i) => {
           const current = i === active;
@@ -42,20 +42,18 @@ export function WorkShowcase() {
                 type="button"
                 onClick={() => select(i)}
                 aria-pressed={current}
-                className={`lift press w-full rounded-sm border px-4 py-3.5 text-left ${
+                className={`lift press w-full rounded-sm border px-4 py-3 text-left transition-all ${
                   current
                     ? "border-rose bg-paper shadow-lift"
-                    : "border-hairline hover:border-ink/30 hover:bg-paper"
+                    : "border-hairline bg-cream/40 hover:border-ink/30 hover:bg-paper"
                 }`}
               >
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="block font-semibold">{s.name}</span>
-                  <span className="plate-label text-[0.65rem] text-rose">
-                    {s.sectorLabel}
-                  </span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-[0.92rem] text-ink truncate">{s.name}</span>
+                  <span className="text-[0.72rem] font-medium text-rose shrink-0">{s.city}</span>
                 </div>
-                <span className="mt-1 block text-[0.82rem] text-ink-soft">
-                  {s.city} · {s.focus}
+                <span className="mt-1 block text-[0.8rem] text-ink-soft truncate">
+                  {s.focus}
                 </span>
               </button>
             </li>

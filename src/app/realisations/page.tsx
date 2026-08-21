@@ -31,9 +31,9 @@ export default function RealisationsPage() {
         title="Des sites en ligne, pas des maquettes"
         lede={
           <>
-            Boutiques e-commerce, vitrines d&apos;artisans, hébergements touristiques,
-            conseil B2B et horticulture : découvrez 19 sites en production. Pas de faux
-            logos, pas de promesses en l&apos;air : chaque projet est accessible en ligne.
+            Boutiques e-commerce, vitrines d&apos;artisans, salons de coiffure, hébergements
+            touristiques, conseil B2B et horticulture : découvrez 19 sites en production.
+            Pas de faux logos, pas de promesses en l&apos;air : chaque projet est accessible en ligne.
           </>
         }
       />

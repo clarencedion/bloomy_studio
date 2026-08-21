@@ -7,7 +7,7 @@ import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { EditorialList } from "@/components/ui/EditorialList";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { SiteGallery } from "@/components/visuals/ShowcaseSites";
+import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
@@ -138,21 +138,18 @@ export default function SalonsPage() {
       </section>
 
       {/*
-        Aucune capture de salon n'existe encore. Plutôt que de laisser la page
-        sans preuve — ou pire, d'en fabriquer une — on montre le travail livré
-        en le nommant pour ce qu'il est : des sites de fleuristes. Le savoir-
-        faire se voit, l'honnêteté aussi.
+        Capture réelle d'un salon de coiffure livré par le studio.
       */}
       <section className="border-y border-hairline bg-cream-deep py-16 sm:py-20">
         <Container width="wide">
           <SectionHead
-          align="split"
+            align="split"
             eyebrow="Notre travail"
             title="Ce que nous livrons, en ligne aujourd'hui"
-            lede="Nos sites livrés sont pour l'instant des boutiques de fleuristes : nous préférons vous montrer du travail réel plutôt qu'une maquette de salon. Le soin, la structure et le niveau de finition sont les mêmes."
+            lede="Découvrez le site conçu pour le salon Rodolphe Dion Coiffure à Dol-de-Bretagne : prestations claires, prise de rendez-vous fluide et univers soigné."
             className="mb-12"
           />
-          <SiteGallery />
+          <SiteShowpiece slug="rodolphe-dion-coiffure" />
         </Container>
       </section>
 

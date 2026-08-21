@@ -98,8 +98,8 @@ export default function HomePage() {
           <SectionHead
             align="center"
             eyebrow="Nos réalisations"
-            title="Quatre projets, quatre univers"
-            lede="Aucun modèle décliné : chaque site part de l'activité, de ses matières et de sa façon de vendre."
+            title="Quatre boutiques, quatre univers"
+            lede="Aucun modèle décliné : chaque site part de la boutique, de ses matières et de sa façon de vendre."
           />
           <div className="mt-12">
             <WorkShowcase />
