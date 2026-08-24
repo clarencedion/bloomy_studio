@@ -9,7 +9,7 @@ import "server-only";
  */
 
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW = 5;
+export const MAX_PER_WINDOW = 15;
 
 const hits = new Map<string, number[]>();
 

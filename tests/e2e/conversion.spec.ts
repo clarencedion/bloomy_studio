@@ -81,6 +81,31 @@ test("le formulaire de contact valide et aboutit", async ({ page }) => {
   await expect(page.getByText("Message bien reçu")).toBeVisible({ timeout: 15_000 });
 });
 
+test("la modale de prise de RDV sur /ramonage s'ouvre, valide et aboutit", async ({ page }) => {
+  await page.goto("/ramonage");
+  await dismissCookies(page);
+
+  // Ouvrir la modale
+  await page.getByRole("button", { name: "Prendre rendez-vous / Échanger" }).first().click();
+  const modal = page.locator("#ramonage-modal-title");
+  await expect(modal).toBeVisible();
+
+  // Remplir les informations ramoneur
+  await page.getByLabel(/Votre nom \*/i).fill("Jean Dupont");
+  await page.getByLabel(/Nom de votre entreprise \*/i).fill("Dupont Ramonage & Fumisterie");
+  await page.getByLabel(/Téléphone \*/i).fill("06 11 22 33 44");
+  await page.getByLabel(/Adresse e-mail \*/i).fill("jean@dupont-ramonage.fr");
+  await page.getByLabel(/Zone \/ Commune d'intervention \*/i).fill("Nantes & 30 km");
+  await page.getByRole("checkbox", { name: /J'accepte que Bloomy Studio/ }).check();
+
+  // Attendre le délai anti-bot (≥ 3 s)
+  await page.waitForTimeout(3200);
+  await page.getByRole("button", { name: /Demander mon rendez-vous d'échange/i }).click();
+
+  // Vérifier le message de confirmation
+  await expect(page.getByText("Demande bien reçue")).toBeVisible({ timeout: 15_000 });
+});
+
 test("navigation mobile : le menu s'ouvre, navigue et se referme", async ({
   page,
   isMobile,

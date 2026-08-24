@@ -10,6 +10,8 @@ export type AnalyticsEvent =
   | "audit_step"
   | "audit_submit"
   | "contact_submit"
+  | "ramonage_modal_open"
+  | "ramonage_submit"
   | "case_study_view"
   /** Projet mis au premier plan dans la vitrine de l'accueil. */
   | "showcase_project_view"

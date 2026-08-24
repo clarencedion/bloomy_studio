@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isBotSubmission, isRateLimited } from "@/lib/anti-spam";
+import { isBotSubmission, isRateLimited, MAX_PER_WINDOW } from "@/lib/anti-spam";
 
 function makeForm(entries: Record<string, string>): FormData {
   const fd = new FormData();
@@ -44,9 +44,9 @@ describe("isBotSubmission", () => {
 });
 
 describe("isRateLimited", () => {
-  it("bloque au-delà de 5 requêtes sur la fenêtre", () => {
+  it("bloque au-delà du seuil maximal sur la fenêtre", () => {
     const ip = `test-${Math.random()}`;
-    for (let i = 0; i < 5; i += 1) {
+    for (let i = 0; i < MAX_PER_WINDOW; i += 1) {
       expect(isRateLimited(ip)).toBe(false);
     }
     expect(isRateLimited(ip)).toBe(true);
@@ -55,7 +55,7 @@ describe("isRateLimited", () => {
   it("ne mélange pas les adresses IP", () => {
     const a = `a-${Math.random()}`;
     const b = `b-${Math.random()}`;
-    for (let i = 0; i < 5; i += 1) isRateLimited(a);
+    for (let i = 0; i < MAX_PER_WINDOW; i += 1) isRateLimited(a);
     expect(isRateLimited(b)).toBe(false);
   });
 });
