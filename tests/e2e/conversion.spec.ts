@@ -86,7 +86,7 @@ test("la modale de prise de RDV sur /ramonage s'ouvre, valide et aboutit", async
   await dismissCookies(page);
 
   // Ouvrir la modale
-  await page.getByRole("button", { name: "Prendre rendez-vous / Échanger" }).first().click();
+  await page.getByRole("button", { name: "Voir mon futur site" }).first().click();
   const modal = page.locator("#ramonage-modal-title");
   await expect(modal).toBeVisible();
 
@@ -104,6 +104,39 @@ test("la modale de prise de RDV sur /ramonage s'ouvre, valide et aboutit", async
 
   // Vérifier le message de confirmation
   await expect(page.getByText("Demande bien reçue")).toBeVisible({ timeout: 15_000 });
+});
+
+test("le parcours de réservation de /ramonage se joue en trois étapes", async ({
+  page,
+}) => {
+  await page.goto("/ramonage");
+  await dismissCookies(page);
+
+  const panel = page.locator("#reservation");
+  await panel.scrollIntoViewIfNeeded();
+
+  // Étape 1 — l'appareil décide de la durée et du tarif affichés au client.
+  await panel.getByRole("button", { name: /Poêle à granulés/ }).click();
+  await panel.getByRole("button", { name: /Choisir mes créneaux/ }).click();
+
+  // Étape 2 — le récapitulatif reste fermé tant que le minimum de créneaux
+  // n'est pas atteint : c'est la règle du tunnel réel, pas un détail d'UI.
+  const recap = panel.getByRole("button", { name: /Voir le récapitulatif/ });
+  await expect(recap).toBeDisabled();
+  await panel.getByRole("button", { name: "10 h – 12 h" }).click();
+  await panel.getByRole("button", { name: "Jeudi 5" }).click();
+  await panel.getByRole("button", { name: "8 h – 10 h" }).click();
+  await expect(panel.getByText("2 / 5 créneaux proposés")).toBeVisible();
+  await recap.click();
+
+  // Étape 3 — le dossier reprend les choix précédents.
+  await expect(panel.getByText("La demande arrive complète.")).toBeVisible();
+  await expect(panel.getByText("Poêle à granulés")).toBeVisible();
+  await expect(panel.getByText("Jeudi 5 · 8 h – 10 h")).toBeVisible();
+
+  // Et il ouvre la modale de prise de contact du studio.
+  await panel.getByRole("button", { name: "Créer mon site ramoneur" }).click();
+  await expect(page.locator("#ramonage-modal-title")).toBeVisible();
 });
 
 test("navigation mobile : le menu s'ouvre, navigue et se referme", async ({

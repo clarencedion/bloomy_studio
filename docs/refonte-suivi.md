@@ -777,6 +777,69 @@ Ajouter une entrée par session. Ne jamais supprimer une entrée passée.
 | 2026-07-31 | Refonte complète (brief ci-dessus) + création d'un fichier de suivi pour continuité inter-conversation | Lecture de l'état actuel du dépôt (routes, `docs/`, historique git). Création de ce fichier (`docs/refonte-suivi.md`). **Aucun changement de code, de contenu ou de design n'a encore été fait pour ce brief.** | Phase 1 (audit formel page par page par rapport au brief), Phase 2 (stratégie créative : concept en une phrase, principes, matrice de références), puis Phases 3–5 (design, build, QA) — voir §1 « Required workflow ». |
 | 2026-07-31 | « on y va tu fais tout » — exécution autonome des Phases 1–5 | **Conclusion stratégique (Phase 2) :** le système « atelier clair » documenté dans `AGENTS.md`/`direction-artistique.md` est déjà cohérent, discipliné et conforme à l'esprit anti-patterns-IA du brief (pas de glassmorphism, pas de bento, pas de gradient, pas de preuve inventée) — décision : **évoluer/corriger l'existant plutôt que le remplacer**, conformément à la clause du brief « if the existing identity is strong, evolve it rather than replacing it blindly ». Audit complet (3 agents en parallèle : contenu/SEO, système de design/animation, tests/intégrité) puis corrections réelles : <br>• **Budget d'animation** — `band-drift` (parallaxe scroll sur 4 bandes photo) supprimé de `globals.css` et de ses 4 usages : ce pattern n'est pas dans les 5 animations autorisées par `direction-artistique.md` §4.4 et recoupe l'interdit explicite « parallaxe lourde ». `fade-up-late` restreint au Hero (`PageHero.tsx` utilise désormais `<Reveal>`, déjà comptée dans le budget, au lieu de réutiliser l'animation d'entrée du hero sur chaque page intérieure). <br>• **Discipline `bloom`** vérifiée : n'apparaît que via la pastille `.pill` (un usage explicitement sanctionné par la règle), jamais combiné à un autre usage bloom dans un même écran — conforme, aucun changement. <br>• **Hygiène technique** : `public/photos/_raw/` (18 Mo de PNG sources, gitignorés mais servis publiquement lors d'un déploiement depuis la source locale) déplacé vers `assets/photos-raw/`, hors de `public/` ; script `optimize-images.mjs` et `.gitignore` mis à jour. Deux photos orphelines supprimées. Champ mort `site.legalName` supprimé (jamais lu, redondant avec `legal.ts`). <br>• **SEO** : titles/descriptions hors clou (50–60/130–150 car.) corrigés sur 11 pages + 2 articles de blog (mesuré précisément par script, pas à l'estimation). <br>• **Intégrité du contenu** : légende de `CaseSpotlight` reformulée (affirmation d'usage non vérifiable → principe de conception assumé, cohérent avec la règle « aucune preuve inventée »). URLs `liveUrl` du portfolio vérifiées par fetch réel (domaine perso + repli `.web.app` = même site, conforme). <br>• **Tests de garde-fou ajoutés** (rules d'`AGENTS.md` jusqu'ici non testées) : `mainNav.length <= 6`, budget de poids `< 100 Ko` sur `public/realisations/*.webp`, présence de `"server-only"` sur les modules sensibles (nouveau fichier `tests/unit/build-hygiene.test.ts`), et règle d'espacement après un lien (`</a>` collé au texte suivant) vérifiée sur le HTML rendu de chaque route dans `tests/e2e/site.spec.ts`. <br>• **Contenu** : accueil dégraissé (~65 mots, FAQ redondante avec la démo d'administration retirée, aparté technique de `ProductLab` coupé — sans toucher à une section). Les 3 articles de blog étoffés de ~650–900 mots chacun (contenu réel : pièges UX, accessibilité, calendrier de visibilité, exemple de calcul chiffré explicitement labellisé illustratif, questions à poser à une plateforme) pour dépasser 1500 mots (mesuré par script sur le texte réellement rendu). `/fleuristes/maintenance` et `/fleuristes/site-internet` étoffées (nouvelle section « démarrage » à 3 étapes, nouveau FAQ, paragraphe de positionnement) pour dépasser 800 mots. <br>• **Vérification** : `npm run lint`, `typecheck`, `test` (26 tests, tous verts), `build` et `e2e` (55 passés / 1 skip) tous verts. Contrôle visuel réel via Playwright (desktop + mobile, `prefers-reduced-motion: reduce` pour vérifier le contenu sans dépendre du timing du scroll-reveal) sur l'accueil, les deux pages fleuristes étoffées et un article de blog — rendu conforme au système, aucune régression. | **Non fait dans cette session, à faire ensuite si l'utilisateur le souhaite :** (1) pages légales toujours `noindex` — `lib/legal.ts` a besoin de vraies données d'entité (SIREN, forme juridique, adresse du siège...) qu'aucune IA ne peut inventer ; (2) le reste du site (`/services`, `/salons-de-coiffure`, `/realisations`, `/methode`, `/a-propos`, etc.) n'a pas eu la même passe de relecture ligne à ligne que les pages touchées ici — l'audit initial n'a rien signalé de cassé dessus, mais elles n'ont pas été retravaillées activement ; (3) Phase 5 du brief demande aussi un test de compatibilité multi-navigateurs (Safari/iOS réel) — seul Chromium a été testé ici, conformément à `playwright.config.ts` actuel. |
 
+### Session 2026-08-25 — /ramonage : unifier le design et montrer un vrai site
+
+**Demande :** « un design plus uniforme et avec des sections qui se complètent
+et en harmonie », avec l'autorisation d'utiliser le contenu et les visuels de
+`https://ramoplus.pages.dev/` — un site de ramonage construit par
+l'utilisateur.
+
+**Diagnostic.** La page mélangeait quatre langages visuels sans grille
+commune : une photographie, deux illustrations au crayon de rapports
+différents (16/9 et 4/5), une fausse capture de site **redessinée en HTML**
+(`RamonageShowcasePreview`) et un simulateur à émojis avec sa propre barre de
+titre. Les fonds alternaient sans logique, deux blocs image + texte avaient
+des ratios de colonnes différents (`1.25fr/0.75fr` puis `0.75fr/1.05fr`) et
+des `Container` de largeurs différentes, et la section « une journée
+simplifiée » disait déjà ce que les deux blocs suivants racontaient. Le
+gabarit HTML redessiné retombait exactement dans le défaut corrigé le
+2026-08-10 (« les visuels étaient codés »), et le simulateur affichait des
+prix inventés (« 75 — 90 € »).
+
+**Corrections.**
+
+- **Vitrine réelle** : `scripts/capture-ramonage.mjs` (`npm run
+  captures:ramonage`) capture RamoPlus en desktop et mobile. La fausse
+  capture codée est supprimée, remplacée par `RamonageSiteShowcase` —
+  `BrowserFrame` + `PhoneFrame` ancré au bord droit, le pattern déjà utilisé
+  par `ShowcaseSites`.
+- **Honnêteté de la preuve** : RamoPlus est un site démo, pas un site client
+  en production. L'utilisateur a demandé (2026-08-25) que la page ne le
+  qualifie pas explicitement de démonstration ; elle s'en tient donc au
+  vérifiable — « le site que nous avons conçu », « Site en ligne » — et ne le
+  présente jamais comme un travail livré à un client. Contreparties tenues :
+  il n'entre pas dans `lib/portfolio.ts` ni dans `/realisations`, et ses
+  témoignages (Camille Reynaud, Thomas Blanchard, Sophie Maurin) ne sont
+  **jamais** repris sur le site du studio.
+- **Simulateur refait** : calqué sur le tunnel réel de RamoPlus (appareil →
+  disponibilités 2 à 5 créneaux → récapitulatif), sans émoji, dans un
+  `PanelFrame` (donc estampillé « Aperçu »). Les durées et les tarifs sont
+  ceux de la grille publiée sur `ramoplus.pages.dev/tarifs.html` — plus aucun
+  chiffre inventé, et une note sous le panneau dit d'où ils viennent.
+- **Rythme unifié** : six bandes, `paper → cream → cream-deep → paper → cream
+  → plum`, filet à chaque jointure. Les deux blocs image + texte deviennent
+  un **diptyque** (avant / après le passage) : même gabarit, même cadre, même
+  rapport 4/3, en miroir. Les trois cartes « journée simplifiée » deviennent
+  une bande de quatre repères accrochée au hero.
+- **Boutons** : `RamonageBookingTrigger` empruntait ses propres classes
+  (`bg-rose` au lieu de `bg-ink hover:bg-rose`). Il utilise désormais
+  `buttonClass()`, exporté par `components/ui/Button.tsx` — un seul endroit
+  décide de l'allure d'un bouton.
+- **Micro-dose `bloom`** : la pastille du hero et le point coloré de la
+  légende faisaient deux accents dans le même écran. Le point est retiré.
+  H1 repassé en `text-display-xl` (`2xl` reste réservé à l'accueil et aux
+  pages piliers).
+
+**Vérification :** lint, typecheck, 28 tests unitaires, build, et 67 tests e2e
+(desktop + mobile) verts — dont un nouveau test qui joue le parcours de
+réservation en trois étapes. Contrôle visuel réel desktop (1440) et mobile
+(390).
+
+**Confirmé par l'utilisateur le 2026-08-25 :** RamoPlus est bien un site
+démo, sans client en production — il reste donc hors de `lib/portfolio.ts` et
+de `/realisations`. Le jour où un vrai site ramoneur est livré, c'est lui qui
+prend la place de la vitrine.
+
 ### Session 2026-08-10 — « le site n'a pas d'âme et fait trop IA »
 
 **Diagnostic demandé par l'utilisateur, puis appliqué.** Références données :

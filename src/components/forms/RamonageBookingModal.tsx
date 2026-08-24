@@ -15,6 +15,7 @@ import {
   submitRamonageBooking,
   type RamonageFormState,
 } from "@/app/ramonage/actions";
+import { buttonClass, type ButtonVariant } from "@/components/ui/Button";
 import { track } from "@/lib/analytics";
 
 const initialState: RamonageFormState = { status: "idle" };
@@ -31,7 +32,11 @@ export function openRamonageModal() {
   }
 }
 
-/** Bouton déclencheur pratique avec style configurable */
+/**
+ * Bouton déclencheur de la modale. Il emprunte les classes de `<Button>` :
+ * un bouton de cette page doit être indiscernable d'un bouton de n'importe
+ * quelle autre — c'est cette identité-là qui se lit comme un site cohérent.
+ */
 export function RamonageBookingTrigger({
   children,
   className = "",
@@ -39,22 +44,13 @@ export function RamonageBookingTrigger({
   ...props
 }: {
   children?: ReactNode;
-  variant?: "primary" | "secondary" | "outline";
+  variant?: ButtonVariant;
 } & ComponentPropsWithoutRef<"button">) {
-  const baseClasses =
-    "inline-flex items-center justify-center font-semibold transition-colors cursor-pointer rounded-full";
-  const variantClasses = {
-    primary: "min-h-12 bg-rose px-7 py-3 text-cream hover:bg-rose-deep",
-    secondary: "min-h-12 bg-ink px-7 py-3 text-cream hover:bg-rose",
-    outline:
-      "min-h-12 border border-ink/25 bg-transparent px-7 py-3 text-ink hover:border-rose hover:text-rose",
-  }[variant];
-
   return (
     <button
       type="button"
       onClick={openRamonageModal}
-      className={`${baseClasses} ${variantClasses} ${className}`}
+      className={`${buttonClass(variant, className)} cursor-pointer`}
       {...props}
     >
       {children ?? "Prendre rendez-vous / Échanger"}

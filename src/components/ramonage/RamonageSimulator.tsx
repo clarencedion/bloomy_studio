@@ -3,400 +3,321 @@
 import { useState } from "react";
 
 import { openRamonageModal } from "@/components/forms/RamonageBookingModal";
+import { PanelFrame } from "@/components/visuals/DeviceFrame";
+import { ramonageDemo, ramonagePage, type RamonageAppliance } from "@/lib/ramonage";
 
-type ApplianceType = {
-  id: string;
-  name: string;
-  desc: string;
-  duration: string;
-  basePrice: string;
-  icon: string;
-};
+const copy = ramonagePage.booking;
+const { appliances, days, slots, minSlots, maxSlots } = ramonageDemo;
 
-const APPLIANCES: ApplianceType[] = [
-  {
-    id: "poele-bois",
-    name: "Poêle à bois (bûches)",
-    desc: "Conduit simple ou tubé, ramonage mécanique rotatif",
-    duration: "45 min",
-    basePrice: "75 — 90 €",
-    icon: "🪵",
-  },
-  {
-    id: "poele-granules",
-    name: "Poêle à granulés / pellets",
-    desc: "Nettoyage conduit + extracteur et creuset",
-    duration: "60 min",
-    basePrice: "90 — 120 €",
-    icon: "⚡",
-  },
-  {
-    id: "insert",
-    name: "Insert / Foyer fermé",
-    desc: "Démontage déflecteur, aspiration suies et contrôle",
-    duration: "50 min",
-    basePrice: "80 — 95 €",
-    icon: "🔥",
-  },
-  {
-    id: "cheminee",
-    name: "Cheminée ouverte traditionnelle",
-    desc: "Ramonage complet avec protection soignée des sols",
-    duration: "45 min",
-    basePrice: "75 — 85 €",
-    icon: "🏡",
-  },
-  {
-    id: "debistrage",
-    name: "Débistrage / Dégoudronnage",
-    desc: "Élimination du bistre durci avant retubage",
-    duration: "2 à 3 h",
-    basePrice: "Sur diagnostic",
-    icon: "⚙️",
-  },
-];
+const STEPS = ["Appareil", "Créneaux", "Récapitulatif"] as const;
+type Step = 0 | 1 | 2;
 
-const SECTORS = [
-  {
-    name: "Secteur Centre / Proche agglomération",
-    days: "Interventions Mardi & Jeudi",
-    slots: ["Mardi 09:00", "Mardi 14:30", "Jeudi 11:00", "Jeudi 16:00"],
-  },
-  {
-    name: "Secteur Nord & communes limitrophes",
-    days: "Interventions Mercredi matin & Vendredi",
-    slots: ["Mercredi 08:30", "Mercredi 10:30", "Vendredi 13:30", "Vendredi 15:30"],
-  },
-  {
-    name: "Secteur Sud & campagne",
-    days: "Interventions Lundi & Mercredi après-midi",
-    slots: ["Lundi 09:30", "Lundi 14:00", "Mercredi 14:00", "Mercredi 16:30"],
-  },
-];
+/** Identifiant lisible d'un créneau : « Mardi 3 · 8 h – 10 h ». */
+function slotId(dayLabel: string, slot: string) {
+  return `${dayLabel} · ${slot}`;
+}
 
+/**
+ * Parcours de réservation jouable, calqué sur le tunnel réel de
+ * ramoplus.pages.dev (appareil → disponibilités → récapitulatif).
+ *
+ * Les durées et les tarifs viennent de la grille publiée par ce site : rien
+ * n'est inventé ici, et la note sous le panneau le dit. Pas d'émoji, pas de
+ * seconde couleur d'action : le bourgogne marque la sélection et l'appel,
+ * tout le reste tient au filet et à la typographie.
+ */
 export function RamonageSimulator() {
-  const [selectedAppliance, setSelectedAppliance] = useState<ApplianceType>(APPLIANCES[0]);
-  const [selectedSector, setSelectedSector] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(SECTORS[0].slots[0]);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<Step>(0);
+  const [appliance, setAppliance] = useState<RamonageAppliance>(appliances[0]);
+  const [dayIndex, setDayIndex] = useState(0);
+  const [picked, setPicked] = useState<string[]>([]);
+
+  const day = days[dayIndex];
+  const enough = picked.length >= minSlots;
+
+  function toggleSlot(id: string) {
+    setPicked((current) => {
+      if (current.includes(id)) return current.filter((s) => s !== id);
+      if (current.length >= maxSlots) return current;
+      return [...current, id];
+    });
+  }
 
   return (
-    <div className="overflow-hidden rounded-sm border border-hairline bg-paper shadow-lift">
-      {/* Header bar */}
-      <div className="border-b border-hairline bg-cream-deep px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="flex size-2.5 rounded-full bg-sage-deep" aria-hidden="true" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-            Aperçu interactif : ce que voit votre client
-          </span>
-        </div>
-        <span className="text-xs text-ink-faint hidden sm:inline">
-          Module de réservation en ligne pour ramoneurs
-        </span>
-      </div>
-
-      <div className="p-6 sm:p-8">
-        {/* Step indicator */}
-        <div className="flex items-center gap-3 border-b border-hairline pb-5">
-          <button
-            type="button"
-            onClick={() => setStep(1)}
-            className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-              step === 1 ? "text-rose" : "text-ink-faint hover:text-ink"
-            }`}
-          >
-            <span
-              className={`flex size-6 items-center justify-center rounded-full text-xs ${
-                step === 1 ? "bg-rose text-cream" : "bg-cream-deep text-ink"
-              }`}
-            >
-              1
-            </span>
-            Appareil
-          </button>
-          <span className="text-ink-faint">→</span>
-          <button
-            type="button"
-            onClick={() => setStep(2)}
-            className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-              step === 2 ? "text-rose" : "text-ink-faint hover:text-ink"
-            }`}
-          >
-            <span
-              className={`flex size-6 items-center justify-center rounded-full text-xs ${
-                step === 2 ? "bg-rose text-cream" : "bg-cream-deep text-ink"
-              }`}
-            >
-              2
-            </span>
-            Tournée & Créneau
-          </button>
-          <span className="text-ink-faint">→</span>
-          <button
-            type="button"
-            onClick={() => setStep(3)}
-            className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-              step === 3 ? "text-rose" : "text-ink-faint hover:text-ink"
-            }`}
-          >
-            <span
-              className={`flex size-6 items-center justify-center rounded-full text-xs ${
-                step === 3 ? "bg-rose text-cream" : "bg-cream-deep text-ink"
-              }`}
-            >
-              3
-            </span>
-            Confirmation & Certificat
-          </button>
-        </div>
-
-        {/* Step 1: Choix de l'appareil */}
-        {step === 1 && (
-          <div className="mt-6 space-y-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-rose">
-                Étape 1 sur 3
-              </p>
-              <h3 className="text-display-sm text-ink mt-1">
-                Quel appareil devez-vous faire ramoner ?
-              </h3>
-              <p className="text-sm text-ink-soft mt-1">
-                Le client choisit son équipement. Le temps d&apos;intervention et le
-                forfait sont calibrés automatiquement sans surprise.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 pt-2">
-              {APPLIANCES.map((app) => (
+    <div className="mx-auto max-w-4xl">
+      <PanelFrame label={copy.panelLabel}>
+        {/* Rail d'étapes — une vraie séquence, donc de vrais numéros. */}
+        <nav
+          aria-label="Étapes de la réservation"
+          className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-hairline bg-cream px-4 py-3 sm:px-6"
+        >
+          {STEPS.map((label, index) => {
+            const active = step === index;
+            // Le récapitulatif n'existe pas tant qu'aucun créneau n'est
+            // proposé : le rail ne doit pas y mener sur un dossier vide.
+            const locked = index === 2 && !enough;
+            return (
+              <span key={label} className="flex items-center">
                 <button
-                  key={app.id}
                   type="button"
-                  onClick={() => {
-                    setSelectedAppliance(app);
-                  }}
-                  className={`text-left p-4 rounded-sm border transition-all cursor-pointer ${
-                    selectedAppliance.id === app.id
-                      ? "border-rose bg-rose-veil/60 shadow-xs"
-                      : "border-hairline bg-paper-soft hover:border-ink/30"
+                  onClick={() => setStep(index as Step)}
+                  disabled={locked}
+                  aria-current={active ? "step" : undefined}
+                  className={`plate-label transition-colors ${
+                    locked
+                      ? "cursor-not-allowed opacity-45"
+                      : `cursor-pointer ${active ? "text-rose" : "hover:text-ink"}`
                   }`}
                 >
-                  <span className="text-2xl" role="img" aria-label={app.name}>
-                    {app.icon}
-                  </span>
-                  <p className="font-semibold text-sm text-ink mt-2">{app.name}</p>
-                  <p className="text-xs text-ink-soft mt-1 leading-relaxed">{app.desc}</p>
-                  <div className="mt-3 flex items-center justify-between border-t border-ink/10 pt-2 text-xs">
-                    <span className="text-ink-faint">Durée : {app.duration}</span>
-                    <span className="font-semibold text-rose-deep">{app.basePrice}</span>
-                  </div>
+                  <span className={active ? "text-rose" : "text-ink/40"}>
+                    0{index + 1}
+                  </span>{" "}
+                  {label}
                 </button>
-              ))}
-            </div>
+              </span>
+            );
+          })}
+        </nav>
 
-            <div className="mt-6 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="min-h-11 rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose cursor-pointer"
-              >
-                Continuer vers le choix de créneau →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Choix de la tournée */}
-        {step === 2 && (
-          <div className="mt-6 space-y-4">
+        <div className="bg-paper p-5 sm:p-8">
+          {/* Étape 1 — l'appareil */}
+          {step === 0 ? (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-rose">
-                Étape 2 sur 3
+              <h3 className="text-display-sm">Quel appareil devons-nous ramoner ?</h3>
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
+                Le client choisit son équipement. La durée d’intervention et le
+                tarif s’affichent avant même la prise de rendez-vous.
               </p>
-              <h3 className="text-display-sm text-ink mt-1">
-                Sélectionnez votre commune pour grouper la tournée
-              </h3>
-              <p className="text-sm text-ink-soft mt-1">
-                Le système propose des créneaux selon votre secteur géographique pour
-                éviter 50 km de route inutile entre deux rendez-vous.
-              </p>
-            </div>
 
-            <div className="space-y-3 pt-2">
-              {SECTORS.map((sec, idx) => (
-                <div
-                  key={sec.name}
-                  className={`p-4 rounded-sm border transition-all ${
-                    selectedSector === idx
-                      ? "border-rose bg-rose-veil/40"
-                      : "border-hairline bg-paper-soft"
-                  }`}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p className="font-semibold text-sm text-ink">{sec.name}</p>
-                      <p className="text-xs text-ink-faint">{sec.days}</p>
-                    </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {appliances.map((item) => {
+                  const selected = appliance.id === item.id;
+                  return (
                     <button
+                      key={item.id}
                       type="button"
-                      onClick={() => {
-                        setSelectedSector(idx);
-                        setSelectedSlot(sec.slots[0]);
-                      }}
-                      className={`text-xs px-3 py-1 rounded-full font-medium cursor-pointer ${
-                        selectedSector === idx
-                          ? "bg-rose text-cream"
-                          : "bg-paper border border-hairline text-ink hover:border-ink/40"
+                      onClick={() => setAppliance(item)}
+                      aria-pressed={selected}
+                      className={`cursor-pointer rounded-sm border p-4 text-left transition-colors ${
+                        selected
+                          ? "border-rose bg-rose-veil"
+                          : "border-hairline bg-paper-soft hover:border-ink/25"
                       }`}
                     >
-                      {selectedSector === idx ? "Secteur sélectionné" : "Choisir ce secteur"}
+                      <span className="plate-label">{item.fuel}</span>
+                      <span className="mt-2 block text-[0.95rem] font-semibold text-ink">
+                        {item.name}
+                      </span>
+                      <span className="mt-1 block text-xs leading-relaxed text-ink-soft">
+                        {item.desc}
+                      </span>
+                      <span className="mt-3 flex items-center justify-between border-t border-hairline pt-2 text-xs text-ink-soft">
+                        {item.duration}
+                        <span className="font-semibold text-ink">{item.price}</span>
+                      </span>
                     </button>
-                  </div>
-
-                  {selectedSector === idx && (
-                    <div className="mt-3 pt-3 border-t border-ink/10">
-                      <p className="text-xs font-medium text-ink-soft mb-2">
-                        Créneaux de passage disponibles :
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {sec.slots.map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            onClick={() => setSelectedSlot(s)}
-                            className={`text-xs px-3 py-1.5 rounded-sm font-medium transition-colors cursor-pointer ${
-                              selectedSlot === s
-                                ? "bg-rose-deep text-cream"
-                                : "bg-paper border border-hairline text-ink hover:bg-cream-deep"
-                            }`}
-                          >
-                            {s}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="text-sm font-semibold text-ink-soft hover:text-ink cursor-pointer"
-              >
-                ← Retour au choix d&apos;appareil
-              </button>
-              <button
-                type="button"
-                onClick={() => setStep(3)}
-                className="min-h-11 rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose cursor-pointer"
-              >
-                Voir le récapitulatif & attestation →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Résumé & Certificat */}
-        {step === 3 && (
-          <div className="mt-6 space-y-5">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-sage-deep">
-                Étape 3 sur 3 — Rendez-vous réservé en 45 secondes
-              </p>
-              <h3 className="text-display-sm text-ink mt-1">
-                Dossier prêt pour l&apos;artisan et le client
-              </h3>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {/* Carte intervention */}
-              <div className="rounded-sm border border-hairline bg-paper-soft p-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-ink-faint">
-                  Détails de l&apos;intervention
-                </p>
-                <div className="mt-3 space-y-2 text-sm text-ink">
-                  <div className="flex justify-between border-b border-hairline pb-1.5">
-                    <span className="text-ink-soft">Installation :</span>
-                    <span className="font-semibold">{selectedAppliance.name}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-hairline pb-1.5">
-                    <span className="text-ink-soft">Créneau :</span>
-                    <span className="font-semibold">{selectedSlot}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-hairline pb-1.5">
-                    <span className="text-ink-soft">Estimation forfait :</span>
-                    <span className="font-semibold text-rose-deep">
-                      {selectedAppliance.basePrice}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-ink-soft">Rappels automatisés :</span>
-                    <span className="text-xs text-sage-deep font-semibold">
-                      SMS J-1 & Email
-                    </span>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
 
-              {/* Carte Certificat */}
-              <div className="rounded-sm border border-sage-deep/30 bg-sage-veil p-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-base" role="img" aria-label="Certificat">
-                    📋
-                  </span>
-                  <p className="text-xs font-bold uppercase tracking-wider text-sage-deep">
-                    Attestation de ramonage conforme
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="press min-h-11 cursor-pointer rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose"
+                >
+                  Choisir mes créneaux →
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {/* Étape 2 — les disponibilités, groupées par secteur */}
+          {step === 1 ? (
+            <div>
+              <h3 className="text-display-sm">Quand pouvons-nous passer ?</h3>
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
+                Seuls les jours de tournée du secteur sont proposés. Le client
+                retient {minSlots} à {maxSlots} créneaux, vous confirmez celui qui
+                complète le mieux la journée.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {days.map((d, index) => {
+                  const selected = dayIndex === index;
+                  return (
+                    <button
+                      key={d.id}
+                      type="button"
+                      onClick={() => setDayIndex(index)}
+                      aria-pressed={selected}
+                      className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                        selected
+                          ? "border-rose bg-rose text-cream"
+                          : "border-hairline bg-paper text-ink hover:border-ink/30"
+                      }`}
+                    >
+                      {d.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <p className="plate-label mt-5">{day.sector}</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-4">
+                {slots.map((slot) => {
+                  const id = slotId(day.label, slot);
+                  const selected = picked.includes(id);
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      onClick={() => toggleSlot(id)}
+                      aria-pressed={selected}
+                      className={`cursor-pointer rounded-sm border px-3 py-2.5 text-sm font-medium transition-colors ${
+                        selected
+                          ? "border-rose bg-rose-veil text-rose-deep"
+                          : "border-hairline bg-paper-soft text-ink hover:border-ink/25"
+                      }`}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-6 border-t border-hairline pt-4">
+                <p className="plate-label">
+                  {picked.length} / {maxSlots} créneaux proposés
+                </p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {picked.length === 0 ? (
+                    <li className="text-sm text-ink-faint">
+                      Sélectionnez au moins {minSlots} créneaux.
+                    </li>
+                  ) : (
+                    picked.map((id) => (
+                      <li
+                        key={id}
+                        className="rounded-full border border-hairline bg-cream px-3 py-1 text-xs text-ink"
+                      >
+                        {id}
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => setStep(0)}
+                  className="cursor-pointer text-sm font-semibold text-ink-soft transition-colors hover:text-ink"
+                >
+                  ← Retour à l’appareil
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  disabled={!enough}
+                  className="press min-h-11 cursor-pointer rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Voir le récapitulatif →
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {/* Étape 3 — le dossier tel qu'il arrive chez l'artisan */}
+          {step === 2 ? (
+            <div>
+              <h3 className="text-display-sm">La demande arrive complète.</h3>
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
+                Voilà ce que vous recevez, sans avoir décroché une seule fois.
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-sm border border-hairline bg-paper-soft p-4">
+                  <p className="plate-label">Intervention</p>
+                  <dl className="mt-3 text-sm">
+                    <div className="flex justify-between gap-4 border-b border-hairline py-2">
+                      <dt className="text-ink-soft">Appareil</dt>
+                      <dd className="text-right font-semibold">{appliance.name}</dd>
+                    </div>
+                    <div className="flex justify-between gap-4 border-b border-hairline py-2">
+                      <dt className="text-ink-soft">Durée prévue</dt>
+                      <dd className="text-right font-semibold">{appliance.duration}</dd>
+                    </div>
+                    <div className="flex justify-between gap-4 border-b border-hairline py-2">
+                      <dt className="text-ink-soft">Secteur</dt>
+                      <dd className="text-right font-semibold">{day.sector}</dd>
+                    </div>
+                    <div className="flex justify-between gap-4 py-2">
+                      <dt className="text-ink-soft">Tarif annoncé</dt>
+                      <dd className="text-right font-semibold text-rose-deep">
+                        {appliance.price}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="rounded-sm border border-hairline bg-paper-soft p-4">
+                  <p className="plate-label">Créneaux proposés</p>
+                  <ul className="mt-3 space-y-2 text-sm text-ink">
+                    {picked.map((id) => (
+                      <li key={id} className="flex gap-2.5 border-b border-hairline pb-2">
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 size-1.5 shrink-0 rounded-full bg-rose"
+                        />
+                        {id}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+                    Aucun paiement en ligne, annulation libre jusqu’à 24 h avant le
+                    passage, certificat conforme au décret n° 2023-641 remis le jour
+                    même.
                   </p>
                 </div>
-                <p className="mt-2 text-xs text-ink-soft leading-relaxed">
-                  Générée en fin d&apos;intervention depuis votre smartphone en 1 clic.
-                  Prête pour l&apos;assurance habitation de votre client (décret 2023).
-                </p>
-                <div className="mt-3 rounded-sm bg-paper p-2.5 text-xs text-ink-soft border border-sage-deep/20 font-mono">
-                  <div className="flex justify-between">
-                    <span>Certificat N°</span>
-                    <span className="text-ink font-semibold">RAM-2026-0842</span>
-                  </div>
-                  <div className="flex justify-between mt-1">
-                    <span>État du conduit</span>
-                    <span className="text-sage-deep font-bold">Conforme / Bon état</span>
-                  </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-sm border border-hairline bg-cream-deep p-4 sm:p-5">
+                <div>
+                  <p className="text-sm font-semibold text-ink">
+                    Ce parcours, avec vos tarifs et vos communes.
+                  </p>
+                  <p className="mt-0.5 text-xs text-ink-soft">
+                    Nous le réglons sur votre façon de travailler.
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={openRamonageModal}
+                  className="press min-h-11 w-full shrink-0 cursor-pointer rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose sm:w-auto"
+                >
+                  Créer mon site ramoneur
+                </button>
+              </div>
+
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep(0);
+                    setPicked([]);
+                  }}
+                  className="cursor-pointer text-xs text-ink-faint transition-colors hover:text-ink"
+                >
+                  Recommencer le parcours
+                </button>
               </div>
             </div>
+          ) : null}
+        </div>
+      </PanelFrame>
 
-            <div className="rounded-sm border border-hairline bg-cream-deep p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <p className="font-semibold text-sm text-ink">
-                  Vous voulez ce système sur votre propre site ?
-                </p>
-                <p className="text-xs text-ink-soft mt-0.5">
-                  Adapté à vos prix, vos communes et votre façon de travailler.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={openRamonageModal}
-                className="w-full sm:w-auto min-h-11 shrink-0 rounded-full bg-rose px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose-deep cursor-pointer"
-              >
-                Créer mon site ramoneur
-              </button>
-            </div>
-
-            <div className="flex justify-start">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="text-xs text-ink-faint hover:text-ink cursor-pointer"
-              >
-                ↺ Recommencer la démonstration
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      <p className="caption mt-4">{copy.note}</p>
     </div>
   );
 }

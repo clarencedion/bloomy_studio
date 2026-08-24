@@ -1,25 +1,26 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
   RamonageBookingModal,
   RamonageBookingTrigger,
 } from "@/components/forms/RamonageBookingModal";
-import { RamonageShowcasePreview } from "@/components/ramonage/RamonageShowcasePreview";
 import { RamonageSimulator } from "@/components/ramonage/RamonageSimulator";
+import { RamonageSiteShowcase } from "@/components/ramonage/RamonageSiteShowcase";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
-import { CtaBand } from "@/components/ui/CtaBand";
-import { EditorialList } from "@/components/ui/EditorialList";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
-import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { ramonagePage as copy } from "@/lib/ramonage";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Création de site pour ramoneur, réservation & tournées",
+  title: "Site internet pour ramoneur : réservations & tournées",
   description:
-    "Sites pour ramoneurs et fumistes : prise de rendez-vous en ligne, tournées par commune, certificat dématérialisé et SEO local Google Maps.",
+    "Un site pensé pour les ramoneurs : réservation en ligne, tournées par commune et suivi des interventions. Ouvrez le site que nous avons conçu.",
   path: "/ramonage",
 });
 
@@ -28,89 +29,22 @@ const crumbs = [
   { name: "Ramoneurs", path: "/ramonage" },
 ];
 
-const features = [
-  {
-    title: "Prise de rendez-vous en ligne par type de conduit",
-    body: "Fini les appels manqués pendant que vous êtes sur une échelle ou un toit. Vos clients sélectionnent leur appareil (poêle à bois, granulés/pellets, insert, cheminée ouverte, chaudière) et réservent en 45 secondes selon vos disponibilités.",
-  },
-  {
-    title: "Optimisation de vos tournées par commune",
-    body: "Vos créneaux de passage sont automatiquement regroupés par secteur géographique ou jour de semaine. Vous évitez les kilomètres inutiles, économisez du carburant et augmentez le nombre d'interventions par journée.",
-  },
-  {
-    title: "Attestation et certificat de ramonage dématérialisé",
-    body: "Émettez des certificats conformes à la réglementation (décret 2023 / Règlement Sanitaire Départemental) en quelques clics depuis votre smartphone. Votre client reçoit son attestation immédiatement pour son assurance habitation.",
-  },
-  {
-    title: "Relances automatiques annuelles (SMS & e-mail)",
-    body: "Le ramonage est obligatoire chaque année. Votre site relance automatiquement vos anciens clients à la fin de l'été pour bloquer leurs rendez-vous avant la saturation de la saison de chauffe, sans aucun démarchage manuel.",
-  },
-  {
-    title: "Visibilité locale Google Maps ultra-ciblée",
-    body: "Positionnez votre entreprise en tête sur les recherches stratégiques de votre secteur (« ramoneur Nantes », « ramonage poêle à granulés Rezé », « débistrage 44 ») avec une fiche Google My Business optimisée et synchronisée.",
-  },
-  {
-    title: "Grille tarifaire claire et forfaits sans surprise",
-    body: "Affichez vos forfaits de ramonage, débistrage et diagnostic en toute transparence. Vous rassurez les propriétaires, filtrez les demandes hors zone et gagnez du temps sur les devis répétitifs.",
-  },
-  {
-    title: "Mise en avant du débistrage et chantiers techniques",
-    body: "Valorisez vos équipements professionnels (débistreuse mécanique rotative, inspection vidéo par caméra, tubage inox) pour capter des chantiers à plus forte valeur ajoutée.",
-  },
-  {
-    title: "Multi-techniciens et gestion d'équipe",
-    body: "Si vous employez plusieurs ramoneurs, le planning répartit automatiquement les interventions par technicien ou par camion pour une coordination sans accroc.",
-  },
-];
-
-const faq = [
-  {
-    question: "Comment cela s'articule-t-il avec mon agenda actuel (Google Agenda, Outlook…) ?",
-    answer: (
-      <p>
-        Le site se connecte directement à votre outil de calendrier habituel. Dès
-        qu&apos;un créneau est réservé par un client ou bloqué manuellement sur
-        votre téléphone, votre planning s&apos;actualise en temps réel pour
-        empêcher tout doublon.
-      </p>
-    ),
-  },
-  {
-    question: "Que faire pour les clients qui préfèrent appeler ?",
-    answer: (
-      <p>
-        Le site conserve un bouton d&apos;appel direct bien visible sur mobile. La
-        réservation en ligne absorbe les demandes des clients connectés en soirée
-        et le week-end, tout en laissant les personnes qui le souhaitent vous
-        joindre par téléphone.
-      </p>
-    ),
-  },
-  {
-    question: "Comment empêcher les réservations en dehors de mon secteur d'intervention ?",
-    answer: (
-      <p>
-        Le formulaire vérifie automatiquement le code postal ou la commune du
-        client. En dehors de votre rayon d&apos;action défini, la réservation est
-        refusée poliment ou bascule sur une demande de devis avec frais de
-        déplacement.
-      </p>
-    ),
-  },
-  {
-    question: "En combien de temps notre site peut-il être mis en ligne ?",
-    answer: (
-      <p>
-        En moyenne 2 à 4 semaines grâce à notre{" "}
-        <Link href="/methode">méthode</Link>{" "}jalonnée : structure, rédaction des
-        contenus spécialisés, paramétrage de vos forfaits et mise en ligne avant
-        le démarrage de votre pic d&apos;activité d&apos;automne.
-      </p>
-    ),
-  },
-];
-
+/**
+ * Page ramoneur — une seule ligne narrative, six bandes.
+ *
+ * Rythme des fonds : paper (hero) → cream (vitrine) → cream-deep (parcours)
+ * → paper (diptyque) → cream (questions) → plum (appel). Chaque bande est
+ * séparée par un filet, et tous les visuels passent par la même famille de
+ * cadres : capture réelle en `BrowserFrame` / `PhoneFrame`, parcours jouable
+ * en `PanelFrame`, photographie et illustrations dans le même cadre `rounded-sm`
+ * au même rapport 4/3.
+ */
 export default function RamonagePage() {
+  const faq = copy.faq.items.map((item) => ({
+    question: item.question,
+    answer: <p>{item.answer}</p>,
+  }));
+
   return (
     <>
       <JsonLd
@@ -124,99 +58,182 @@ export default function RamonagePage() {
         })}
       />
 
-      <PageHero
-        crumbs={crumbs}
-        eyebrow="Ramoneurs & Fumistes"
-        title="Moins d'appels sur les toits, des tournées pleines tout l'automne."
-        lede={
-          <>
-            Nous concevons des sites spécialisés pour ramoneurs et fumistes :
-            prise de rendez-vous en ligne par type de conduit, regroupement des
-            tournées par commune, certificats dématérialisés et référencement
-            local de proximité.
-          </>
-        }
-      >
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <RamonageBookingTrigger variant="primary">
-            Prendre rendez-vous / Échanger
-          </RamonageBookingTrigger>
-          <Link
-            href="#fonctionnalites"
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/20 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-rose hover:text-rose"
-          >
-            Découvrir les fonctionnalités ↓
-          </Link>
-        </div>
-      </PageHero>
+      {/* 1 — Hero et repères, une seule bande : le titre et ses quatre preuves
+          de fonctionnement ne se lisent pas séparément. */}
+      <section className="overflow-hidden border-b border-hairline bg-paper">
+        <Container width="wide" className="py-8 sm:py-12 lg:py-16">
+          <Breadcrumbs items={crumbs} />
+          <div className="mt-8 grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
+            <div className="max-w-2xl">
+              <Eyebrow>{copy.hero.eyebrow}</Eyebrow>
+              <h1 className="text-display-xl mt-6">{copy.hero.title}</h1>
+              <p className="lede mt-6 max-w-xl">{copy.hero.lede}</p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <RamonageBookingTrigger variant="primary">
+                  {copy.hero.primaryCta}
+                </RamonageBookingTrigger>
+                <Link
+                  href="#reservation"
+                  className="press inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink/15 bg-paper px-7 py-3 text-[0.95rem] font-semibold text-ink transition-colors duration-150 hover:border-ink/40"
+                >
+                  {copy.hero.secondaryCta} ↓
+                </Link>
+              </div>
+            </div>
 
-      {/* Section 1 : Ce que nous construisons */}
-      <section id="fonctionnalites" className="py-16 sm:py-24">
-        <Container>
-          <SectionHead
-            align="split"
-            eyebrow="Ce que cela inclut"
-            title="Huit atouts pensés pour le quotidien d'un ramoneur"
-            lede="Un artisan ramoneur passe ses journées en déplacement et sur les toits. Votre site doit travailler pour vous : filtrer les demandes, organiser vos trajets et fidéliser vos clients d'une année sur l'autre."
-          />
-          <EditorialList className="mt-12" items={features} />
+            <figure className="relative min-w-0 lg:pl-6">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-hairline bg-cream-deep shadow-lift">
+                <Image
+                  src="/ramonage/ramoneur-intervention.webp"
+                  alt={copy.hero.imageAlt}
+                  fill
+                  sizes="(max-width: 1023px) 100vw, 54vw"
+                  loading="eager"
+                  fetchPriority="high"
+                  className="object-cover object-[56%_center] lg:object-[48%_center]"
+                />
+              </div>
+              <figcaption className="relative -mt-8 ml-5 max-w-xs rounded-sm border border-hairline bg-cream p-4 text-sm leading-relaxed text-ink shadow-lift sm:ml-auto sm:mr-6">
+                {copy.hero.imageCaption}
+              </figcaption>
+            </figure>
+          </div>
+
+          <ul className="mt-12 grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
+            {copy.markers.map((marker) => (
+              <li key={marker.label} className="border-t border-hairline pt-4">
+                <p className="plate-label text-ink">{marker.label}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                  {marker.body}
+                </p>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
 
-      {/* Section 2 : Démonstration interactive */}
-      <section className="border-y border-hairline bg-cream-deep py-16 sm:py-24">
+      {/* 2 — Montrer avant de raconter : la capture réelle du site en ligne. */}
+      <section className="py-16 sm:py-24">
         <Container width="wide">
           <SectionHead
             align="split"
-            eyebrow="Démonstration"
-            title="La réservation simplifiée pour vos clients particuliers"
-            lede="Testez le parcours que vos clients suivront pour réserver leur ramonage. En 3 étapes, le rendez-vous est calé et le dossier d'intervention est prêt."
+            eyebrow={copy.showcase.eyebrow}
+            title={copy.showcase.title}
+            lede={copy.showcase.lede}
+            className="mb-12"
+          />
+          <RamonageSiteShowcase />
+        </Container>
+      </section>
+
+      {/* 3 — Le moteur du site précédent, cette fois jouable. */}
+      <section
+        id="reservation"
+        className="scroll-mt-24 border-y border-hairline bg-cream-deep py-16 sm:py-24"
+      >
+        <Container width="wide">
+          <SectionHead
+            align="split"
+            eyebrow={copy.booking.eyebrow}
+            title={copy.booking.title}
+            lede={copy.booking.lede}
             className="mb-12"
           />
           <RamonageSimulator />
         </Container>
       </section>
 
-      {/* Section 3 : Aperçu visuel du futur site */}
-      <section className="py-16 sm:py-24">
+      {/* 4 — Diptyque : deux volets de même gabarit, en miroir. */}
+      <section className="border-b border-hairline bg-paper py-16 sm:py-24">
         <Container width="wide">
           <SectionHead
             align="split"
-            eyebrow="Univers visuel"
-            title="Une présence digitale moderne et rassurante"
-            lede="Finis les sites génériques et vieillots. Offrez à votre entreprise de ramonage une image professionnelle et soignée qui inspire immédiatement confiance aux propriétaires."
-            className="mb-12"
+            eyebrow={copy.field.eyebrow}
+            title={copy.field.title}
+            lede={copy.field.lede}
           />
-          <RamonageShowcasePreview />
+
+          {copy.field.panels.map((panel, index) => (
+            <div
+              key={panel.title}
+              className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-16 ${
+                index === 0 ? "mt-12" : "mt-12 border-t border-hairline pt-12 lg:mt-16 lg:pt-16"
+              }`}
+            >
+              <figure
+                className={`relative aspect-[4/3] overflow-hidden rounded-sm border border-hairline bg-cream-deep shadow-lift ${
+                  index % 2 === 1 ? "lg:order-2" : ""
+                }`}
+              >
+                <Image
+                  src={panel.image}
+                  alt={panel.imageAlt}
+                  fill
+                  sizes="(max-width: 1023px) 100vw, 46vw"
+                  className="object-cover"
+                />
+              </figure>
+
+              <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                <Eyebrow>{panel.eyebrow}</Eyebrow>
+                <h3 className="text-display-md mt-5">{panel.title}</h3>
+                <p className="mt-4 leading-relaxed text-ink-soft">{panel.body}</p>
+                <ul className="mt-7 divide-y divide-hairline border-y border-hairline">
+                  {panel.points.map((point) => (
+                    <li
+                      key={point}
+                      className="flex gap-3 py-3.5 text-sm leading-relaxed text-ink-soft"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 size-1.5 shrink-0 rounded-full bg-rose"
+                      />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
         </Container>
       </section>
 
-      {/* Section 4 : FAQ */}
-      <section className="border-y border-hairline bg-paper py-16 sm:py-24">
+      {/* 5 — Questions de terrain. */}
+      <section className="py-16 sm:py-24">
         <Container width="narrow">
           <SectionHead
             align="left"
-            eyebrow="Vos questions"
-            title="Ce que les artisans ramoneurs nous demandent"
+            eyebrow={copy.faq.eyebrow}
+            title={copy.faq.title}
             className="mb-10"
           />
           <FaqAccordion items={faq} />
           <p className="prose-links mt-8 text-sm text-ink-soft">
-            Vous souhaitez analyser votre présence actuelle ? Consultez notre{" "}
-            <Link href="/audit">diagnostic gratuit</Link>{" "}ou découvrez notre{" "}
-            <Link href="/methode">méthode de travail</Link>.
+            Découvrez aussi notre <Link href="/sites-internet">approche des sites internet</Link>{" "}
+            ou notre <Link href="/methode">méthode de travail</Link>.
           </p>
         </Container>
       </section>
 
-      {/* Section 5 : CTA Band & Modale de RDV */}
-      <CtaBand
-        placement="ramonage_footer"
-        title="Prêt à automatiser vos prises de rendez-vous pour la saison ?"
-        lede="Échangeons pendant 15 minutes sur votre secteur, vos tarifs et vos objectifs. Gratuit, direct et sans engagement."
-      />
+      {/* 6 — L'appel, seule bande sombre de la page. */}
+      <section className="on-ink border-t border-hairline bg-plum py-16 text-cream sm:py-24">
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow>{copy.closing.eyebrow}</Eyebrow>
+            <h2 className="text-display-lg mt-6">{copy.closing.title}</h2>
+            <p className="mx-auto mt-5 max-w-xl leading-relaxed text-cream/75">
+              {copy.closing.lede}
+            </p>
+            <div className="mt-9 flex flex-col items-center gap-4">
+              <RamonageBookingTrigger variant="onInk">
+                {copy.closing.cta}
+              </RamonageBookingTrigger>
+              <p className="text-xs text-cream/60">{copy.closing.reassurance}</p>
+            </div>
+          </div>
+        </Container>
+      </section>
 
-      {/* Modale accessible pour prise de RDV ramoneur */}
       <RamonageBookingModal />
     </>
   );

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "outline" | "onInk" | "ghost";
+export type ButtonVariant = "primary" | "outline" | "onInk" | "ghost";
+
+type Variant = ButtonVariant;
 
 const base =
   "press inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 text-[0.95rem] font-semibold transition-colors duration-150";
@@ -15,6 +17,15 @@ const variants: Record<Variant, string> = {
   ghost:
     "text-rose underline decoration-rose/40 underline-offset-4 hover:decoration-rose",
 };
+
+/**
+ * Classes d'un bouton du système, pour les déclencheurs qui ne peuvent pas
+ * utiliser `<Button>` (composants client avec leur propre `onClick`).
+ * Un seul endroit décide de l'allure d'un bouton sur tout le site.
+ */
+export function buttonClass(variant: Variant = "primary", className = "") {
+  return `${base} ${variants[variant]} ${className}`;
+}
 
 type LinkProps = {
   href: string;
