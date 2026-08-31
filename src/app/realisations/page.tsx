@@ -32,7 +32,7 @@ export default function RealisationsPage() {
         lede={
           <>
             Boutiques e-commerce, vitrines d&apos;artisans, salons de coiffure, hébergements
-            touristiques, conseil B2B et horticulture : découvrez 19 sites en production.
+            touristiques, conseil B2B, services techniques et horticulture : découvrez 20 sites en production.
             Pas de faux logos, pas de promesses en l&apos;air : chaque projet est accessible en ligne.
           </>
         }
@@ -44,7 +44,7 @@ export default function RealisationsPage() {
           <SectionHead
             align="center"
             eyebrow="Sites livrés"
-            title="19 réalisations, 19 univers en ligne"
+            title="20 réalisations, 20 univers en ligne"
             lede="Chaque site part du lieu et de l'activité réelle — son identité, ses produits, sa manière de vendre. Filtrez par secteur pour explorer nos créations."
             className="mb-12"
           />

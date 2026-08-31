@@ -28,6 +28,7 @@ const SITES = [
   ["osmose-florale", "https://osmoseflorale.web.app/"],
   ["aux-coquelicots", "https://auxcoquelicots.web.app/"],
   ["au-jardin-de-celine", "https://aujardindeceline.web.app/"],
+  ["net-plus-services", "https://www.netplusservices.fr/"],
 ];
 
 const outDir = "public/realisations";

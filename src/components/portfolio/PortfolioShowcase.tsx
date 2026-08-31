@@ -31,15 +31,11 @@ export function PortfolioShowcase() {
 
   // Calcul du nombre d'éléments par catégorie pour les badges
   const counts = useMemo(() => {
-    const map: Record<PortfolioCategory, number> = {
-      all: showcaseSites.length,
-      "ecommerce-retail": 0,
-      floristry: 0,
-      hospitality: 0,
-      consulting: 0,
-      "events-creative": 0,
-      horticulture: 0,
-    };
+    const map = {} as Record<PortfolioCategory, number>;
+    for (const cat of portfolioCategories) {
+      map[cat.id] = 0;
+    }
+    map.all = showcaseSites.length;
     for (const site of showcaseSites) {
       for (const cat of site.categories) {
         if (cat in map) {

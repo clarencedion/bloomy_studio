@@ -111,13 +111,18 @@ test("la page réalisations permet de filtrer les projets par catégorie", async
   await expect(cards).toHaveCount(1);
   await expect(page.locator("#portfolio-grid")).toContainText("ACT4RESULTS");
 
+  // Filtrer par Services & Maintenance (1 projet : Net Plus Services)
+  await page.getByRole("tab", { name: /Services/ }).click();
+  await expect(cards).toHaveCount(1);
+  await expect(page.locator("#portfolio-grid")).toContainText("Net Plus Services");
+
   // Filtrer par Horticulture & Pépinières (1 projet : Pépinières Raffard)
   await page.getByRole("tab", { name: /Horticulture/ }).click();
   await expect(cards).toHaveCount(1);
   await expect(page.locator("#portfolio-grid")).toContainText("Pépinières Raffard");
 
-  // Afficher Tous les projets (19 projets)
+  // Afficher Tous les projets (20 projets)
   await page.getByRole("tab", { name: /Tous les projets/ }).click();
-  await expect(cards).toHaveCount(19);
+  await expect(cards).toHaveCount(20);
 });
 

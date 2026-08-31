@@ -115,9 +115,9 @@ describe("intégrité du contenu", () => {
 });
 
 describe("intégrité du portfolio", () => {
-  it("contient les 19 projets sans doublon de slug ou d'URL", async () => {
+  it("contient les 20 projets sans doublon de slug ou d'URL", async () => {
     const { showcaseSites } = await import("@/lib/portfolio");
-    expect(showcaseSites.length).toBe(19);
+    expect(showcaseSites.length).toBe(20);
 
     const slugs = showcaseSites.map((s) => s.slug);
     expect(new Set(slugs).size).toBe(showcaseSites.length);

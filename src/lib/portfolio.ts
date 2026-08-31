@@ -22,7 +22,8 @@ export type PortfolioCategory =
   | "hospitality"
   | "consulting"
   | "events-creative"
-  | "horticulture";
+  | "horticulture"
+  | "services";
 
 export type CategoryFilter = {
   id: PortfolioCategory;
@@ -34,6 +35,7 @@ export const portfolioCategories: readonly CategoryFilter[] = [
   { id: "floristry", label: "Fleuristes", shortLabel: "Fleuristes" },
   { id: "all", label: "Tous les projets", shortLabel: "Tous" },
   { id: "ecommerce-retail", label: "E-commerce & Boutiques", shortLabel: "E-commerce" },
+  { id: "services", label: "Services & Maintenance", shortLabel: "Services" },
   { id: "events-creative", label: "Événementiel & Studio créatif", shortLabel: "Événementiel" },
   { id: "hospitality", label: "Hôtellerie & Tourisme", shortLabel: "Hôtellerie" },
   { id: "consulting", label: "Conseil & Stratégie B2B", shortLabel: "Conseil" },
@@ -80,7 +82,7 @@ export type ShowcaseSite = {
 };
 
 /**
- * Portfolio complet : les 19 projets réels du studio.
+ * Portfolio complet : les 20 projets réels du studio.
  * Les 15 sites fleuristes sont ordonnés en premier, suivis des réalisations
  * pour les autres commerces et secteurs d'activité.
  */
@@ -501,6 +503,28 @@ export const showcaseSites = [
       width: 780,
       height: 1688,
       alt: "Version mobile du site des Pépinières Raffard.",
+    },
+  },
+  {
+    slug: "net-plus-services",
+    liveUrl: "https://www.netplusservices.fr",
+    name: "Net Plus Services",
+    city: "Montreuil · Île-de-France",
+    sector: "autre",
+    sectorLabel: "Nettoyage technique & Ascenseurs",
+    category: "services",
+    categories: ["services"],
+    focus: "Nettoyage technique d'ascenseurs",
+    note: "Spécialiste du nettoyage et assainissement d'ascenseurs en Île-de-France : catalogue de prestations, demandes de devis et conformité réglementaire.",
+    image: "/realisations/net-plus-services.webp",
+    width: 1600,
+    height: 1000,
+    alt: "Site de Net Plus Services, spécialiste du nettoyage d'ascenseurs en Île-de-France, conçu par Bloomy Studio.",
+    mobile: {
+      image: "/realisations/net-plus-services-mobile.webp",
+      width: 780,
+      height: 1688,
+      alt: "Version mobile du site de Net Plus Services en Île-de-France.",
     },
   },
 ] as const satisfies readonly ShowcaseSite[];
