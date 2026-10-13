@@ -1,69 +1,60 @@
 import Image from "next/image";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 
-import { BrowserFrame, PhoneFrame } from "@/components/visuals/DeviceFrame";
+import { BrowserFrame } from "@/components/visuals/DeviceFrame";
 import { ramonagePage } from "@/lib/ramonage";
 
 const copy = ramonagePage.showcase;
 
+/** Adresse affichée du site, sans protocole ni barre finale. */
 /**
- * Vitrine de la page ramoneur : la capture réelle de RamoPlus, pas un
- * gabarit redessiné en HTML. Le mobile est ancré au bord droit du navigateur
- * — superposition, jamais d'appareil incliné ni flottant
- * (direction artistique §4.3).
+ * RamoPlus vit sur une adresse de développement (pages.dev) : on n'écrit
+ * jamais cette adresse à l'écran, seulement le nom du site.
+ */
+export const ramoplusHost = "RamoPlus";
+
+/**
+ * Vitrine de la page ramoneur : la capture réelle de RamoPlus, jamais un
+ * gabarit redessiné en HTML. La fenêtre de navigateur monte du bord bas
+ * d'un panneau « feuille » qui la rogne : l'appareil est ancré, pas flottant
+ * (direction artistique § 4.4). Le mobile du même site est déjà dans le
+ * hero ; ici, le bureau seul, en grand.
+ *
+ * Mobile (< 768 px) : même composition, marges réduites ; la légende passe
+ * sur deux lignes, le lien sous le texte.
  *
  * La légende s'en tient au vérifiable : nous l'avons conçu, il est en ligne.
- * Rien n'y présente RamoPlus comme un site client en production — il n'entre
- * d'ailleurs pas dans `lib/portfolio.ts`.
+ * Rien n'y présente RamoPlus comme un site client en production, et il
+ * n'entre pas dans `lib/portfolio.ts`.
  */
 export function RamonageSiteShowcase() {
-  const host = copy.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
-
   return (
-    <figure className="mx-auto max-w-5xl">
-      <div className="rounded-sm border border-hairline bg-cream-deep p-4 sm:p-8">
-        <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:gap-0">
-          <BrowserFrame
-            label={`${host} — RamoPlus, ramonage certifié`}
-            className="w-full min-w-0 lg:flex-1"
-          >
-            <Image
-              src="/ramonage/ramoplus-accueil.webp"
-              alt={copy.desktopAlt}
-              width={1600}
-              height={1000}
-              sizes="(min-width: 1024px) 44rem, 100vw"
-              className="h-auto w-full"
-            />
-          </BrowserFrame>
-
-          <PhoneFrame className="relative z-10 w-36 shrink-0 sm:w-40 lg:-ml-24 lg:mb-6 lg:w-44">
-            <Image
-              src="/ramonage/ramoplus-accueil-mobile.webp"
-              alt={copy.mobileAlt}
-              width={780}
-              height={1688}
-              sizes="11rem"
-              className="h-auto w-full"
-            />
-          </PhoneFrame>
-        </div>
+    <figure>
+      <div className="leaf-lg overflow-hidden bg-mint px-4 pt-6 sm:px-10 sm:pt-12 lg:px-20 lg:pt-16">
+        <BrowserFrame label={ramoplusHost} className="mx-auto -mb-10 max-w-5xl sm:-mb-16 lg:-mb-24">
+          <Image
+            src="/ramonage/ramoplus-accueil.webp"
+            alt={copy.desktopAlt}
+            width={1600}
+            height={1000}
+            sizes="(min-width: 1280px) 64rem, 92vw"
+            className="h-auto w-full"
+          />
+        </BrowserFrame>
       </div>
 
-      <figcaption className="mt-5 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <span className="caption max-w-md">{copy.caption}</span>
+      <figcaption className="mt-5 flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between">
+        <span className="text-[0.98rem] leading-relaxed text-forest-soft">{copy.caption}</span>
         <span className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1.5">
-          <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-sage-deep">
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-sage-deep" />
-            {copy.liveLabel}
-          </span>
+          <span className="plate-label">{copy.liveLabel}</span>
           <a
             href={copy.liveUrl}
             target="_blank"
             rel="noopener"
-            className="link-live text-[0.9rem] font-semibold text-rose"
+            className="group link-live inline-flex min-h-11 items-center gap-1 text-[0.92rem] font-semibold text-bloom-ink"
           >
-            {host}
-            <span aria-hidden="true" className="link-live-arrow"> ↗</span>
+            {ramoplusHost}
+            <ArrowUpRight aria-hidden="true" weight="bold" className="arrow-nudge-up size-3.5" />
             <span className="sr-only"> (nouvel onglet)</span>
           </a>
         </span>

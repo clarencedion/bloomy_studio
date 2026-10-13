@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { Plus } from "@phosphor-icons/react";
 
 export type FaqItem = { question: string; answer: React.ReactNode };
 
@@ -13,13 +14,13 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="divide-y divide-hairline border-y border-hairline">
+    <div className="border-t border-line">
       {items.map((item, i) => {
         const open = openIndex === i;
         const panelId = `${baseId}-panel-${i}`;
         const buttonId = `${baseId}-button-${i}`;
         return (
-          <div key={item.question}>
+          <div key={item.question} className="border-b border-line">
             <h3>
               <button
                 type="button"
@@ -27,15 +28,21 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(open ? null : i)}
-                className="flex min-h-14 w-full items-center justify-between gap-4 py-4 text-left text-[1.02rem] font-semibold transition-colors hover:text-rose"
+                className="group flex min-h-16 w-full items-center justify-between gap-6 py-5 text-left"
               >
-                {item.question}
+                <span className="font-display text-[1.15rem] font-semibold leading-snug tracking-tight transition-colors group-hover:text-bloom-ink sm:text-[1.25rem]">
+                  {item.question}
+                </span>
                 <span
                   aria-hidden="true"
-                  className={`text-rose transition-transform duration-300 ${open ? "rotate-45" : ""}`}
+                  className={`grid size-9 shrink-0 place-items-center rounded-full border transition-[transform,background-color,border-color,color] duration-300 ${
+                    open
+                      ? "rotate-45 border-bloom-strong bg-bloom-strong text-white"
+                      : "border-forest/20 text-forest group-hover:border-forest"
+                  }`}
                   style={{ transitionTimingFunction: "var(--ease-soft)" }}
                 >
-                  +
+                  <Plus weight="bold" className="size-4" />
                 </span>
               </button>
             </h3>
@@ -44,7 +51,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
               role="region"
               aria-labelledby={buttonId}
               hidden={!open}
-              className="prose-links pb-5 pr-8 text-[0.98rem] leading-relaxed text-ink-soft"
+              className="prose-links max-w-[62ch] pb-7 pr-12 text-[1.02rem] leading-relaxed text-forest-soft"
             >
               {item.answer}
             </div>

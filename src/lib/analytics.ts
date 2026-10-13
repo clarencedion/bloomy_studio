@@ -6,6 +6,10 @@
 
 export type AnalyticsEvent =
   | "cta_audit_click"
+  /** Appel à l'action principal « Démarrer un projet » (vers /contact). */
+  | "cta_contact_click"
+  /** Ouverture d'un site du portfolio depuis une vitrine. */
+  | "portfolio_site_open"
   | "audit_start"
   | "audit_step"
   | "audit_submit"

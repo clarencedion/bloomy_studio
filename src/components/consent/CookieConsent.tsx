@@ -10,6 +10,10 @@ import { OPEN_COOKIE_SETTINGS_EVENT } from "@/components/consent/ManageCookiesBu
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const CONSENT_CHANGED_EVENT = "bloomy:consent-changed";
 
+/** Les deux choix globaux partagent exactement la même classe. */
+const choiceClass =
+  "press min-h-11 rounded-full border border-forest/25 bg-white px-3 py-2.5 text-[0.92rem] font-semibold text-forest transition-colors hover:border-forest hover:bg-forest hover:text-paper";
+
 /** Le stockage local est la source de vérité, lue via useSyncExternalStore. */
 function subscribe(onChange: () => void): () => void {
   window.addEventListener("storage", onChange);
@@ -47,10 +51,13 @@ function parseConsent(raw: string | null): ConsentState | null {
 
 /**
  * Bandeau de consentement conforme CNIL :
- * — « Accepter » et « Refuser » présentés à égalité ;
- * — aucun script de mesure chargé avant consentement explicite ;
- * — choix conservé 6 mois et modifiable via « Gérer les cookies » ;
- * — le site reste pleinement fonctionnel en cas de refus.
+ * - « Tout accepter » et « Tout refuser » ont exactement le même style ;
+ * - aucun script de mesure chargé avant consentement explicite ;
+ * - choix conservé 6 mois et modifiable via « Gérer les cookies » ;
+ * - le site reste pleinement fonctionnel en cas de refus.
+ *
+ * Forme : panneau blanc à coins feuille, boutons en pilule. Mobile : il
+ * occupe la largeur de l'écran moins une marge, posé en bas.
  */
 export function CookieConsent() {
   // useSyncExternalStore gère l'hydratation : rendu serveur sans consentement
@@ -115,63 +122,59 @@ gtag('config', '${GA_ID}', { anonymize_ip: true });`}
           role="dialog"
           aria-modal="false"
           aria-labelledby="cookie-titre"
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-paper p-5 shadow-float sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-md sm:rounded-sm sm:border"
+          className="leaf fixed inset-x-3 bottom-3 z-50 border border-line bg-white p-5 text-forest shadow-float sm:inset-x-auto sm:bottom-5 sm:left-5 sm:w-[25rem] sm:p-6"
         >
           <h2 id="cookie-titre" className="text-display-sm">
             Cookies
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Nous utilisons uniquement des cookies strictement nécessaires et,
-            avec votre accord, une mesure d&apos;audience anonymisée. Refuser ne
-            change rien à votre navigation.{" "}
-            <Link href="/cookies" className="text-rose underline underline-offset-4">
+          <p className="mt-2 text-[0.92rem] leading-relaxed text-forest-soft">
+            Uniquement le strict nécessaire et, avec votre accord, une mesure
+            d&apos;audience anonymisée. Refuser ne change rien à votre
+            navigation.{" "}
+            <Link
+              href="/cookies"
+              className="whitespace-nowrap font-medium text-bloom-ink underline decoration-bloom-ink/35 underline-offset-4 hover:decoration-bloom-ink"
+            >
               En savoir plus
             </Link>
           </p>
 
           {detail && (
-            <fieldset className="mt-4 space-y-3 border-t border-hairline pt-4">
+            <fieldset className="mt-4 space-y-3 border-t border-line pt-4">
               <legend className="sr-only">Choisir les cookies autorisés</legend>
-              <label className="flex items-start gap-3 text-sm">
+              <label className="flex items-start gap-3 text-[0.92rem]">
                 <input
                   type="checkbox"
                   checked
                   disabled
-                  className="mt-0.5 size-4 accent-rose"
+                  className="mt-0.5 size-4 shrink-0 accent-bloom-strong"
                 />
                 <span>
-                  <span className="font-semibold">Nécessaires</span> — toujours
-                  actifs (sécurité, consentement).
+                  <span className="font-semibold">Nécessaires</span>&nbsp;: toujours
+                  actifs (sécurité, mémoire de votre choix).
                 </span>
               </label>
-              <label className="flex items-start gap-3 text-sm">
+              <label className="flex items-start gap-3 text-[0.92rem]">
                 <input
                   type="checkbox"
                   checked={analyticsChecked}
                   onChange={(e) => setAnalyticsChecked(e.target.checked)}
-                  className="mt-0.5 size-4 accent-rose"
+                  className="mt-0.5 size-4 shrink-0 accent-bloom-strong"
                 />
                 <span>
-                  <span className="font-semibold">Mesure d&apos;audience</span>{" "}
-                  — statistiques anonymisées de fréquentation.
+                  <span className="font-semibold">Mesure d&apos;audience</span>&nbsp;:
+                  statistiques de fréquentation anonymisées.
                 </span>
               </label>
             </fieldset>
           )}
 
-          <div className="mt-4 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => decide(false)}
-              className="min-h-11 rounded-full border border-ink/25 px-4 py-2.5 text-sm font-semibold transition-colors hover:border-rose hover:text-rose"
-            >
+          {/* Égalité stricte : même forme, même taille, même contraste. */}
+          <div className="mt-5 grid grid-cols-2 gap-2.5">
+            <button type="button" onClick={() => decide(false)} className={choiceClass}>
               Tout refuser
             </button>
-            <button
-              type="button"
-              onClick={() => decide(true)}
-              className="min-h-11 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-rose"
-            >
+            <button type="button" onClick={() => decide(true)} className={choiceClass}>
               Tout accepter
             </button>
           </div>
@@ -179,7 +182,7 @@ gtag('config', '${GA_ID}', { anonymize_ip: true });`}
             <button
               type="button"
               onClick={() => decide(analyticsChecked)}
-              className="mt-2 min-h-11 w-full rounded-full border border-ink/25 px-4 py-2.5 text-sm font-semibold transition-colors hover:border-rose hover:text-rose"
+              className="press mt-2.5 min-h-11 w-full rounded-full bg-bloom-strong px-4 py-2.5 text-[0.92rem] font-semibold text-white transition-colors hover:bg-forest"
             >
               Enregistrer mes choix
             </button>
@@ -187,7 +190,7 @@ gtag('config', '${GA_ID}', { anonymize_ip: true });`}
             <button
               type="button"
               onClick={() => setDetail(true)}
-              className="mt-3 text-sm text-rose underline underline-offset-4"
+              className="mt-3 min-h-11 text-[0.92rem] font-medium text-bloom-ink underline decoration-bloom-ink/35 underline-offset-4 hover:decoration-bloom-ink"
             >
               Personnaliser
             </button>

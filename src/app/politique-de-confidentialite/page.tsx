@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
 import { dataProtection, hasLegalPlaceholders, legalEntity } from "@/lib/legal";
@@ -67,7 +69,7 @@ export default function ConfidentialitePage() {
             <td>Mesure d&apos;audience</td>
             <td>Données de navigation anonymisées</td>
             <td>Comprendre l&apos;usage du site pour l&apos;améliorer</td>
-            <td>Consentement — jamais activée sans votre accord</td>
+            <td>Consentement (jamais activée sans votre accord)</td>
           </tr>
         </tbody>
       </table>
@@ -90,8 +92,15 @@ export default function ConfidentialitePage() {
       <ul>
         {dataProtection.processors.map((p) => (
           <li key={p.name}>
-            <strong>{p.name}</strong> — hébergé en {p.location}. Accord de
-            traitement des données : {p.dpa}
+            <strong>{p.name}</strong>, hébergé en {p.location}. Accord de
+            traitement des données :{" "}
+            {p.dpa.startsWith("https://") ? (
+              <a href={p.dpa} rel="noopener">
+                {p.dpa.replace("https://", "")}
+              </a>
+            ) : (
+              p.dpa
+            )}
           </li>
         ))}
       </ul>
@@ -111,7 +120,7 @@ export default function ConfidentialitePage() {
       <h2>Cookies</h2>
       <p>
         L&apos;usage des cookies et votre contrôle sur ceux-ci sont détaillés
-        dans la <a href="/cookies">politique cookies</a>. Vous pouvez modifier
+        dans la <Link href="/cookies">politique cookies</Link>. Vous pouvez modifier
         votre choix à tout moment via le lien « Gérer les cookies » en pied de
         page.
       </p>

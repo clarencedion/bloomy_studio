@@ -1,65 +1,77 @@
-import Image from "next/image";
-
 import { Container } from "@/components/ui/Container";
 import { CtaLink } from "@/components/ui/CtaLink";
 import { EmailLink } from "@/components/ui/EmailLink";
+import { ButtonArrow, buttonClass } from "@/components/ui/Button";
+import { auditCta, primaryCta } from "@/lib/site";
 
 type Props = {
   title?: string;
   lede?: string;
+  /** Emplacement, transmis à l'événement analytics. */
   placement: string;
+  /**
+   * `projet` (par défaut) mène au formulaire de contact ; `audit` mène au
+   * diagnostic gratuit, l'offre d'entrée des pages métier.
+   */
+  intent?: "projet" | "audit";
 };
 
 /**
- * Bande de conversion finale — section 12 de la direction artistique.
+ * Bande de conversion finale. Elle ouvre le grand aplat vert qui se prolonge
+ * dans le pied de page : la page se referme sur la couleur de la tige.
  *
- * Le seul moment où l'on demande quelque chose, et le seul endroit où une
- * photographie occupe tout l'écran. Le cadrage privilégie la droite de
- * l'image, déjà sombre, et le voile prune à 80 % achève le contraste : le
- * texte reste lisible, la matière reste visible. Un voile plus opaque
- * effaçait la photo, ce qui revenait à ne pas en avoir.
+ * Le monogramme du logo y apparaît une seule fois, en très grand et en
+ * ton sur ton, rogné par le bord : la signature de la marque, pas un décor.
  *
  * Jamais de fausse urgence : ni compte à rebours, ni places restantes.
  */
 export function CtaBand({
-  title = "Voyons ce que votre boutique mérite en ligne",
-  lede = "Envoyez-nous votre site actuel — ou son absence. Vous recevez un diagnostic humain et concret, gratuit et sans engagement.",
+  title = "Parlons de votre projet.",
+  lede = "Un site, une boutique, une première version de votre application : décrivez-nous où vous en êtes. Réponse sous 48 h ouvrées.",
   placement,
+  intent = "projet",
 }: Props) {
-  return (
-    <section className="on-ink relative overflow-hidden bg-plum text-cream">
-      <div aria-hidden="true" className="absolute inset-0">
-        <Image
-          src="/photos/cta-final-hero.webp"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-[70%_center]"
-        />
-      </div>
-      <div aria-hidden="true" className="absolute inset-0 bg-plum/80" />
+  const cta = intent === "audit" ? auditCta : primaryCta;
+  const event = intent === "audit" ? "cta_audit_click" : "cta_contact_click";
 
-      <Container className="relative py-16 sm:py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-display-lg">{title}</h2>
-          <p className="mx-auto mt-5 max-w-lg leading-relaxed text-cream/80">{lede}</p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+  return (
+    <section className="on-forest relative isolate overflow-hidden bg-forest">
+      {/*
+        Monogramme en masque CSS plutôt qu'en <img> : purement décoratif, il
+        ne doit jamais être retenu comme plus grand élément affiché (LCP).
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -right-16 -z-10 aspect-[1386/1437] w-[22rem] bg-forest-mid sm:w-[30rem] lg:-bottom-40 lg:right-0 lg:w-[38rem]"
+        style={{
+          maskImage: "url(/brand/bloomy-mark.svg)",
+          WebkitMaskImage: "url(/brand/bloomy-mark.svg)",
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+        }}
+      />
+
+      <Container width="wide" className="py-20 sm:py-28">
+        <div className="max-w-3xl">
+          <h2 className="text-display-2xl text-paper">{title}</h2>
+          <p className="lede mt-7 max-w-xl">{lede}</p>
+          <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
             <CtaLink
-              href="/audit"
-              event="cta_audit_click"
+              href={cta.href}
+              event={event}
               placement={placement}
-              className="press inline-flex min-h-13 w-full items-center justify-center rounded-full bg-cream px-8 py-3.5 font-semibold text-plum transition-colors hover:bg-rose hover:text-cream sm:w-auto"
+              className={buttonClass("primary", "min-h-14 px-8 text-base hover:bg-paper hover:text-forest")}
             >
-              Recevoir mon diagnostic gratuit
+              {cta.label}
+              <ButtonArrow />
             </CtaLink>
-            <p className="text-sm text-cream/70">
-              ou écrivez-nous :{" "}
-              <EmailLink className="text-cream underline underline-offset-4" />
+            <p className="text-[0.95rem] text-paper/80">
+              ou écrivez-nous :{" "}
+              <EmailLink className="font-semibold text-paper underline decoration-bloom-light/60 underline-offset-4 hover:decoration-bloom-light" />
             </p>
           </div>
-          <p className="mt-6 text-xs text-cream/60">
-            Réponse sous 48 h ouvrées. Aucun démarchage, aucune relance automatique.
-          </p>
         </div>
       </Container>
     </section>

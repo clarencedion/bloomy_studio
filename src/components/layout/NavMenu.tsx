@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { ArrowRight, CaretDown } from "@phosphor-icons/react";
+
 import type { NavLeaf } from "@/lib/site";
 
 /**
@@ -10,7 +12,7 @@ import type { NavLeaf } from "@/lib/site";
  *
  * Le brief interdit « l'accès par survol uniquement » : le panneau s'ouvre
  * donc au clic **et** au survol, mais il est toujours atteignable au clavier
- * — le déclencheur est un vrai `<button>` avec `aria-expanded`, Échap referme
+ * — le déclencheur est un vrai `<button>` avec `aria-expanded`. Échap referme
  * et rend le focus, et une perte de focus hors du groupe referme aussi.
  *
  * Le survol n'ouvre qu'après un court délai et la fermeture est différée :
@@ -79,56 +81,52 @@ export function NavMenu({
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex items-center gap-1.5 py-2 text-[0.92rem] font-medium transition-colors hover:text-rose ${
-          sectionActive ? "text-rose" : "text-ink"
-        }`}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[0.95rem] font-medium transition-colors hover:text-bloom-ink ${
+          sectionActive
+            ? "text-forest underline decoration-bloom decoration-2 underline-offset-[10px]"
+            : "text-forest"
+        } ${open ? "text-bloom-ink" : ""}`}
       >
         {label}
-        <svg
-          width="10"
-          height="7"
-          viewBox="0 0 10 7"
+        <CaretDown
           aria-hidden="true"
-          className={`transition-transform duration-150 ${open ? "rotate-180" : ""}`}
-        >
-          <path
-            d="M1 1.5L5 5.5L9 1.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+          weight="bold"
+          className={`size-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {open ? (
         <div
           id={panelId}
-          className="absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 pt-3"
+          className="absolute left-1/2 top-full z-50 w-[25rem] -translate-x-1/2 pt-3"
         >
-          <div className="overflow-hidden rounded-sm border border-hairline bg-paper shadow-float">
-            <p className="border-b border-hairline bg-cream px-5 py-3 text-[0.78rem] text-ink-faint">
-              {intro}
-            </p>
-            <ul className="p-2">
+          <div className="leaf overflow-hidden border border-line bg-white shadow-float animate-[fade-in_160ms_var(--ease-soft)]">
+            <p className="px-6 pb-2 pt-5 text-[0.82rem] text-forest-faint">{intro}</p>
+            <ul className="px-3 pb-3">
               {items.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-cream"
+                    className="group flex items-start justify-between gap-4 rounded-2xl px-3 py-3 transition-colors hover:bg-mint/70"
                   >
-                    <span
-                      className={`block text-[0.92rem] font-semibold transition-colors group-hover:text-rose ${
-                        isActive(item.href) ? "text-rose" : ""
-                      }`}
-                    >
-                      {item.label}
+                    <span>
+                      <span
+                        className={`font-display block text-[1.05rem] font-semibold tracking-tight transition-colors group-hover:text-bloom-ink ${
+                          isActive(item.href) ? "text-bloom-ink" : "text-forest"
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                      <span className="mt-0.5 block text-[0.84rem] leading-snug text-forest-soft">
+                        {item.hint}
+                      </span>
                     </span>
-                    <span className="mt-0.5 block text-[0.8rem] leading-snug text-ink-soft">
-                      {item.hint}
-                    </span>
+                    <ArrowRight
+                      aria-hidden="true"
+                      weight="bold"
+                      className="arrow-nudge mt-1 size-4 shrink-0 text-bloom-ink opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                   </Link>
                 </li>
               ))}

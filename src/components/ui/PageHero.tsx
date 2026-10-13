@@ -2,45 +2,76 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
+
+type Tone = "paper" | "blush" | "mint";
+
+const tones: Record<Tone, string> = {
+  paper: "bg-paper",
+  blush: "bg-blush",
+  mint: "bg-mint",
+};
 
 type Props = {
   crumbs: { name: string; path: string }[];
-  eyebrow: string;
+  /** Libellé facultatif au-dessus du H1, avec les filets du logo. */
+  eyebrow?: string;
   title: ReactNode;
   lede: ReactNode;
+  /** Actions sous le chapô (boutons). */
   children?: ReactNode;
   /**
-   * Composition visuelle sous le texte : une capture réelle, un aperçu
-   * d'interface. C'est ce qui remplace le rameau décoratif — sur une page de
-   * décision, l'espace se donne au travail livré, pas à un ornement.
+   * Composition pleine largeur sous le texte : une capture réelle, un
+   * aperçu d'interface.
    */
   visual?: ReactNode;
+  /** Composition à droite du texte en desktop (sous le texte en mobile). */
+  aside?: ReactNode;
+  /** Fond du bandeau d'en-tête. */
+  tone?: Tone;
 };
 
 /**
- * En-tête des pages intérieures : fil d'Ariane, pastille, H1, chapô, et une
- * composition facultative.
+ * En-tête des pages intérieures : fil d'Ariane, H1 aligné à gauche, chapô,
+ * actions, et une composition facultative.
  *
- * Pas d'illustration botanique en marge : la direction artistique révisée les
- * proscrit explicitement. Une page qui n'a rien de réel à montrer se contente
- * du texte — c'est plus honnête qu'un décor.
+ * Volontairement différent du hero d'accueil : pas de mur de travaux, pas
+ * d'animation de titre. Une page intérieure répond vite à « suis-je au bon
+ * endroit ? » puis laisse la place à son propre récit.
  */
-export function PageHero({ crumbs, eyebrow, title, lede, children, visual }: Props) {
+export function PageHero({
+  crumbs,
+  eyebrow,
+  title,
+  lede,
+  children,
+  visual,
+  aside,
+  tone = "paper",
+}: Props) {
   return (
-    <section className="border-b border-hairline">
-      <Container width={visual ? "wide" : "default"} className="py-10 sm:py-14">
+    <section className={`relative ${tones[tone]}`}>
+      <Container width="wide" className="pb-16 pt-8 sm:pb-24 sm:pt-10">
         <Breadcrumbs items={crumbs} />
-        <div className="mx-auto mt-10 max-w-3xl text-center">
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="text-display-xl mt-6">{title}</h1>
-          <p className="prose-links mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
-            {lede}
-          </p>
-          {children}
+        <div
+          className={`mt-12 sm:mt-16 ${
+            aside ? "grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-10" : ""
+          }`}
+        >
+          <div className={aside ? "lg:col-span-7" : "max-w-4xl"}>
+            {eyebrow ? (
+              <Kicker ruled className="mb-7">
+                {eyebrow}
+              </Kicker>
+            ) : null}
+            <h1 className="text-display-xl">{title}</h1>
+            <p className="lede prose-links mt-7 max-w-2xl">{lede}</p>
+            {children ? <div className="mt-9">{children}</div> : null}
+          </div>
+          {aside ? <div className="lg:col-span-5">{aside}</div> : null}
         </div>
-        {visual ? <Reveal className="mt-12">{visual}</Reveal> : null}
+        {visual ? <Reveal className="relative mt-14 sm:mt-20">{visual}</Reveal> : null}
       </Container>
     </section>
   );

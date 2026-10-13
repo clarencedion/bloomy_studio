@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 
 /**
- * Articles du blog, en dur et typés (pas de CMS au lancement — décision
+ * Articles du blog, en dur et typés (pas de CMS au lancement : décision
  * documentée dans le blueprint). Chaque article répond à une vraie question
  * de fleuriste et apporte un angle propre au studio (information gain),
  * sans chiffre inventé ni promesse de classement.
@@ -16,6 +16,13 @@ export type BlogPost = {
   dateModified: string;
   readingMinutes: number;
   authorName: string;
+  /** Sujet de l’article, affiché en petit libellé au-dessus du titre. */
+  topic: string;
+  /**
+   * Pages du site qui prolongent l’article (offre ou page métier). Affichées
+   * en fin d’article, à côté des autres articles.
+   */
+  related: { label: string; href: string }[];
   body: ReactNode;
 };
 
@@ -29,19 +36,24 @@ export const blogPosts: BlogPost[] = [
     dateModified: "2026-07-24",
     readingMinutes: 8,
     authorName: "L'équipe Bloomy Studio",
+    topic: "Site internet",
+    related: [
+      { label: "Site internet", href: "/fleuristes/site-internet" },
+      { label: "Boutique en ligne", href: "/fleuristes/e-commerce" },
+    ],
     body: (
       <>
         <p>
           Nous avons passé deux ans à construire{" "}
           <a href="https://bloomy.one">Bloomy</a>, une plateforme de commande
           florale, aux côtés de fleuristes indépendants. En chemin, nous avons
-          vu des dizaines de sites de fleuristes — des bons, des datés, des
+          vu des dizaines de sites de fleuristes : des bons, des datés, des
           absents. Voici, concrètement, ce qu&apos;un site de fleuriste doit
           contenir pour travailler à votre place pendant que vous composez au
           comptoir.
         </p>
 
-        <h2>1. Les informations que tout le monde cherche — en premier</h2>
+        <h2>Les informations que tout le monde cherche, en premier</h2>
         <p>
           La majorité de vos visiteurs arrivent depuis Google, souvent depuis
           votre fiche Google Business Profile, presque toujours sur téléphone.
@@ -49,16 +61,16 @@ export const blogPosts: BlogPost[] = [
         </p>
         <ul>
           <li>
-            <strong>Vos horaires du jour</strong> — y compris jours fériés et
+            <strong>Vos horaires du jour</strong>, y compris les jours fériés et
             fermetures exceptionnelles. Un client qui se déplace pour rien ne
             revient pas.
           </li>
           <li>
-            <strong>Votre adresse et l&apos;itinéraire</strong> — un lien direct
+            <strong>Votre adresse et l&apos;itinéraire</strong>{" "}: un lien direct
             vers Google Maps, pas une carte décorative.
           </li>
           <li>
-            <strong>Un moyen de commander ou d&apos;appeler</strong> — bouton
+            <strong>Un moyen de commander ou d&apos;appeler</strong>{" "}: un bouton
             d&apos;appel cliquable, commande en ligne si vous la proposez.
           </li>
         </ul>
@@ -69,11 +81,11 @@ export const blogPosts: BlogPost[] = [
           numéro de téléphone doit être un <strong>lien cliquable</strong>,
           pas seulement du texte. Sur mobile, la différence est celle entre un
           appel lancé d&apos;un geste et un numéro qu&apos;il faut recopier à
-          la main — la plupart des visiteurs pressés abandonnent avant d&apos;y
+          la main. La plupart des visiteurs pressés abandonnent avant d&apos;y
           arriver.
         </p>
 
-        <h2>2. Une page par service — pas une page « prestations »</h2>
+        <h2>Une page par service, pas une page « prestations »</h2>
         <p>
           C&apos;est l&apos;erreur la plus fréquente et la plus coûteuse. Un
           fleuriste vend des services très différents, cherchés par des
@@ -81,53 +93,51 @@ export const blogPosts: BlogPost[] = [
         </p>
         <ul>
           <li>
-            <strong>Mariage</strong> : se prépare des mois à l&apos;avance, se
+            <strong>Mariage</strong>{" "}: se prépare des mois à l&apos;avance, se
             choisit sur dossier. Cette page montre vos réalisations, votre
             démarche, et propose un rendez-vous.
           </li>
           <li>
-            <strong>Deuil</strong> : se cherche dans l&apos;urgence, sur
+            <strong>Deuil</strong>{" "}: se cherche dans l&apos;urgence, sur
             téléphone, avec une charge émotionnelle forte. Cette page doit être
             sobre, rassurante, avec la livraison en cérémonie clairement
             expliquée.
           </li>
           <li>
-            <strong>Entreprises</strong> : abonnements bureaux, hôtels,
-            restaurants — des revenus récurrents qui méritent une page avec
+            <strong>Entreprises</strong>{" "}: abonnements bureaux, hôtels,
+            restaurants. Ce sont des revenus récurrents qui méritent une page avec
             demande de devis.
           </li>
           <li>
             <strong>Ateliers</strong>, <strong>abonnements particuliers</strong>
-            , <strong>événements</strong> : selon votre activité.
+            , <strong>événements</strong>{" "}: selon votre activité.
           </li>
         </ul>
         <p>
-          Chaque page dédiée répond mieux à la personne qui la cherche — et
+          Chaque page dédiée répond mieux à la personne qui la cherche, et
           c&apos;est aussi l&apos;un des leviers les plus puissants du
           référencement local : Google associe votre boutique à « fleuriste
           mariage + votre ville » seulement si une page en parle sérieusement.
           Une page « prestations » unique qui évoque les quatre activités en
-          deux lignes chacune ne convainc ni le visiteur pressé, ni Google —
+          deux lignes chacune ne convainc ni le visiteur pressé, ni Google :
           elle donne l&apos;impression que rien n&apos;est vraiment
           approfondi.
         </p>
 
-        <h2>3. La commande en ligne — au niveau adapté à votre boutique</h2>
+        <h2>La commande en ligne, au niveau adapté à votre boutique</h2>
         <p>Tous les fleuristes n&apos;ont pas besoin du même niveau :</p>
         <ol>
           <li>
-            <strong>Niveau minimal</strong> : un formulaire de commande simple
+            <strong>Niveau minimal</strong>{" "}: un formulaire de commande simple
             (occasion, budget, date de retrait) confirmé par téléphone. Zéro
             gestion de stock, déjà très utile.
           </li>
           <li>
-            <strong>Niveau intermédiaire</strong> : un catalogue en gammes —
-            « bouquet du marché dès 25 € », « brassée de saison dès 45 € » —
-            avec click-and-collect. Vous ne photographiez pas chaque
+            <strong>Niveau intermédiaire</strong>{" "}: un catalogue en gammes (« bouquet du marché dès 25 € », « brassée de saison dès 45 € ») avec click-and-collect. Vous ne photographiez pas chaque
             composition : vous vendez votre savoir-faire dans une fourchette.
           </li>
           <li>
-            <strong>Niveau complet</strong> : catalogue, créneaux de retrait,
+            <strong>Niveau complet</strong>{" "}: catalogue, créneaux de retrait,
             zones de livraison, paiement en ligne. À réserver aux boutiques
             prêtes à intégrer la commande en ligne dans leur routine
             quotidienne.
@@ -144,7 +154,7 @@ export const blogPosts: BlogPost[] = [
           sur <Link href="/fleuristes/e-commerce">la page e-commerce</Link>.
         </p>
 
-        <h2>4. Des photos à vous — même imparfaites</h2>
+        <h2>Des photos à vous, même imparfaites</h2>
         <p>
           Une photo de banque d&apos;images se reconnaît immédiatement, et elle
           dit exactement l&apos;inverse de ce que vous voulez dire. Trois
@@ -155,11 +165,11 @@ export const blogPosts: BlogPost[] = [
           ou votre équipe au travail si vous êtes à l&apos;aise.
         </p>
 
-        <h2>5. Les liens avec votre fiche Google</h2>
+        <h2>Les liens avec votre fiche Google</h2>
         <p>
           Votre site et votre fiche Google Business Profile forment un système.
           Vérifiez que le nom, l&apos;adresse, le téléphone et les horaires
-          sont <strong>strictement identiques</strong> des deux côtés, que la
+          sont <strong>strictement identiques</strong>{" "}des deux côtés, que la
           fiche pointe vers votre site (idéalement vers la bonne page service),
           et que le site mentionne clairement votre zone : ville, quartiers
           livrés, communes voisines. Nous avons consacré{" "}
@@ -169,42 +179,42 @@ export const blogPosts: BlogPost[] = [
           .
         </p>
 
-        <h2>6. Ce qui doit pouvoir changer sans votre prestataire</h2>
+        <h2>Ce qui doit pouvoir changer sans votre prestataire</h2>
         <p>
           Un site de fleuriste vit au rythme des saisons. Exigez de pouvoir
           modifier vous-même, sans facturation ni délai : horaires et
           fermetures, photos, disponibilités et prix des produits, et une
           annonce ponctuelle (« précommandes de Saint-Valentin ouvertes »). Si
           votre prestataire facture chaque changement d&apos;horaire, le
-          problème n&apos;est pas technique — il est contractuel. Un test
+          problème n&apos;est pas technique : il est contractuel. Un test
           simple avant de signer : demandez à changer une horaire ou ajouter
           une fermeture exceptionnelle pendant la démonstration. Si la réponse
           est « on vous envoie un devis », le site ne vous appartient pas
           vraiment, quel que soit ce qui est écrit sur le contrat.
         </p>
 
-        <h2>7. Les fondations invisibles</h2>
+        <h2>Les fondations invisibles</h2>
         <ul>
           <li>
-            <strong>Vitesse mobile</strong> : vos clients sont sur téléphone,
+            <strong>Vitesse mobile</strong>{" "}: vos clients sont sur téléphone,
             souvent en déplacement. Un site lent perd des commandes.
           </li>
           <li>
-            <strong>HTTPS</strong> : indispensable, pour la confiance comme
+            <strong>HTTPS</strong>{" "}: indispensable, pour la confiance comme
             pour Google.
           </li>
           <li>
-            <strong>Mentions légales et politique de confidentialité</strong> :
+            <strong>Mentions légales et politique de confidentialité</strong>{" "}:
             obligatoires, et rassurantes pour les commandes en ligne.
           </li>
           <li>
-            <strong>Un nom de domaine à votre nom</strong> : vérifiez que vous
+            <strong>Un nom de domaine à votre nom</strong>{" "}: vérifiez que vous
             en êtes propriétaire, pas votre prestataire. C&apos;est votre
             adresse commerciale numérique.
           </li>
         </ul>
 
-        <h2>8. Ce qui fait fuir un visiteur en quinze secondes</h2>
+        <h2>Ce qui fait fuir un visiteur en quinze secondes</h2>
         <p>
           Certains choix, souvent hérités d&apos;un thème générique, coûtent
           des commandes sans qu&apos;on comprenne pourquoi le téléphone sonne
@@ -212,12 +222,12 @@ export const blogPosts: BlogPost[] = [
         </p>
         <ul>
           <li>
-            <strong>Une musique ou une vidéo en lecture automatique</strong> —
+            <strong>Une musique ou une vidéo en lecture automatique</strong>{" "}:
             le premier réflexe est de quitter l&apos;onglet, pas de couper le
             son.
           </li>
           <li>
-            <strong>Une fenêtre d&apos;inscription à la newsletter</strong> qui
+            <strong>Une fenêtre d&apos;inscription à la newsletter</strong>{" "}qui
             s&apos;affiche avant même que le visiteur ait vu une seule fleur.
           </li>
           <li>
@@ -225,62 +235,62 @@ export const blogPosts: BlogPost[] = [
             boutons trop petits pour un pouce sur un trottoir.
           </li>
           <li>
-            <strong>Un formulaire qui n&apos;accuse pas réception</strong> :
+            <strong>Un formulaire qui n&apos;accuse pas réception</strong>{" "}:
             sans écran ou message de confirmation, la moitié des visiteurs
             renvoient le message deux fois, ou abandonnent en doutant qu&apos;il
             soit parti.
           </li>
           <li>
-            <strong>Une page d&apos;accueil muette</strong> sur ce que vous
+            <strong>Une page d&apos;accueil muette</strong>{" "}sur ce que vous
             vendez et où vous êtes : le visiteur ne doit jamais avoir à
             faire défiler la page pour comprendre ça.
           </li>
         </ul>
 
-        <h2>9. L&apos;accessibilité : un minimum légal, un levier commercial</h2>
+        <h2>L&apos;accessibilité : un minimum légal, un levier commercial</h2>
         <p>
           On la traite souvent comme une case à cocher en fin de projet. C&apos;est
-          une erreur : une partie non négligeable de votre clientèle — deuil,
-          générations plus âgées, lecture au soleil sur un trottoir — bénéficie
+          une erreur : une partie non négligeable de votre clientèle (deuil,
+          générations plus âgées, lecture au soleil sur un trottoir) bénéficie
           directement d&apos;un site pensé pour être accessible, sans que cela
           se voie ni ne coûte plus cher à construire dès le départ :
         </p>
         <ul>
           <li>
-            <strong>Un contraste suffisant</strong> entre le texte et le fond,
+            <strong>Un contraste suffisant</strong>{" "}entre le texte et le fond,
             y compris en plein soleil sur un écran de téléphone.
           </li>
           <li>
-            <strong>Des champs de formulaire correctement étiquetés</strong> —
+            <strong>Des champs de formulaire correctement étiquetés</strong>,
             pas seulement un texte grisé qui disparaît dès qu&apos;on clique
             dedans.
           </li>
           <li>
-            <strong>Un texte alternatif sur les photos</strong> : utile aux
+            <strong>Un texte alternatif sur les photos</strong>{" "}: utile aux
             technologies d&apos;assistance, et c&apos;est aussi ce que Google
             lit pour comprendre une image.
           </li>
           <li>
             <strong>Une navigation possible au clavier</strong>, pour les
-            visiteurs qui ne peuvent pas — ou ne veulent pas — utiliser une
+            visiteurs qui ne peuvent pas (ou ne veulent pas) utiliser une
             souris ou un doigt.
           </li>
         </ul>
         <p>
           Rien de tout cela ne se voit sur une maquette. C&apos;est pourtant ce
           qui distingue un site construit sérieusement d&apos;un thème
-          assemblé rapidement — et c&apos;est aussi, très concrètement, la
+          assemblé rapidement. C&apos;est aussi, très concrètement, la
           différence entre un client qui parvient à passer commande sans
           effort et un autre qui abandonne au milieu d&apos;un formulaire mal
           conçu.
         </p>
 
-        <h2>10. Combien de temps ça prend, réalistement</h2>
+        <h2>Combien de temps ça prend, réalistement</h2>
         <p>
           Construire un site qui coche tous ces points ne se fait pas en un
           après-midi, mais ça ne devrait pas non plus s&apos;étaler sur des
-          mois. Chez Bloomy Studio, un site vitrine complet — identité,
-          pages services, connexion à la fiche Google, formation — se
+          mois. Chez Bloomy Studio, un site vitrine complet (identité,
+          pages services, connexion à la fiche Google, formation) se
           construit en quatre semaines : une semaine de cadrage, une de
           direction visuelle, une de construction, une de lancement. Ce
           rythme n&apos;est pas une règle universelle, mais c&apos;est un
@@ -305,7 +315,7 @@ export const blogPosts: BlogPost[] = [
         <p>
           Si vous voulez savoir où en est votre site sur chacun de ces points,{" "}
           <Link href="/audit">notre diagnostic gratuit</Link>{" "}les passe tous en
-          revue — honnêtement, et sans engagement.
+          revue, honnêtement et sans engagement.
         </p>
       </>
     ),
@@ -319,13 +329,18 @@ export const blogPosts: BlogPost[] = [
     dateModified: "2026-07-24",
     readingMinutes: 8,
     authorName: "L'équipe Bloomy Studio",
+    topic: "Google Maps",
+    related: [
+      { label: "SEO local et Google Maps", href: "/fleuristes/seo-local" },
+      { label: "Site internet", href: "/fleuristes/site-internet" },
+    ],
     body: (
       <>
         <p>
           Tapez « fleuriste » dans Google depuis votre téléphone : trois
           boutiques apparaissent avec une carte, des avis et un itinéraire,
           avant tous les autres résultats. Ce « pack local » capte une part
-          décisive des clients — et y figurer n&apos;a rien d&apos;un hasard.
+          décisive des clients, et y figurer n&apos;a rien d&apos;un hasard.
           La bonne nouvelle : contrairement à un classement Google classique,
           souvent verrouillé par des sites installés depuis des années, le
           pack local se rejoue en continu et reste accessible à une petite
@@ -337,26 +352,26 @@ export const blogPosts: BlogPost[] = [
         <p>Google combine trois familles de critères :</p>
         <ul>
           <li>
-            <strong>La pertinence</strong> : votre fiche et votre site
+            <strong>La pertinence</strong>{" "}: votre fiche et votre site
             décrivent-ils précisément ce que la personne cherche ?
           </li>
           <li>
-            <strong>La distance</strong> : vous ne contrôlez pas d&apos;où
-            cherche le client — raison de plus pour optimiser le reste.
+            <strong>La distance</strong>{" "}: vous ne contrôlez pas d&apos;où
+            cherche le client. Raison de plus pour optimiser le reste.
           </li>
           <li>
-            <strong>La notoriété</strong> : avis, activité de la fiche,
+            <strong>La notoriété</strong>{" "}: avis, activité de la fiche,
             cohérence de vos informations sur le web, qualité de votre site.
           </li>
         </ul>
         <p>
-          Personne — ni nous, ni personne — ne peut vous « garantir la première
+          Personne, ni nous ni un autre prestataire, ne peut vous « garantir la première
           place ». En revanche, la plupart des fiches de fleuristes sont si peu
           travaillées qu&apos;une optimisation sérieuse change réellement la
           donne dans la majorité des villes.
         </p>
 
-        <h2>Étape 1 — Reprenez la main sur votre fiche</h2>
+        <h2>1. Reprenez la main sur votre fiche</h2>
         <p>
           Si vous ne l&apos;avez jamais fait, cherchez votre boutique sur
           Google et cliquez sur « Vous êtes le propriétaire de cet
@@ -364,60 +379,59 @@ export const blogPosts: BlogPost[] = [
           non revendiquée, c&apos;est votre vitrine gérée par personne.
         </p>
 
-        <h2>Étape 2 — La catégorie principale, décision la plus importante</h2>
+        <h2>2. La catégorie principale, la décision la plus importante</h2>
         <p>
           Votre catégorie principale doit être <strong>« Fleuriste »</strong>.
           Pas « Boutique de cadeaux », pas « Magasin ». C&apos;est le premier
-          critère de classement local — et l&apos;erreur la plus fréquente.
+          critère de classement local, et l&apos;erreur la plus fréquente.
           Ajoutez ensuite des catégories secondaires si elles correspondent
           vraiment à votre activité (livraison de fleurs, par exemple).
         </p>
 
-        <h2>Étape 3 — Complétez tout, vraiment tout</h2>
+        <h2>3. Complétez tout, vraiment tout</h2>
         <ul>
           <li>
-            <strong>Horaires</strong> : à jour, avec les jours fériés — une
-            fiche « horaires non confirmés » fait fuir.
+            <strong>Horaires</strong>{" "}: à jour, avec les jours fériés. Une fiche « horaires non confirmés » fait fuir.
           </li>
           <li>
-            <strong>Services</strong> : bouquets sur mesure, mariage, deuil,
-            livraison, click-and-collect, abonnements — détaillez.
+            <strong>Services</strong>{" "}: bouquets sur mesure, mariage, deuil,
+            livraison, click-and-collect, abonnements : détaillez chaque service.
           </li>
           <li>
-            <strong>Photos</strong> : devanture, intérieur, créations récentes.
-            Ajoutez-en régulièrement — une fiche vivante rassure Google et vos
+            <strong>Photos</strong>{" "}: devanture, intérieur, créations récentes.
+            Ajoutez-en régulièrement : une fiche vivante rassure Google et vos
             clients. Les photos datées de trois ans racontent une boutique à
             l&apos;abandon.
           </li>
           <li>
-            <strong>Description</strong> : votre spécialité, votre quartier,
-            votre différence — en langage naturel, sans bourrage de mots-clés.
+            <strong>Description</strong>{" "}: votre spécialité, votre quartier,
+            votre différence, en langage naturel et sans bourrage de mots-clés.
           </li>
           <li>
-            <strong>Zone desservie</strong> : les communes et quartiers que
+            <strong>Zone desservie</strong>{" "}: les communes et quartiers que
             vous livrez réellement.
           </li>
         </ul>
 
-        <h2>Étape 4 — Les avis : la régularité compte autant que la note</h2>
+        <h2>4. Les avis : la régularité compte autant que la note</h2>
         <p>
           Une fiche à 4,8 dont le dernier avis date de huit mois inspire moins
-          confiance — aux clients comme à Google — qu&apos;une fiche à 4,6 avec
+          confiance (aux clients comme à Google) qu&apos;une fiche à 4,6 avec
           des avis chaque semaine. Trois règles :
         </p>
         <ul>
           <li>
-            <strong>Demandez simplement</strong> : après une commande réussie,
+            <strong>Demandez simplement</strong>{" "}: après une commande réussie,
             un petit mot ou un QR code en boutique suffit. Si vous vendez en
             ligne, un e-mail après livraison fait ce travail automatiquement.
           </li>
           <li>
-            <strong>Répondez à tous les avis</strong>, y compris les négatifs —
+            <strong>Répondez à tous les avis</strong>, y compris les négatifs,
             avec le calme de quelqu&apos;un dont le prochain client lira la
             réponse.
           </li>
           <li>
-            <strong>N&apos;achetez jamais d&apos;avis</strong> et ne filtrez
+            <strong>N&apos;achetez jamais d&apos;avis</strong>{" "}et ne filtrez
             jamais les clients mécontents avant de les envoyer vers Google :
             c&apos;est interdit, détectable, et sanctionné.
           </li>
@@ -431,20 +445,20 @@ export const blogPosts: BlogPost[] = [
           l&apos;effet inverse, quel que soit qui a raison sur le fond.
         </p>
 
-        <h2>Étape 5 — Votre site fait la moitié du travail</h2>
+        <h2>5. Votre site fait la moitié du travail</h2>
         <p>
           Google lit votre site pour comprendre votre fiche. Trois points de
           jonction :
         </p>
         <ul>
           <li>
-            <strong>Cohérence absolue</strong> : nom, adresse, téléphone et
+            <strong>Cohérence absolue</strong>{" "}: nom, adresse, téléphone et
             horaires identiques sur le site, la fiche et les annuaires
             sérieux. Chaque incohérence sème le doute.
           </li>
           <li>
-            <strong>Pages services</strong> : « fleuriste mariage + votre
-            ville » se gagne avec une vraie page mariage sur votre site — pas
+            <strong>Pages services</strong>{" "}: « fleuriste mariage + votre
+            ville » se gagne avec une vraie page mariage sur votre site, pas
             avec la fiche seule. Nous détaillons ce mécanisme dans{" "}
             <Link href="/blog/site-internet-fleuriste-checklist">
               la checklist du site de fleuriste
@@ -452,21 +466,20 @@ export const blogPosts: BlogPost[] = [
             .
           </li>
           <li>
-            <strong>Vitesse et mobile</strong> : la fiche envoie vers votre
+            <strong>Vitesse et mobile</strong>{" "}: la fiche envoie vers votre
             site ; si l&apos;atterrissage est lent ou illisible, le client
-            repart — et Google le mesure.
+            repart, et Google le mesure.
           </li>
           <li>
-            <strong>Les données structurées</strong> : un balisage technique
+            <strong>Les données structurées</strong>{" "}: un balisage technique
             (schema.org) sur votre site décrit explicitement à Google votre
-            nom, votre adresse, vos horaires et votre catégorie d&apos;activité
-            — une couche supplémentaire de clarté, en plus du texte visible.
+            nom, votre adresse, vos horaires et votre catégorie d&apos;activité. C&apos;est une couche supplémentaire de clarté, en plus du texte visible.
             C&apos;est ce que nous posons systématiquement sur les sites que
             nous livrons.
           </li>
         </ul>
 
-        <h2>Étape 6 — Plusieurs boutiques, plusieurs fiches</h2>
+        <h2>6. Plusieurs boutiques, plusieurs fiches</h2>
         <p>
           Si vous avez ouvert une seconde boutique, résistez à la tentation
           d&apos;étendre la zone desservie de votre première fiche plutôt que
@@ -479,42 +492,42 @@ export const blogPosts: BlogPost[] = [
           adresses plutôt que d&apos;une seule.
         </p>
 
-        <h2>Étape 7 — Publiez au rythme de vos saisons</h2>
+        <h2>7. Publiez au rythme de vos saisons</h2>
         <p>
           Les posts Google (nouveautés, offres) sont un signal d&apos;activité
           simple à entretenir : précommandes de Saint-Valentin, collections de
           fête des mères, horaires de Toussaint, ateliers. Dix minutes par
-          semaine suffisent — l&apos;important est la régularité, pas le
+          semaine suffisent : l&apos;important est la régularité, pas le
           volume.
         </p>
 
-        <h2>Étape 8 — Les erreurs qui sabotent un bon classement</h2>
+        <h2>8. Les erreurs qui sabotent un bon classement</h2>
         <p>
           Certaines fiches cumulent des mois d&apos;efforts et stagnent quand
           même, à cause d&apos;un détail qui les dessert en silence :
         </p>
         <ul>
           <li>
-            <strong>Une fiche dupliquée</strong> : deux fiches actives pour la
-            même boutique — souvent héritée d&apos;un ancien déménagement ou
-            d&apos;un changement de nom — divisent vos avis en deux et
+            <strong>Une fiche dupliquée</strong>{" "}: deux fiches actives pour la
+            même boutique (souvent héritée d&apos;un ancien déménagement ou
+            d&apos;un changement de nom) divisent vos avis en deux et
             brouillent Google. Fusionnez ou signalez le doublon dès que vous
             le repérez.
           </li>
           <li>
-            <strong>Une catégorie qui change tous les six mois</strong> :
+            <strong>Une catégorie qui change tous les six mois</strong>{" "}:
             Google a besoin de stabilité pour évaluer votre pertinence sur une
             requête. Choisissez « Fleuriste » et n&apos;y touchez plus.
           </li>
           <li>
-            <strong>Les questions publiques ignorées</strong> : la section
+            <strong>Les questions publiques ignorées</strong>{" "}: la section
             questions-réponses de votre fiche est ouverte à tout le monde, y
             compris à un client qui répond à la place d&apos;un autre avec une
             information fausse. Surveillez-la et répondez vous-même en
             premier.
           </li>
           <li>
-            <strong>Une zone desservie trop large</strong> : indiquer « toute
+            <strong>Une zone desservie trop large</strong>{" "}: indiquer « toute
             la France » pour une boutique avec pignon sur rue dilue votre
             pertinence locale au lieu de la renforcer. Ne listez que les
             communes que vous livrez réellement.
@@ -529,7 +542,7 @@ export const blogPosts: BlogPost[] = [
           quelques semaines ; l&apos;effet cumulé d&apos;avis réguliers, d&apos;une
           activité constante et d&apos;un site cohérent se construit sur
           plusieurs mois. C&apos;est un travail de fond, pas une case à cocher
-          une fois pour toutes — d&apos;où l&apos;intérêt d&apos;un rythme
+          une fois pour toutes, d&apos;où l&apos;intérêt d&apos;un rythme
           tenable (dix minutes par semaine) plutôt que d&apos;un sprint suivi
           d&apos;un abandon. Les boutiques qui progressent le plus durablement
           sont rarement celles qui font un grand effort ponctuel, mais celles
@@ -539,17 +552,16 @@ export const blogPosts: BlogPost[] = [
         <h2>Le vocabulaire de base, pour s&apos;y retrouver</h2>
         <ul>
           <li>
-            <strong>Pack local</strong> : le bloc de trois résultats avec
+            <strong>Pack local</strong>{" "}: le bloc de trois résultats avec
             carte qui s&apos;affiche en haut de la recherche Google pour une
-            requête locale — c&apos;est l&apos;objectif de cet article.
+            requête locale. C&apos;est l&apos;objectif de cet article.
           </li>
           <li>
-            <strong>Fiche d&apos;établissement</strong> (Google Business
-            Profile) : votre profil public sur Google Maps et la recherche —
-            gratuit, et distinct de votre site.
+            <strong>Fiche d&apos;établissement</strong>{" "}(Google Business
+            Profile) : votre profil public sur Google Maps et la recherche, gratuit et distinct de votre site.
           </li>
           <li>
-            <strong>Cohérence NAP</strong> (Nom, Adresse, téléphone) :
+            <strong>Cohérence NAP</strong>{" "}(Nom, Adresse, téléphone) :
             l&apos;abréviation que les professionnels du référencement local
             utilisent pour la cohérence de vos coordonnées sur le web.
           </li>
@@ -558,7 +570,7 @@ export const blogPosts: BlogPost[] = [
         <h2>Faut-il aussi faire de la publicité locale ?</h2>
         <p>
           Le pack local dont nous parlons depuis le début est un résultat
-          organique — vous n&apos;y figurez pas parce que vous payez, mais
+          organique : vous n&apos;y figurez pas parce que vous payez, mais
           parce que votre fiche et votre site le méritent. Google propose
           séparément des annonces locales payantes, affichées au-dessus du
           pack organique. Elles peuvent avoir leur intérêt ponctuel (une
@@ -578,13 +590,13 @@ export const blogPosts: BlogPost[] = [
           rigueur et de la constance : une fiche complète dans la bonne
           catégorie, des avis frais jamais achetés, un site cohérent avec des
           pages services dédiées, et une activité régulière. Rien
-          d&apos;ésotérique — mais presque personne ne le fait sérieusement,
+          d&apos;ésotérique, mais presque personne ne le fait sérieusement,
           et c&apos;est votre opportunité.
         </p>
         <p>
           Vous voulez savoir où en est votre fiche face aux fleuristes voisins
           ? <Link href="/audit">Le diagnostic gratuit</Link>{" "}inclut cette
-          analyse, avec des priorités concrètes — dans quel ordre les traiter,
+          analyse, avec des priorités concrètes : dans quel ordre les traiter,
           et ce qui aura le plus d&apos;impact pour votre boutique en
           particulier. Et si vous préférez déléguer la totalité,{" "}
           <Link href="/fleuristes/seo-local">
@@ -604,6 +616,11 @@ export const blogPosts: BlogPost[] = [
     dateModified: "2026-07-24",
     readingMinutes: 8,
     authorName: "L'équipe Bloomy Studio",
+    topic: "Vente en ligne",
+    related: [
+      { label: "Boutique en ligne", href: "/fleuristes/e-commerce" },
+      { label: "SEO local et Google Maps", href: "/fleuristes/seo-local" },
+    ],
     body: (
       <>
         <p>
@@ -612,7 +629,7 @@ export const blogPosts: BlogPost[] = [
           une plateforme florale qui ne prélève aucune commission sur les
           artisans, précisément parce que le modèle dominant nous semblait
           injuste. Et notre studio vend des sites en propre. Cet article
-          n&apos;est donc pas neutre — mais il est factuel, et il ne vous dira
+          n&apos;est donc pas neutre, mais il est factuel, et il ne vous dira
           pas de tout quitter du jour au lendemain. Nous préférons vous donner
           de quoi calculer vous-même plutôt qu&apos;une conclusion toute
           faite : à la fin de cet article, vous devriez pouvoir répondre à la
@@ -623,15 +640,15 @@ export const blogPosts: BlogPost[] = [
         <p>Soyons justes, car c&apos;est la condition d&apos;un bon calcul :</p>
         <ul>
           <li>
-            <strong>Des commandes sans effort d&apos;acquisition</strong> — la
+            <strong>Des commandes sans effort d&apos;acquisition</strong>{" "}: la
             plateforme investit en publicité à votre place.
           </li>
           <li>
-            <strong>Le réseau de transmission</strong> — une commande passée à
+            <strong>Le réseau de transmission</strong>{" "}: une commande passée à
             Lille pour une livraison dans votre ville arrive chez vous.
           </li>
           <li>
-            <strong>Une présence immédiate</strong> — utile à
+            <strong>Une présence immédiate</strong>, utile à
             l&apos;ouverture, quand personne ne vous connaît.
           </li>
         </ul>
@@ -639,13 +656,12 @@ export const blogPosts: BlogPost[] = [
         <h2>Être sur plusieurs plateformes à la fois : plus de risque, pas moins</h2>
         <p>
           Un réflexe fréquent consiste à s&apos;inscrire sur toutes les
-          plateformes disponibles, par précaution — l&apos;idée qu&apos;additionner
+          plateformes disponibles, par précaution, avec l&apos;idée qu&apos;additionner
           les canaux réduit le risque. C&apos;est rarement vrai dans les
           faits : chaque plateforme supplémentaire ajoute sa propre
           commission, son propre catalogue à tenir à jour, et sa propre
           dépendance, sans que le volume de commandes ne suive
-          proportionnellement. Le risque ne se dilue pas, il s&apos;additionne
-          — et le temps passé à gérer trois catalogues standardisés est un
+          proportionnellement. Le risque ne se dilue pas, il s&apos;additionne. Et le temps passé à gérer trois catalogues standardisés est un
           temps qui ne construit ni votre site, ni votre fiche Google, ni la
           relation directe avec vos clients.
         </p>
@@ -653,26 +669,26 @@ export const blogPosts: BlogPost[] = [
         <h2>Ce qu&apos;elles vous coûtent</h2>
         <ul>
           <li>
-            <strong>La commission</strong> : un pourcentage significatif de
+            <strong>La commission</strong>{" "}: un pourcentage significatif de
             chaque commande, parfois cumulé avec un abonnement mensuel et des
             frais d&apos;inscription au réseau. Faites le calcul sur votre
-            volume annuel réel — c&apos;est souvent le prix d&apos;un site
+            volume annuel réel : c&apos;est souvent le prix d&apos;un site
             entier, chaque année.
           </li>
           <li>
-            <strong>Votre identité</strong> : sur la plateforme, vous exécutez
+            <strong>Votre identité</strong>{" "}: sur la plateforme, vous exécutez
             un catalogue standardisé sous la marque de quelqu&apos;un
             d&apos;autre. Le « bouquet rond romantique » est le même à
-            Strasbourg et à Biarritz — votre savoir-faire devient
+            Strasbourg et à Biarritz, et votre savoir-faire devient
             interchangeable.
           </li>
           <li>
-            <strong>Le client</strong> : il appartient à la plateforme. Vous ne
+            <strong>Le client</strong>{" "}: il appartient à la plateforme. Vous ne
             connaissez pas son e-mail, vous ne pouvez pas l&apos;inviter à
             revenir, il n&apos;a souvent même pas retenu votre nom.
           </li>
           <li>
-            <strong>La dépendance</strong> : conditions, commissions et
+            <strong>La dépendance</strong>{" "}: conditions, commissions et
             visibilité dans le réseau peuvent changer sans vous, et vous ne
             l&apos;apprenez généralement qu&apos;après coup, par e-mail
             groupé envoyé à tous les artisans du réseau le même jour.
@@ -683,20 +699,20 @@ export const blogPosts: BlogPost[] = [
           en propre, la seule personne qui décide de votre visibilité, de vos
           prix et de votre présentation, c&apos;est vous. Sur une plateforme,
           cette décision appartient à quelqu&apos;un d&apos;autre, qui a ses
-          propres intérêts — pas nécessairement alignés avec les vôtres au
+          propres intérêts, pas nécessairement alignés avec les vôtres au
           moment où les conditions changent.
         </p>
 
         <h2>Les questions à poser avant de signer, ou de continuer</h2>
         <p>
           Peu de fleuristes lisent les conditions générales d&apos;une
-          plateforme en entier — c&apos;est pourtant là que se cachent les
+          plateforme en entier. C&apos;est pourtant là que se cachent les
           vraies contraintes. Avant de signer, ou pour réévaluer un contrat
           en cours, posez ces questions simples :
         </p>
         <ul>
           <li>
-            <strong>Le taux de commission peut-il changer</strong> sans
+            <strong>Le taux de commission peut-il changer</strong>{" "}sans
             préavis, ou seulement à date anniversaire du contrat ?
           </li>
           <li>
@@ -709,8 +725,7 @@ export const blogPosts: BlogPost[] = [
             délai de préavis ?
           </li>
           <li>
-            <strong>Qui gère la relation client en cas de litige</strong> —
-            livraison manquée, produit non conforme — et qui en assume le
+            <strong>Qui gère la relation client en cas de litige</strong>{" "}(livraison manquée, produit non conforme), et qui en assume le
             coût ?
           </li>
         </ul>
@@ -718,7 +733,7 @@ export const blogPosts: BlogPost[] = [
           Une plateforme sérieuse répond sans détour à ces quatre questions.
           Des réponses évasives sur la propriété des données clients ou la
           possibilité de partir sont, à elles seules, un signal à prendre au
-          sérieux — bien avant que la question de la commission elle-même ne
+          sérieux, bien avant que la question de la commission elle-même ne
           se pose.
         </p>
 
@@ -730,8 +745,7 @@ export const blogPosts: BlogPost[] = [
             commission totale versée (pourcentage + abonnements + frais).
           </li>
           <li>
-            La part de ces commandes qui seraient venues à vous de toute façon
-            — clients de votre ville qui vous auraient trouvés sur Google Maps
+            La part de ces commandes qui seraient venues à vous de toute façon : les clients de votre ville qui vous auraient trouvés sur Google Maps
             si votre présence locale était solide.
           </li>
           <li>
@@ -742,8 +756,7 @@ export const blogPosts: BlogPost[] = [
         <p>
           Le point 2 est le cœur du sujet : pour beaucoup de boutiques, une
           partie des commandes « apportées » par les plateformes sont des
-          clients locaux qui cherchaient simplement un fleuriste dans leur
-          ville — et que votre propre visibilité aurait captés sans
+          clients locaux qui cherchaient simplement un fleuriste dans leur ville, et que votre propre visibilité aurait captés sans
           commission. C&apos;est exactement ce que travaillent{" "}
           <Link href="/fleuristes/seo-local">le SEO local</Link>{" "}et{" "}
           <Link href="/fleuristes/e-commerce">la boutique en ligne en propre</Link>.
@@ -751,8 +764,7 @@ export const blogPosts: BlogPost[] = [
 
         <h2>Un exemple chiffré, à recalculer avec vos propres nombres</h2>
         <p>
-          Pour rendre le calcul concret, prenons des chiffres d&apos;exemple —
-          arrondis, illustratifs, à remplacer par les vôtres avant d&apos;en
+          Pour rendre le calcul concret, prenons des chiffres d&apos;exemple, arrondis et illustratifs, à remplacer par les vôtres avant d&apos;en
           tirer une conclusion. Une boutique qui reçoit 200 commandes par an
           via une ou plusieurs plateformes, à un panier moyen de 45 €, avec
           une commission de 20 % et un abonnement de 30 € par mois :
@@ -776,9 +788,9 @@ export const blogPosts: BlogPost[] = [
           d&apos;un site vitrine complet avec commande en ligne, entretien
           compris. La différence : le site reste un actif qui vous
           appartient une fois payé, quand la commission, elle, se répète
-          indéfiniment — et augmente si la plateforme change ses conditions.
+          indéfiniment, et augmente si la plateforme change ses conditions.
           Refaites ce calcul avec votre volume réel et votre commission
-          exacte : c&apos;est la seule version du calcul qui compte — celle de
+          exacte : c&apos;est la seule version du calcul qui compte : celle de
           votre boutique, pas une moyenne de marché qui ne correspond
           probablement pas à votre situation.
         </p>
@@ -793,7 +805,7 @@ export const blogPosts: BlogPost[] = [
           finance l&apos;activité pendant que la fiche Google et le site
           montent en puissance. La question n&apos;est donc pas de choisir un
           camp à l&apos;ouverture, mais de savoir à quel moment le rapport de
-          force s&apos;inverse — et de ne pas le rater par confort, une fois
+          force s&apos;inverse, et de ne pas le rater par confort, une fois
           que la plateforme n&apos;apporte plus grand-chose que vous
           n&apos;auriez pas de toute façon.
         </p>
@@ -821,7 +833,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
         <p>
           Plus la dépendance est haute et la troisième réponse basse, plus la
-          construction d&apos;un canal en propre est urgente — pas dans six
+          construction d&apos;un canal en propre est urgente : pas dans six
           mois, maintenant. À l&apos;inverse, une dépendance faible et un bon
           taux de retour direct signifient que vous avez déjà, sans le
           nommer ainsi, largement réussi cette transition.
@@ -830,29 +842,28 @@ export const blogPosts: BlogPost[] = [
         <h2>Notre recommandation : la transition, pas la rupture</h2>
         <ol>
           <li>
-            <strong>Gardez les plateformes qui vous rapportent</strong> tant
-            que le calcul reste positif — pas de dogmatisme. Une plateforme
+            <strong>Gardez les plateformes qui vous rapportent</strong>{" "}tant
+            que le calcul reste positif, sans dogmatisme. Une plateforme
             qui apporte une vraie clientèle de passage ou de transmission
             (hors de votre zone locale) reste utile même une fois votre site
             en place.
           </li>
           <li>
-            <strong>Construisez votre canal en propre</strong> : site solide,
+            <strong>Construisez votre canal en propre</strong>{" "}: site solide,
             fiche Google travaillée, commande en ligne à votre niveau. C&apos;est
             un investissement qui prend quelques semaines à porter ses
             fruits, pas quelques jours.
           </li>
           <li>
-            <strong>Faites basculer vos clients locaux</strong> : carte dans
-            chaque bouquet livré, mention au comptoir — « la prochaine fois,
-            commandez directement sur notre site ». Un client transféré est
+            <strong>Faites basculer vos clients locaux</strong>{" "}: carte dans
+            chaque bouquet livré, mention au comptoir (« la prochaine fois,
+            commandez directement sur notre site »). Un client transféré est
             une commission économisée à vie.
           </li>
           <li>
-            <strong>Réévaluez chaque année</strong> : quand votre canal propre
+            <strong>Réévaluez chaque année</strong>{" "}: quand votre canal propre
             porte l&apos;essentiel de vos commandes locales, la question de
-            rester sur telle plateforme se pose sereinement, chiffres en main
-            — pas sous le coup de l&apos;habitude.
+            rester sur telle plateforme se pose sereinement, chiffres en main, et non sous le coup de l&apos;habitude.
           </li>
         </ol>
 
@@ -861,7 +872,7 @@ export const blogPosts: BlogPost[] = [
           La question n&apos;est pas « marketplace ou site en propre »
           mais « qui possède quoi ». Sur une plateforme, vous louez un flux de
           commandes au prix fort. Sur votre site, vous possédez
-          l&apos;actif — identité, clients, marges — et il prend de la valeur
+          l&apos;actif (identité, clients, marges), et il prend de la valeur
           chaque année. La transition demande quelques mois d&apos;efforts ;
           la dépendance, elle, se paie indéfiniment, et son coût augmente
           silencieusement à chaque révision des conditions du réseau.
@@ -869,7 +880,7 @@ export const blogPosts: BlogPost[] = [
         <p>
           Pour savoir ce qu&apos;un canal en propre pourrait donner dans votre
           ville : <Link href="/audit">le diagnostic gratuit</Link>{" "}évalue votre
-          zone, votre concurrence et votre potentiel — honnêtement. Il inclut
+          zone, votre concurrence et votre potentiel, honnêtement. Il inclut
           aussi un regard sur votre dépendance actuelle aux plateformes, et ce
           qu&apos;une transition progressive changerait concrètement à votre
           échelle.

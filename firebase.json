@@ -9,7 +9,10 @@
       ".next",
       "test-results",
       "playwright-report",
-      "public/photos/_raw"
+      "public/photos/_raw",
+      ".shots",
+      "assets",
+      "tsconfig.tsbuildinfo"
     ]
   }
 }

@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { ArticleHeader } from "@/components/blog/ArticleHeader";
+import { ArticleToc } from "@/components/blog/ArticleToc";
+import { outlineArticle } from "@/components/blog/outline";
+import { RelatedReading } from "@/components/blog/RelatedReading";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { articleSchema } from "@/lib/schema";
@@ -30,18 +33,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-
+/**
+ * Page article. Récit : un en-tête qui situe (sujet, titre, métadonnées
+ * réelles), le texte en colonne de lecture (~68 caractères) avec son
+ * sommaire, la marque de fin, puis les lectures liées et la bande finale.
+ */
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPost(slug);
   if (!post) notFound();
 
-  const others = blogPosts.filter((p) => p.slug !== post.slug);
+  const { content, outline } = outlineArticle(post.body);
+  const others = blogPosts
+    .filter((p) => p.slug !== post.slug)
+    .sort((a, b) => b.datePublished.localeCompare(a.datePublished));
 
   return (
     <>
@@ -55,60 +60,46 @@ export default async function BlogPostPage({ params }: Props) {
           authorName: post.authorName,
         })}
       />
-      <article className="py-10 sm:py-16">
-        <Container width="narrow">
-          <Breadcrumbs
-            items={[
-              { name: "Accueil", path: "/" },
-              { name: "Blog", path: "/blog" },
-              { name: post.title, path: `/blog/${post.slug}` },
-            ]}
-          />
-          <header className="mt-8">
-            <p className="plate-label flex flex-wrap items-center gap-x-2">
-              <time dateTime={post.datePublished}>
-                {dateFormatter.format(new Date(post.datePublished))}
-              </time>
-              <span aria-hidden="true">·</span>
-              <span>{post.readingMinutes} min de lecture</span>
-              <span aria-hidden="true">·</span>
-              <span>{post.authorName}</span>
-            </p>
-            <h1 className="text-display-lg mt-4">{post.title}</h1>
-            {post.dateModified !== post.datePublished && (
-              <p className="mt-3 text-sm text-ink-faint">
-                Mis à jour le{" "}
-                <time dateTime={post.dateModified}>
-                  {dateFormatter.format(new Date(post.dateModified))}
-                </time>
-              </p>
-            )}
-          </header>
-          <div className="article mt-10">{post.body}</div>
+      <article>
+        <ArticleHeader post={post} />
 
-          {others.length > 0 && (
-            <nav aria-label="Autres articles" className="mt-16 border-t border-hairline pt-8">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                À lire ensuite
-              </h2>
-              <ul className="mt-4 space-y-3">
-                {others.map((p) => (
-                  <li key={p.slug}>
-                    <Link
-                      href={`/blog/${p.slug}`}
-                      className="font-medium text-rose underline decoration-rose/40 underline-offset-4 hover:decoration-rose"
-                    >
-                      {p.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
+        <Container className="py-14 sm:py-20">
+          {/*
+            Colonne de lecture de 34 rem : environ 68 caractères par ligne en
+            Geist 17 px. Le sommaire occupe une colonne fixe à gauche.
+          */}
+          <div className="grid gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-20 xl:gap-28">
+            <div>
+              <ArticleToc outline={outline} />
+            </div>
+
+            <div className="min-w-0">
+              <div className="article prose-links max-w-[34rem] [&_h2]:scroll-mt-28">{content}</div>
+
+              {/* Marque de fin : le monogramme du logo, une seule fois. */}
+              <div className="mt-14">
+                <Image
+                  src="/brand/bloomy-mark.svg"
+                  alt=""
+                  width={1386}
+                  height={1437}
+                  unoptimized
+                  className="h-auto w-9"
+                />
+              </div>
+            </div>
+          </div>
         </Container>
       </article>
 
-      <CtaBand placement="blog_article_footer" />
+      <RelatedReading others={others} related={post.related} />
+
+      <CtaBand
+        intent="audit"
+        title={"Où en est votre boutique\u00a0?"}
+        lede="Le diagnostic gratuit passe votre site et votre fiche Google en revue, puis vous donne des priorités concrètes. Sans engagement."
+        placement="blog_article_footer"
+      />
     </>
   );
 }

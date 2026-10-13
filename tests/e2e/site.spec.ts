@@ -64,6 +64,16 @@ for (const path of INDEXABLE_PAGES) {
     const glued = html.match(/<\/a>(—|:|[A-Za-zÀ-ÿ])/g);
     expect(glued, `lien collé au texte suivant sur ${path} : ${glued?.join(", ")}`).toBeNull();
 
+    // Règle taste-skill : aucun tiret cadratin ni demi-cadratin dans le texte
+    // visible, ni dans le titre de la page.
+    const visible = (await page.locator("body").innerText()) + (await page.title());
+    const dashes = visible.match(/.{0,30}[—–].{0,30}/g);
+    expect(dashes, `tirets interdits sur ${path} : ${dashes?.join(" | ")}`).toBeNull();
+
+    // Aucune adresse de développement écrite à l'écran (demande du 2026-10-13).
+    const devHosts = visible.match(/[\w-]+\.(?:vercel\.app|web\.app|firebaseapp\.com|pages\.dev)/g);
+    expect(devHosts, `adresses de dev visibles sur ${path} : ${devHosts?.join(", ")}`).toBeNull();
+
     // Pas d'erreur console critique.
     expect(errors, `erreurs console sur ${path} : ${errors.join(" | ")}`).toEqual([]);
   });
@@ -74,7 +84,7 @@ test("la page 404 est utile et renvoie un statut 404", async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.locator("h1")).toContainText("fanée");
   await expect(
-    page.locator("main").getByRole("link", { name: "Audit gratuit" }),
+    page.locator("main").getByRole("link", { name: "Diagnostic gratuit" }),
   ).toBeVisible();
 });
 
@@ -97,32 +107,65 @@ test("le JSON-LD Organization est rendu côté serveur", async ({ request }) => 
 test("la page réalisations permet de filtrer les projets par catégorie", async ({ page }) => {
   await page.goto("/realisations");
 
-  // Par défaut, l'onglet Fleuristes est actif (15 sites)
-  const cards = page.locator("#portfolio-grid article");
-  await expect(cards).toHaveCount(15);
+  // Le bandeau cookies se pose en bas à gauche, sur la liste des filtres :
+  // comme un vrai visiteur, on y répond d'abord.
+  const banner = page.getByRole("dialog", { name: "Cookies" });
+  if (await banner.isVisible().catch(() => false)) {
+    await banner.getByRole("button", { name: "Tout refuser" }).click();
+    await expect(banner).toBeHidden();
+  }
 
-  // Filtrer par Hôtellerie & Tourisme (1 projet : FLÖVIA)
+  // Par défaut, tous les projets (21 livrés, 12 récents, 25 concepts), par
+  // lots de douze : le bouton ajoute le lot suivant jusqu'au dernier.
+  const cards = page.locator("#portfolio-grid article");
+  const more = page.getByRole("button", { name: /^Afficher \d+ projets? de plus$/ });
+  await expect(cards).toHaveCount(12);
+  for (const expected of [24, 36, 48, 58]) {
+    await more.click();
+    await expect(cards).toHaveCount(expected);
+  }
+  await expect(more).toBeHidden();
+
+  // Changer de filtre repart du premier lot.
+  await page.getByRole("tab", { name: /^Fleuristes/ }).click();
+  await expect(cards).toHaveCount(12);
+  await more.click();
+  await expect(cards).toHaveCount(21);
+  await expect(page.locator("#portfolio-grid")).toContainText("Osmose Florale");
+
   await page.getByRole("tab", { name: /Hôtellerie/ }).click();
   await expect(cards).toHaveCount(1);
   await expect(page.locator("#portfolio-grid")).toContainText("FLÖVIA");
 
-  // Filtrer par Conseil & Stratégie B2B (1 projet : ACT4RESULTS)
   await page.getByRole("tab", { name: /Conseil/ }).click();
-  await expect(cards).toHaveCount(1);
+  await expect(cards).toHaveCount(2);
   await expect(page.locator("#portfolio-grid")).toContainText("ACT4RESULTS");
 
-  // Filtrer par Services & Maintenance (1 projet : Net Plus Services)
-  await page.getByRole("tab", { name: /Services/ }).click();
-  await expect(cards).toHaveCount(1);
+  await page.getByRole("tab", { name: /Artisans/ }).click();
+  await expect(cards).toHaveCount(7);
   await expect(page.locator("#portfolio-grid")).toContainText("Net Plus Services");
+  await expect(page.locator("#portfolio-grid")).toContainText("WAW Carrosserie");
 
-  // Filtrer par Horticulture & Pépinières (1 projet : Pépinières Raffard)
+  await page.getByRole("tab", { name: /Automobile|Garages/ }).click();
+  await expect(cards).toHaveCount(5);
+
+  // Les projets concept sont regroupés et étiquetés comme tels.
+  await page.getByRole("tab", { name: /Restaurants/ }).click();
+  await expect(cards).toHaveCount(8);
+  await expect(page.locator("#portfolio-grid")).toContainText("Hanare");
+
+  await page.getByRole("tab", { name: /concept/i }).click();
+  await expect(cards).toHaveCount(12);
+  await more.click();
+  await expect(cards).toHaveCount(24);
+  await more.click();
+  await expect(cards).toHaveCount(25);
+  await expect(page.locator("#portfolio-grid")).toContainText("Projet concept");
+
   await page.getByRole("tab", { name: /Horticulture/ }).click();
   await expect(cards).toHaveCount(1);
   await expect(page.locator("#portfolio-grid")).toContainText("Pépinières Raffard");
 
-  // Afficher Tous les projets (20 projets)
   await page.getByRole("tab", { name: /Tous les projets/ }).click();
-  await expect(cards).toHaveCount(20);
+  await expect(cards).toHaveCount(12);
 });
-

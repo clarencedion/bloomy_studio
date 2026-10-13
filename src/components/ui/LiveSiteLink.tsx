@@ -1,14 +1,18 @@
-import type { ShowcaseSite } from "@/lib/portfolio";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+
+import { isDevUrl, siteHost, type ShowcaseSite } from "@/lib/portfolio";
 
 /**
- * Preuve vérifiable en un clic.
+ * Preuve vérifiable en un clic : le lien vers le projet.
  *
- * Un portfolio de captures, aussi belles soient-elles, se lit comme une série
- * de maquettes tant que le visiteur ne peut pas aller voir. C'est le lien qui
- * fait basculer la perception — pas la légende.
+ * L'étiquette dit ce que la capture ne prouve pas toute seule :
+ * « Site en ligne » pour un site livré, « Projet récent » pour un site conçu
+ * pour une entreprise réelle dont la mise en production n'est pas confirmée,
+ * « Projet concept » pour une démonstration ou une proposition non commandée.
  *
- * L'étiquette « Site en production » n'est pas décorative : elle nomme
- * explicitement ce que la capture ne prouve pas toute seule.
+ * Le domaine n'est écrit en clair que s'il appartient à l'entreprise ; une
+ * adresse de développement (vercel.app, web.app…) reste derrière « Voir le
+ * site ». Un site hors ligne n'a pas de lien du tout.
  */
 export function LiveSiteLink({
   site,
@@ -17,22 +21,33 @@ export function LiveSiteLink({
   site: ShowcaseSite;
   className?: string;
 }) {
-  const host = site.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  if (site.offline) {
+    // Jamais de lien vers une adresse morte : la capture reste, le lien non.
+    return (
+      <p className={className}>
+        <span className="plate-label">Site actuellement hors ligne</span>
+      </p>
+    );
+  }
+  const label =
+    site.kind === "concept" ? "Projet concept" : site.kind === "recent" ? "Projet récent" : "Site en ligne";
+  const text = isDevUrl(site.liveUrl)
+    ? site.kind === "concept"
+      ? "Voir le concept"
+      : "Voir le site"
+    : siteHost(site);
   return (
     <p className={`flex flex-wrap items-center gap-x-3 gap-y-1.5 ${className}`}>
-      <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-sage-deep">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-sage-deep" />
-        Site en production
-      </span>
+      <span className="plate-label">{label}</span>
       <a
         href={site.liveUrl}
         target="_blank"
         rel="noopener"
-        className="link-live text-[0.9rem] font-semibold text-rose"
+        className="group link-live inline-flex items-center gap-1 text-[0.92rem] font-semibold text-bloom-ink"
       >
-        {host}
-        <span aria-hidden="true" className="link-live-arrow"> ↗</span>
-        <span className="sr-only"> (nouvel onglet)</span>
+        {text}
+        <ArrowUpRight aria-hidden="true" weight="bold" className="arrow-nudge-up size-3.5" />
+        <span className="sr-only">{` (${site.name}, nouvel onglet)`}</span>
       </a>
     </p>
   );

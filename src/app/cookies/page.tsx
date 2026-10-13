@@ -45,19 +45,19 @@ export default function CookiesPage() {
         au service demandé (article 82 de la loi Informatique et Libertés).
       </p>
 
-      <h2>Mesure d&apos;audience — uniquement avec votre accord</h2>
+      <h2>Mesure d&apos;audience, uniquement avec votre accord</h2>
       <p>
         Si vous l&apos;acceptez, nous activons une mesure d&apos;audience
         (Google Analytics 4, IP anonymisée) pour comprendre quelles pages sont
         utiles et lesquelles doivent être améliorées. Si vous refusez,{" "}
-        <strong>rien n&apos;est chargé</strong> — et le site fonctionne
+        <strong>rien n&apos;est chargé</strong>, et le site fonctionne
         exactement de la même manière.
       </p>
 
       <h2>Modifier votre choix</h2>
       <p>
         Votre choix est conservé 6 mois et modifiable à tout moment :{" "}
-        <ManageCookiesButton className="font-semibold text-rose underline underline-offset-4" />
+        <ManageCookiesButton className="font-semibold text-bloom-ink underline decoration-bloom-ink/35 underline-offset-4 hover:decoration-bloom-ink" />
         .
       </p>
     </LegalShell>

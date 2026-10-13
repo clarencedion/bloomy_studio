@@ -1,119 +1,155 @@
 @import "tailwindcss";
 
 /*
- * Système de design « Atelier clair ».
+ * Système de design « Tige & fleur » (refonte du 2026-10-02).
  *
- * Beaucoup de blanc, une seule couleur forte, et le travail montré plutôt que
- * décrit. Le fleuriste doit comprendre en trois secondes ce que nous faisons
- * et à quoi ça ressemble — la typographie et la lumière portent le reste.
+ * Tout part du logo. Le rose de la fleur et le vert profond de la ligne
+ * « DIGITAL STUDIO » deviennent les deux pôles du site :
  *
- * Rôles de couleur (à respecter) :
- *   cream      l'ivoire refroidi — fond de page ; sur aplat sombre, couleur du texte
- *   cream-deep panneaux et bandes en léger retrait, gris pierre
- *   paper-soft surface neutre en léger retrait : encarts, formulaires
- *   ink        anthracite dense — titres et corps, jamais du noir pur
- *   rose       LE bourgogne : la seule couleur d'action. Liens, boutons, aplat
- *              de conversion. Une seule couleur d'action par page.
- *   plum       prune profond : surface sombre et chaude, jamais un texte de
- *              corps. C'est le fond des composants d'interface (admin, produit)
- *              — il évite le noir de SaaS.
- *   bloom      accent floral vif, en micro-dose : pastille, soulignement de
- *              survol, ponctuation d'un chiffre. Jamais deux dans un écran,
- *              jamais porteur d'une information seule.
- *   sage       vert botanique désaturé, décoratif (tiges, feuillages)
- *   hairline   tous les filets de la mise en page
+ *   forest  la tige. Structure, texte, surfaces sombres. Jamais du noir.
+ *   bloom   la fleur. Ce qui éclot : l'action, le résultat, l'accent.
  *
- * Les variantes -deep sont les seules autorisées pour du texte (≥ 4.5:1).
+ * Trois emprunts directs au logo, et aucun ornement inventé :
+ *   1. Le filet rose qui encadre « DIGITAL STUDIO » → `.kicker--ruled`.
+ *   2. La forme des feuilles (deux angles arrondis opposés, deux angles vifs)
+ *      → les coins « feuille » `.leaf` des médias et des cartes.
+ *   3. Le monogramme B + tulipe → favicon, signature de fin de page.
+ *
+ * Rôles de couleur (vérifiés au contrasteur, WCAG 2.2 AA) :
+ *   paper         fond de page, blanc à peine réchauffé
+ *   forest        texte courant (11,5:1 sur paper) et surfaces sombres
+ *   forest-soft   texte secondaire (7,3:1)
+ *   forest-faint  métadonnées (5,0:1) — jamais plus clair pour du texte
+ *   bloom         le rose du logo, pour les grandes surfaces graphiques
+ *                 uniquement (3,5:1 : insuffisant pour du petit texte)
+ *   bloom-strong  fond des boutons d'action, texte blanc (4,7:1)
+ *   bloom-ink     rose des liens et du petit texte (5,4:1 sur paper)
+ *   bloom-light   rose lisible sur fond forest (5,6:1)
+ *   blush / mint  panneaux teintés, jamais un état ni un lien
+ *   leaf          vert tendre : texte secondaire sur forest (5,9:1)
  */
 @theme {
-  /*
-   * Papier — ivoire refroidi. La version précédente tirait sur le beige et,
-   * combinée au prune et au bourgogne, donnait un ensemble chaud sur chaud
-   * qui écœurait à la lecture longue. On garde la chaleur du papier, on
-   * retire le jaune : la palette s'aligne sur la photographie du site, gris
-   * pierre et vert désaturé.
-   */
-  --color-cream: #faf9f6;
-  --color-cream-deep: #f0eee9;
-  --color-paper: #ffffff;
-  --color-paper-soft: #f7f6f3;
+  /* — Papier — */
+  --color-paper: #fcfbf9;
+  --color-white: #ffffff;
+  --color-blush: #fce8f0;
+  --color-blush-deep: #f8d5e3;
+  --color-mint: #e6efea;
+  --color-mint-deep: #d5e3db;
 
-  /* Anthracite dense, jamais du noir pur */
-  --color-ink: #17161a;
-  --color-ink-soft: #55535c;
-  --color-ink-faint: #6b6974;
+  /* — Tige — */
+  --color-forest: #0e3f2f;
+  --color-forest-deep: #082a1f;
+  --color-forest-mid: #15523e;
+  --color-forest-soft: #3d5a50;
+  --color-forest-faint: #5a7268;
+  --color-leaf: #9fbdaf;
 
-  /* La fleur : un bourgogne de dahlia. Unique couleur d'action. */
-  --color-rose: #8a2145;
-  --color-rose-deep: #6e1836;
-  --color-rose-veil: #f6eef1;
+  /* — Fleur — */
+  --color-bloom: #f04284;
+  --color-bloom-strong: #d92668;
+  --color-bloom-ink: #c81d5e;
+  --color-bloom-light: #ff8fb8;
 
-  /*
-   * Aubergine-anthracite — surfaces sombres et composants d'interface.
-   * L'ancien prune (#43203A) était sucré et occupait deux bandes pleines :
-   * c'est lui qui rendait la page lourde. Celui-ci est froid et dense,
-   * 13,7:1 sous du crème.
-   */
-  --color-plum: #2e2733;
-  --color-plum-soft: #443c4b;
+  /* — Filets — */
+  --color-line: #e2e6e2;
+  --color-line-strong: #c9d2cc;
+  --color-line-dark: #1f5a45;
 
-  /* Accent floral — ponctuel, 6,1:1 sur ivoire. Moins bonbon que #C43060. */
-  --color-bloom: #b3234f;
-
-  /* Vert botanique désaturé — tiges, feuillages, pictogrammes */
-  --color-sage: #8da089;
-  --color-sage-deep: #3b5a45;
-  --color-sage-veil: #ebefe9;
+  --color-error: #b3261e;
 
   /*
-   * Teintes de carte — la correction du défaut « site monochrome ».
-   *
-   * La règle « une seule couleur d'action » reste vraie : ces teintes ne sont
-   * jamais un lien, un bouton ni un état. Ce sont des **fonds de carte**, qui
-   * servent à distinguer un métier d'un autre et un produit d'un autre. Sans
-   * elles, chaque énumération devenait un mur beige et le site n'avait plus de
-   * couleur que dans les photos.
-   *
-   * Chacune est tirée d'une matière du métier plutôt que d'une palette d'UI :
-   * papier kraft, papier de soie, feuillage, eau, lin. Toutes tiennent le texte
-   * `ink` au-dessus de 12:1.
+   * Alias hérités de l'ancien système « atelier clair ». Ils pointent vers la
+   * nouvelle palette pour qu'aucune page ne casse pendant la migration.
+   * Ne pas les utiliser dans du code neuf.
    */
-  --color-tint-kraft: #f3ece1;
-  --color-tint-soie: #f7e9ec;
-  --color-tint-feuille: #e9efe8;
-  --color-tint-eau: #e6ecf0;
-  --color-tint-lin: #f0eee9;
-
-  /* Filets — refroidis eux aussi, sinon ils ramènent le beige par la bande */
-  --color-hairline: #e4e1db;
-  --color-hairline-dark: #3a3340;
-
-  --color-error: #a32433;
+  --color-cream: var(--color-paper);
+  --color-cream-deep: var(--color-mint);
+  --color-paper-soft: #f6f8f6;
+  --color-ink: var(--color-forest);
+  --color-ink-soft: var(--color-forest-soft);
+  --color-ink-faint: var(--color-forest-faint);
+  --color-rose: var(--color-bloom-ink);
+  --color-rose-deep: #a3124f;
+  --color-rose-veil: var(--color-blush);
+  --color-plum: var(--color-forest);
+  --color-plum-soft: var(--color-forest-mid);
+  --color-sage: var(--color-leaf);
+  --color-sage-deep: #2f6b52;
+  --color-sage-veil: var(--color-mint);
+  --color-tint-kraft: #f6efe5;
+  --color-tint-soie: var(--color-blush);
+  --color-tint-feuille: var(--color-mint);
+  --color-tint-eau: #e6edf2;
+  --color-tint-lin: #f1f1ed;
+  --color-hairline: var(--color-line);
+  --color-hairline-dark: var(--color-line-dark);
 
   /*
-   * Cal Sans pour les titres : une seule graisse, pas d'italique. Toute
-   * emphase passe donc par la couleur, jamais par `italic` — la fonte n'en a
-   * pas et le navigateur en synthétiserait une, penchée et sale.
+   * Bricolage Grotesque pour les titres : une grotesque à axe optique dont
+   * les grandes tailles gardent du caractère sans tomber dans le gadget.
+   * Geist pour le corps et les libellés : neutre, net, très lisible.
    */
-  --font-display: "Cal Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 
-  --shadow-lift: 0 1px 2px rgb(27 24 28 / 0.04), 0 12px 30px -14px rgb(27 24 28 / 0.12);
-  --shadow-float: 0 2px 6px rgb(27 24 28 / 0.05), 0 30px 70px -24px rgb(27 24 28 / 0.20);
+  /* Ombres teintées de vert : jamais de noir sur du papier. */
+  --shadow-lift: 0 1px 2px rgb(14 63 47 / 0.05), 0 14px 32px -16px rgb(14 63 47 / 0.18);
+  --shadow-float: 0 2px 6px rgb(14 63 47 / 0.06), 0 34px 70px -28px rgb(14 63 47 / 0.32);
+
+  /* Échelle de z-index : rien au-delà de 60. */
+  --z-header: 40;
+  --z-menu: 50;
+  --z-modal: 60;
 }
 
 ::selection {
-  background: var(--color-rose);
-  color: var(--color-cream);
+  background: var(--color-bloom);
+  color: var(--color-white);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-forest);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 /*
- * Fondu court, utilisé au changement de projet dans la vitrine. Déclaré hors
- * de toute media query : la règle globale `prefers-reduced-motion` plus bas
- * ramène déjà sa durée à zéro.
+ * Grain de papier, très bas. `z-index: -1` le glisse entre le fond de page et
+ * le contenu sans forcer `position: relative` sur chaque enfant (ce qui
+ * casserait `sr-only` et le lien d'évitement).
  */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -123,399 +159,457 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
 /*
- * Grain de papier : tuile de bruit de 180 px, très basse opacité. Sur un fond
- * aussi clair, au-delà de 2 % le papier paraît sale plutôt que texturé.
- *
- * `z-index: -1` place le voile entre le fond de page et le contenu, sans
- * toucher au contenu lui-même. Surtout ne pas revenir à un `body > *` qui
- * forcerait `position: relative` sur chaque enfant : cette règle n'est dans
- * aucune couche CSS, elle l'emporterait donc sur les utilitaires Tailwind
- * (qui vivent dans `@layer utilities`) — et casserait `sr-only`, dont le lien
- * d'évitement dépend. Il occupait ainsi 22 px en haut de chaque page.
- */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.018;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/*
- * Tout ce qui suit vit dans `components` : les classes du système posent la
- * valeur par défaut, et n'importe quel utilitaire Tailwind (`text-cream`,
- * `text-sm`…) reprend la main sans `!important`.
+ * Les classes du système vivent dans `components` : n'importe quel utilitaire
+ * Tailwind (`text-white`, `text-sm`…) reprend la main sans `!important`.
  */
 @layer components {
+  /*
+   * Échelle display. Les grands titres sont denses comme le « Bloomy » du
+   * logo (largeur réduite, graisse 700), les petits s'ouvrent pour rester
+   * lisibles. L'approche reste modérée : au-delà de -0,03 em, les lettres de
+   * Bricolage se touchent.
+   */
+  .text-display-3xl {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 1.1rem + 6.9vw, 7.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    font-variation-settings: "wdth" 90;
+  }
 
-/*
- * Échelle display — Cal Sans.
- * Géométrique, chaleureuse, dessinée serrée : elle n'a qu'une graisse (400),
- * donc la hiérarchie se joue uniquement sur la taille et l'interlignage.
- * Le titre doit tenir en deux lignes et laisser voir le haut de la vitrine —
- * c'est elle qui répond à la question du visiteur, pas la typographie.
- */
-/*
- * H1 — accueil et pages intérieures. Plafonné à 3,75 rem : au-delà, les titres
- * descriptifs des pages de référencement passaient à quatre lignes et le titre
- * devenait un mur plutôt qu'une phrase.
- */
-/*
- * Échelle « statement » — réservée au hero de l'accueil et au titre d'une
- * page pilier. Documentée dans direction-artistique.md §4.2 mais jamais
- * construite jusqu'ici : c'est elle qui porte le geste éditorial (Craft,
- * Attio) plutôt que la prudence d'un titre de page de référencement.
- */
-.text-display-2xl {
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 1.5rem + 4.6vw, 5rem);
-  line-height: 0.98;
-  letter-spacing: -0.026em;
-  font-weight: 400;
+  .text-display-2xl {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 1.3rem + 4.6vw, 5.4rem);
+    line-height: 0.96;
+    letter-spacing: -0.026em;
+    font-weight: 700;
+    font-variation-settings: "wdth" 92;
+  }
+
+  .text-display-xl {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 1.35rem + 3.4vw, 4.2rem);
+    line-height: 1;
+    letter-spacing: -0.022em;
+    font-weight: 680;
+    font-variation-settings: "wdth" 94;
+  }
+
+  .text-display-lg {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 1.2rem + 2.5vw, 3.15rem);
+    line-height: 1.04;
+    letter-spacing: -0.018em;
+    font-weight: 650;
+    font-variation-settings: "wdth" 96;
+  }
+
+  .text-display-md {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 1.1rem + 1.15vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: -0.012em;
+    font-weight: 620;
+    font-variation-settings: "wdth" 98;
+  }
+
+  .text-display-sm {
+    font-family: var(--font-display);
+    font-size: clamp(1.12rem, 1rem + 0.45vw, 1.32rem);
+    line-height: 1.2;
+    letter-spacing: -0.006em;
+    font-weight: 600;
+    font-variation-settings: "wdth" 100;
+  }
+
+  /* Chapô : une phrase qui porte ce que le titre ne dit pas. */
+  .lede {
+    font-size: clamp(1.06rem, 1rem + 0.32vw, 1.22rem);
+    line-height: 1.6;
+    color: var(--color-forest-soft);
+    max-width: 38rem;
+  }
+
+  /*
+   * Le libellé du logo : capitales très espacées, comme « DIGITAL STUDIO ».
+   * Rationné : un libellé pour trois sections au maximum (règle taste-skill).
+   * `.kicker--ruled` ajoute les deux filets roses du logo.
+   */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-forest);
+  }
+
+  @media (max-width: 639px) {
+    .kicker {
+      letter-spacing: 0.2em;
+      gap: 0.7rem;
+    }
+  }
+
+  .kicker--ruled::before,
+  .kicker--ruled::after {
+    content: "";
+    width: 1.6rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-bloom);
+    flex: none;
+  }
+
+  /* Petit libellé de métadonnée (secteur, ville, type de projet). */
+  .plate-label {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-forest-faint);
+  }
+
+  /*
+   * Puce de filtre ou d'étiquette. Toujours en pilule, comme les boutons :
+   * tout ce qui se clique a les extrémités arrondies du logo.
+   */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-white);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+  }
+
+  /*
+   * Coins « feuille » : la forme des feuilles du logo. Deux angles opposés
+   * très arrondis, deux angles presque vifs. Réservés aux médias (photos,
+   * panneaux de captures) et aux cartes : les boutons restent en pilule,
+   * les cadres d'appareil gardent leur rayon uniforme.
+   */
+  .leaf {
+    border-radius: 2.25rem 0.4rem 2.25rem 0.4rem;
+  }
+
+  .leaf-sm {
+    border-radius: 1.25rem 0.3rem 1.25rem 0.3rem;
+  }
+
+  .leaf-lg {
+    border-radius: clamp(2rem, 1rem + 3vw, 3.75rem) 0.5rem clamp(2rem, 1rem + 3vw, 3.75rem) 0.5rem;
+  }
+
+  /* Légende d'image, sous l'image, jamais posée dessus. */
+  .caption {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--color-forest-faint);
+  }
+
+  .rule {
+    border: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  /*
+   * Surfaces sombres (forest). Le texte passe en papier, les métadonnées en
+   * `leaf`, le rose en `bloom-light` : `bloom` seul n'est pas lisible ici.
+   */
+  .on-forest,
+  .on-ink {
+    color: var(--color-paper);
+  }
+
+  .on-forest .kicker,
+  .on-ink .kicker {
+    color: var(--color-paper);
+  }
+
+  .on-forest .plate-label,
+  .on-ink .plate-label,
+  .on-forest .caption,
+  .on-ink .caption {
+    color: var(--color-leaf);
+  }
+
+  .on-forest .lede,
+  .on-ink .lede {
+    color: color-mix(in srgb, var(--color-paper) 82%, transparent);
+  }
+
+  .on-forest .rule,
+  .on-ink .rule {
+    border-color: var(--color-line-dark);
+  }
+
+  /* Numéro d'étape : réservé aux vraies séquences (la méthode). */
+  .step-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-variation-settings: "wdth" 84;
+    font-size: 1.1rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-bloom-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .on-forest .step-num,
+  .on-ink .step-num {
+    color: var(--color-bloom-light);
+  }
+
+  /*
+   * Micro-interactions. 140 ms pour ce qui suit le curseur (couleur),
+   * 220 ms pour ce qui bouge (translation). Tout est neutralisé par
+   * `prefers-reduced-motion` plus bas.
+   */
+  .link-live {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 220ms var(--ease-soft);
+    padding-bottom: 2px;
+  }
+
+  .link-live:hover,
+  .link-live:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .link-live-arrow,
+  .arrow-nudge {
+    display: inline-block;
+    transition: transform 220ms var(--ease-soft);
+  }
+
+  .link-live:hover .link-live-arrow,
+  .group:hover .arrow-nudge,
+  .group:focus-visible .arrow-nudge {
+    transform: translateX(3px);
+  }
+
+  .group:hover .arrow-nudge-up,
+  .group:focus-visible .arrow-nudge-up {
+    transform: translate(2px, -2px);
+  }
+
+  .arrow-nudge-up {
+    display: inline-block;
+    transition: transform 220ms var(--ease-soft);
+  }
+
+  .lift {
+    transition:
+      transform 220ms var(--ease-soft),
+      box-shadow 220ms var(--ease-soft),
+      border-color 140ms var(--ease-soft),
+      background-color 140ms var(--ease-soft);
+  }
+
+  .lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .press {
+    transition:
+      transform 140ms var(--ease-soft),
+      background-color 160ms var(--ease-soft),
+      color 160ms var(--ease-soft),
+      border-color 160ms var(--ease-soft);
+  }
+
+  .press:active {
+    transform: scale(0.98);
+  }
+
+  .prose-links a {
+    color: var(--color-bloom-ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-bloom-ink) 35%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 160ms var(--ease-soft);
+  }
+
+  .prose-links a:hover {
+    text-decoration-color: var(--color-bloom-ink);
+  }
+
+  .on-forest .prose-links a,
+  .on-ink .prose-links a {
+    color: var(--color-bloom-light);
+  }
+
+  /* Prose d'article (blog, pages légales). */
+  .article > * + * {
+    margin-top: 1.15em;
+  }
+
+  .article h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2.05rem);
+    line-height: 1.08;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    font-variation-settings: "wdth" 92;
+    margin-top: 2.2em;
+  }
+
+  .article h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 620;
+    letter-spacing: -0.015em;
+    margin-top: 1.8em;
+  }
+
+  .article p,
+  .article li {
+    font-size: 1.06rem;
+    line-height: 1.75;
+    color: var(--color-forest-soft);
+  }
+
+  .article strong {
+    color: var(--color-forest);
+    font-weight: 600;
+  }
+
+  .article ul,
+  .article ol {
+    padding-left: 1.4rem;
+  }
+
+  .article ul {
+    list-style: disc;
+  }
+
+  .article ul li::marker {
+    color: var(--color-bloom);
+  }
+
+  .article ol {
+    list-style: decimal;
+  }
+
+  .article ol li::marker {
+    color: var(--color-bloom-ink);
+    font-weight: 600;
+  }
+
+  .article li + li {
+    margin-top: 0.45em;
+  }
+
+  .article a {
+    color: var(--color-bloom-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .article blockquote {
+    border-left: 3px solid var(--color-bloom);
+    padding-left: 1.25rem;
+    color: var(--color-forest);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .article table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .article th,
+  .article td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .article th {
+    color: var(--color-forest);
+    font-weight: 600;
+  }
+
+  /*
+   * Capture longue qui défile dans son cadre au survol : le visiteur parcourt
+   * le site livré sans quitter la page. `--capture-shift` est calculé côté
+   * serveur depuis les dimensions réelles du fichier (voir ScrollingCapture).
+   */
+  .capture-window {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--color-white);
+  }
+
+  .capture-window > img {
+    position: absolute;
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: auto;
+    transform: translateY(0);
+    transition: transform var(--capture-duration, 7s) var(--ease-inout);
+    will-change: transform;
+  }
+
+  /* Défilement au survol de la carte entière ou au focus clavier du lien. */
+  .group:hover .capture-window > img,
+  .group:focus-visible .capture-window > img,
+  .group:focus-within .capture-window > img {
+    transform: translateY(var(--capture-shift, 0%));
+  }
 }
 
-.text-display-xl {
-  font-family: var(--font-display);
-  font-size: clamp(2.3rem, 1.4rem + 3.2vw, 3.75rem);
-  line-height: 1.06;
-  letter-spacing: -0.022em;
-  font-weight: 400;
+/* Lignes du titre d'accueil : un bloc par ligne, animé ou non. */
+.line-mask,
+.line-mask > span {
+  display: block;
 }
 
-.text-display-lg {
-  font-family: var(--font-display);
-  font-size: clamp(1.85rem, 1.2rem + 2.4vw, 2.95rem);
-  line-height: 1.1;
-  letter-spacing: -0.018em;
-  font-weight: 400;
-}
-
-.text-display-md {
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.85rem);
-  line-height: 1.18;
-  letter-spacing: -0.012em;
-  font-weight: 400;
-}
-
-.text-display-sm {
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 1rem + 0.45vw, 1.3rem);
-  line-height: 1.26;
-  letter-spacing: -0.008em;
-  font-weight: 400;
-}
-
-/*
- * Chapô de section. Facultatif : on ne l'ajoute que s'il porte une information
- * que le titre ne porte pas. Mesure de ligne courte, sinon il se lit comme un
- * paragraphe d'agence.
- */
-.lede {
-  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.2rem);
-  line-height: 1.65;
-  color: var(--color-ink-soft);
-}
-
-/*
- * Petite capitale utilitaire — Inter, taille optique basse pour rester
- * lisible en capitales espacées. Libellés, légendes et micro-liens.
- */
-.plate-label {
-  font-family: var(--font-sans);
-  font-variation-settings: "opsz" 14;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-ink-faint);
-}
-
-/*
- * Pastille de section. Elle remplace l'ancien filet de marge : posée au-dessus
- * d'un titre centré, elle nomme la section en trois mots et laisse tout
- * l'espace au titre. C'est ce qui tient la page ensemble sans une ligne de
- * texte de plus.
- */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid var(--color-hairline);
-  background: var(--color-paper);
-  border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  box-shadow: 0 1px 2px rgb(22 18 17 / 0.04);
-}
-
-/* La pastille : seule micro-dose d'accent vif autorisée en tête de section. */
-.pill::before {
-  content: "";
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  flex: none;
-  background: var(--color-bloom);
-}
-
-.on-ink .plate-label {
-  color: color-mix(in srgb, var(--color-cream) 62%, transparent);
-}
-
-.on-ink .pill {
-  border-color: color-mix(in srgb, var(--color-cream) 22%, transparent);
-  background: color-mix(in srgb, var(--color-cream) 8%, transparent);
-  box-shadow: none;
-}
-
-/*
- * Bourgogne plein écran — le geste éditorial le plus fort du système, réservé
- * à un seul moment par page (un pull-quote, une bande de transition). Mêmes
- * règles de contraste que `.on-ink`, sur `--color-rose` au lieu de `--color-plum`.
- */
-.on-rose .plate-label {
-  color: color-mix(in srgb, var(--color-cream) 70%, transparent);
-}
-
-.on-rose .pill {
-  border-color: color-mix(in srgb, var(--color-cream) 28%, transparent);
-  background: color-mix(in srgb, var(--color-cream) 10%, transparent);
-  box-shadow: none;
-}
-
-.on-rose .pill::before {
-  background: var(--color-cream);
-}
-
-/* Numéro d'étape — réservé aux séquences réelles (la méthode). */
-.step-num {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.55rem;
-  line-height: 1;
-  color: var(--color-rose-deep);
-}
-
-.on-ink .step-num {
-  color: var(--color-rose);
-}
-
-/* Légende d'illustration — s'inverse sur les bandes sombres. */
-.caption {
-  font-size: 0.75rem;
-  color: var(--color-ink-faint);
-}
-
-.on-ink .caption {
-  color: color-mix(in srgb, var(--color-cream) 58%, transparent);
-}
-
-/* Filet horizontal signature */
-.rule {
-  border: 0;
-  border-top: 1px solid var(--color-hairline);
-}
-
-/*
- * Micro-interactions — le détail qui sépare un site fini d'un gabarit.
- *
- * Règle de durée : 120 ms pour ce qui suit le curseur (couleur, opacité),
- * 180 ms pour ce qui bouge (élévation, translation). Au-delà de 200 ms, une
- * interface paraît molle ; en dessous de 100 ms, elle paraît nerveuse.
- * Tout est neutralisé par `prefers-reduced-motion` plus bas.
- */
-
-/* Lien vers un site livré : le soulignement se déroule, la flèche avance. */
-.link-live {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 1px;
-  transition: background-size 180ms var(--ease-soft);
-  padding-bottom: 2px;
-}
-
-.link-live:hover,
-.link-live:focus-visible {
-  background-size: 100% 1px;
-}
-
-.link-live-arrow {
-  display: inline-block;
-  transition: transform 180ms var(--ease-soft);
-}
-
-.link-live:hover .link-live-arrow {
-  transform: translate(2px, -2px);
-}
-
-/*
- * Surface interactive : cartes et panneaux cliquables. Une seule classe pour
- * que l'élévation soit identique partout — c'est la cohérence qui se lit
- * comme du soin, pas l'amplitude du mouvement.
- */
-.lift {
-  transition:
-    transform 180ms var(--ease-soft),
-    box-shadow 180ms var(--ease-soft),
-    border-color 120ms var(--ease-soft);
-}
-
-.lift:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lift);
-}
-
-/* L'enfoncement : ce qui répond au doigt autant qu'à la souris. */
-.press {
-  transition: transform 120ms var(--ease-soft), background-color 120ms var(--ease-soft);
-}
-
-.press:active {
-  transform: scale(0.98);
-}
-
-/* Liens éditoriaux dans la prose */
-.prose-links a {
-  color: var(--color-rose);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--color-rose) 38%, transparent);
-  text-underline-offset: 3px;
-  transition: text-decoration-color 150ms var(--ease-soft);
-}
-
-.prose-links a:hover {
-  text-decoration-color: var(--color-rose);
-}
-
-/* Prose d'article (blog, pages légales) */
-.article > * + * {
-  margin-top: 1.1em;
-}
-
-.article h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 1.15rem + 1vw, 1.85rem);
-  line-height: 1.18;
-  font-weight: 400;
-  letter-spacing: -0.012em;
-  margin-top: 2.2em;
-}
-
-.article h3 {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 400;
-  letter-spacing: -0.008em;
-  margin-top: 1.8em;
-}
-
-.article p,
-.article li {
-  line-height: 1.75;
-  color: var(--color-ink-soft);
-}
-
-.article strong {
-  color: var(--color-ink);
-}
-
-.article ul,
-.article ol {
-  padding-left: 1.4rem;
-}
-
-.article ul {
-  list-style: disc;
-}
-
-.article ol {
-  list-style: decimal;
-}
-
-.article li + li {
-  margin-top: 0.45em;
-}
-
-.article a {
-  color: var(--color-rose);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.article blockquote {
-  border-left: 2px solid var(--color-rose);
-  padding-left: 1.25rem;
-  font-style: italic;
-}
-
-/* Les tableaux défilent dans leur propre conteneur — jamais la page. */
-.table-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.article table {
-  width: 100%;
-  min-width: 560px;
-  border-collapse: collapse;
-  font-size: 0.92rem;
-}
-
-.article th,
-.article td {
-  border-bottom: 1px solid var(--color-hairline);
-  padding: 0.6rem 0.75rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-.article th {
-  color: var(--color-ink);
-  font-weight: 600;
-}
-
-} /* @layer components */
-
-/* Focus visible global */
+/* Focus visible global : le rose d'action, décalé pour ne rien masquer. */
 :focus-visible {
-  outline: 2px solid var(--color-rose-deep);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: 2px solid var(--color-bloom-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
+.on-forest :focus-visible,
 .on-ink :focus-visible {
-  outline-color: var(--color-cream);
+  outline-color: var(--color-bloom-light);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   /*
-   * Révélation au défilement. L'état masqué est conditionné à `[data-js]`,
-   * posé par le script en tête de document : sans JavaScript, le contenu
-   * reste visible. La classe `is-visible` est ajoutée par l'observateur
-   * d'intersection (components/ui/Reveal.tsx).
+   * Révélation au défilement. L'état masqué est conditionné à `[data-js]` :
+   * sans JavaScript, le contenu reste visible et immobile.
    */
   [data-js] .reveal {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(18px);
     transition:
-      opacity 500ms var(--ease-soft) var(--reveal-delay, 0ms),
-      transform 500ms var(--ease-soft) var(--reveal-delay, 0ms);
+      opacity 650ms var(--ease-soft) var(--reveal-delay, 0ms),
+      transform 650ms var(--ease-soft) var(--reveal-delay, 0ms);
   }
 
   [data-js] .reveal.is-visible {
@@ -523,22 +617,120 @@ body::before {
     transform: none;
   }
 
+  /*
+   * Entrée du hero, jouée une fois : chaque ligne du titre monte depuis
+   * derrière un masque. C'est le seul moment expressif de l'ouverture.
+   */
+  .line-mask {
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .line-mask > span {
+    animation: line-rise 900ms var(--ease-soft) both;
+    animation-delay: calc(var(--line, 0) * 90ms + 80ms);
+  }
+
+  @keyframes line-rise {
+    from {
+      transform: translateY(105%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
   .fade-up {
-    animation: fade-up 700ms var(--ease-soft) both;
+    animation: fade-up 800ms var(--ease-soft) both;
+    animation-delay: var(--fade-delay, 0ms);
   }
 
   .fade-up-late {
-    animation: fade-up 700ms 150ms var(--ease-soft) both;
+    animation: fade-up 800ms 260ms var(--ease-soft) both;
   }
 
   @keyframes fade-up {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  /*
+   * Mur de travaux : deux colonnes qui défilent en sens inverse, lentement.
+   * Le contenu est dupliqué une fois (`aria-hidden` sur la copie), d'où le
+   * décalage de -50 %. Pause au survol et au focus.
+   */
+  .marquee-y {
+    animation: marquee-y var(--marquee-duration, 60s) linear infinite;
+  }
+
+  .marquee-y--reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee-x {
+    animation: marquee-x var(--marquee-duration, 50s) linear infinite;
+  }
+
+  .marquee-pause:hover .marquee-y,
+  .marquee-pause:focus-within .marquee-y,
+  .marquee-pause:hover .marquee-x,
+  .marquee-pause:focus-within .marquee-x {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-y {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes marquee-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /*
+   * Manifeste : les mots passent du vert pâle au vert plein à mesure qu'ils
+   * traversent l'écran. Amélioration progressive pure : sans support des
+   * animations liées au défilement, le texte est simplement plein.
+   */
+  @supports (animation-timeline: view()) {
+    .scroll-ink > span {
+      color: color-mix(in srgb, var(--color-forest) 22%, var(--color-paper));
+      animation: ink-in linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+
+    .on-forest .scroll-ink > span {
+      color: color-mix(in srgb, var(--color-paper) 25%, var(--color-forest));
+      animation-name: ink-in-dark;
+    }
+
+    @keyframes ink-in {
+      to {
+        color: var(--color-forest);
+      }
+    }
+
+    @keyframes ink-in-dark {
+      to {
+        color: var(--color-paper);
+      }
     }
   }
 }
@@ -556,9 +748,12 @@ body::before {
     transition-duration: 0.01ms !important;
   }
 
-  /* La révélation au défilement ne s'arme pas du tout : rien à annuler. */
   .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  .capture-window > img {
+    transform: none !important;
   }
 }

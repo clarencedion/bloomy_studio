@@ -1,17 +1,19 @@
-import Link from "next/link";
-
 import { PortfolioShowcase } from "@/components/portfolio/PortfolioShowcase";
+import { CaseStudyTeaser } from "@/components/realisations/CaseStudyTeaser";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
-import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { pageMetadata } from "@/lib/seo";
+import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
 import { publishedCaseStudies } from "@/lib/case-studies";
+import { clientSites, conceptSites, recentSites, showcaseSites, type ShowcaseSlug } from "@/lib/portfolio";
+import { pageMetadata } from "@/lib/seo";
+
+const total = showcaseSites.length;
 
 export const metadata = pageMetadata({
-  title: "Réalisations : portfolio des sites conçus par Bloomy Studio",
-  description:
-    "Découvrez les réalisations de Bloomy Studio : sites e-commerce, vitrines d'artisans, hébergements touristiques, conseil B2B et outils sur mesure.",
+  title: "Réalisations : portfolio des sites conçus par Bloomy Studio",
+  description: `Le portfolio de Bloomy Studio : ${total} projets, du fleuriste au carrossier. Boutiques en ligne, sites d'artisans, tourisme, conseil B2B et concepts.`,
   path: "/realisations",
 });
 
@@ -20,108 +22,85 @@ const crumbs = [
   { name: "Réalisations", path: "/realisations" },
 ];
 
+/**
+ * Ordre éditorial de l'index (« Tous les projets »).
+ *
+ * Osmose Florale ouvre la page en grand : l'index commence donc ailleurs,
+ * par les univers les plus contrastés, et alterne les métiers pour montrer
+ * l'étendue du studio avant sa profondeur fleuriste. Une position sur cinq
+ * passe en pleine largeur avec la capture qui défile (voir PortfolioShowcase).
+ * Un projet absent de cette liste s'affiche quand même, à la suite.
+ */
+const indexOrder = [
+  "gb-performance",
+  "fleurs-ditalie",
+  "rodolphe-dion-coiffure",
+  "act4results",
+  "monloup",
+  "flovia",
+  "maison-orpha",
+  "net-plus-services",
+  "nails-by-cindy",
+  "kl-fleurs",
+  "maison-de-rose",
+  "osmose-florale",
+  "pepinieres-raffard",
+  "domaine-des-aurores",
+  "artistfloral",
+  "la-cle-des-champs",
+  "capifiore",
+  "maison-hortense",
+  "la-fine-fleur",
+  "atelier-de-laurent",
+  "au-jardin-de-celine",
+  "aux-coquelicots",
+  "julius",
+] as const satisfies readonly ShowcaseSlug[];
+
+/**
+ * Réalisations.
+ *
+ * Récit : le titre et le compte réel, puis le travail tout de suite (Osmose
+ * Florale, le site fleuriste de référence, en pièce maîtresse), puis l'index
+ * complet filtrable, puis l'étude de cas racontée en entier.
+ */
 export default function RealisationsPage() {
-  const studies = publishedCaseStudies();
+  const study = publishedCaseStudies()[0];
 
   return (
     <>
-      <PageHero
-        crumbs={crumbs}
-        eyebrow="Réalisations"
-        title="Des sites en ligne, pas des maquettes"
-        lede={
-          <>
-            Boutiques e-commerce, vitrines d&apos;artisans, salons de coiffure, hébergements
-            touristiques, conseil B2B, services techniques et horticulture : découvrez 20 sites en production.
-            Pas de faux logos, pas de promesses en l&apos;air : chaque projet est accessible en ligne.
-          </>
-        }
-      />
+      <section className="pb-20 sm:pb-28">
+        <Container width="wide" className="pt-8 sm:pt-10">
+          <Breadcrumbs items={crumbs} />
+          <h1 className="text-display-2xl mt-12 max-w-5xl sm:mt-16">
+            {total} projets, du fleuriste au <span className="text-bloom-ink">carrossier</span>.
+          </h1>
+          <p className="lede mt-7">
+            {clientSites.length} sites livrés, {recentSites.length} projets récents pour des
+            entreprises réelles et {conceptSites.length} projets concept conçus par le studio.
+          </p>
+          <SiteShowpiece slug="osmose-florale" eager className="mt-12 sm:mt-16" />
+        </Container>
+      </section>
 
-      {/* Le portfolio complet avec filtrage par catégorie */}
-      <section className="border-b border-hairline py-16 sm:py-20">
+      <section aria-labelledby="index-titre" className="border-t border-line py-20 sm:py-28">
         <Container width="wide">
           <SectionHead
-            align="center"
-            eyebrow="Sites livrés"
-            title="20 réalisations, 20 univers en ligne"
-            lede="Chaque site part du lieu et de l'activité réelle — son identité, ses produits, sa manière de vendre. Filtrez par secteur pour explorer nos créations."
-            className="mb-12"
+            title={<span id="index-titre">Trouvez un projet proche du vôtre</span>}
+            lede="Filtrez par métier. Chaque capture vient du site lui-même."
+            className="mb-10 sm:mb-14"
           />
-          <PortfolioShowcase />
+          <PortfolioShowcase order={indexOrder} />
         </Container>
       </section>
 
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHead
-          align="left"
-            eyebrow="Études de cas"
-            title="Racontées en entier, résultats vérifiables"
-            className="mb-12"
-          />
-          <div className="border-t border-hairline">
-            {studies.map((cs) => (
-              <Link
-                key={cs.slug}
-                href={`/realisations/${cs.slug}`}
-                className="group grid gap-x-12 gap-y-6 border-b border-hairline py-10 sm:py-14 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]"
-              >
-                <div>
-                  <p className="plate-label">
-                    <span>{cs.sector}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{cs.year}</span>
-                  </p>
-                  <h2 className="text-display-lg mt-3 group-hover:text-rose">
-                    {cs.client}
-                  </h2>
-                  <p className="mt-3 max-w-xl leading-relaxed text-ink-soft">
-                    {cs.summary}
-                  </p>
-                  <p className="mt-5 flex flex-wrap gap-2">
-                    {cs.services.map((s) => (
-                      <span
-                        key={s}
-                        className="rounded-sm border border-hairline bg-cream px-2.5 py-1 text-xs font-medium text-ink-soft"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </p>
-                  <span className="mt-6 inline-block font-semibold text-rose">
-                    Lire l&apos;étude de cas →
-                  </span>
-                </div>
-                <ul className="space-y-2.5 self-center border-l-2 border-rose pl-5 text-sm text-ink-soft">
-                  {cs.results.slice(0, 4).map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-                </ul>
-              </Link>
-            ))}
-          </div>
-
-          {/* Honnêteté d'un studio récent — transformée en offre */}
-          <aside className="mt-10 rounded-sm border border-dashed border-rose/40 bg-rose-veil/40 p-7 sm:p-9">
-            <h2 className="text-display-md">Votre boutique pourrait être la prochaine</h2>
-            <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
-              Bloomy Studio est un studio récent : nous préférons peu d&apos;études
-              de cas honnêtes à une galerie gonflée. C&apos;est aussi une
-              opportunité — nos premiers clients fleuristes reçoivent une
-              attention de premier projet et des conditions de lancement, en
-              échange d&apos;une étude de cas documentée (avec votre accord
-              écrit).
-            </p>
-            <Link
-              href="/audit"
-              className="mt-6 inline-flex min-h-12 items-center rounded-full bg-ink px-6 py-3 font-semibold text-cream transition-colors hover:bg-rose"
-            >
-              Commencer par le diagnostic gratuit
-            </Link>
-          </aside>
-        </Container>
-      </section>
+      {study ? (
+        <section className="pb-24 sm:pb-32">
+          <Container width="wide">
+            <CaseStudyTeaser cs={study} />
+          </Container>
+        </section>
+      ) : null}
 
       <CtaBand placement="realisations_footer" />
     </>

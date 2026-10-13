@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
 import { hasLegalPlaceholders, hosting, legalEntity } from "@/lib/legal";
@@ -38,7 +40,7 @@ export default function MentionsLegalesPage() {
       <h2>Hébergement</h2>
       <p>
         Le Site est hébergé par {hosting.name}, opéré par {hosting.company},{" "}
-        {hosting.address} —{" "}
+        {hosting.address}. Site de l&apos;hébergeur :{" "}
         <a href={hosting.website} rel="noopener">
           {hosting.website}
         </a>
@@ -68,8 +70,8 @@ export default function MentionsLegalesPage() {
       <p>
         Le traitement des données personnelles et l&apos;usage des cookies sont
         décrits dans la{" "}
-        <a href="/politique-de-confidentialite">politique de confidentialité</a>{" "}
-        et la <a href="/cookies">politique cookies</a>.
+        <Link href="/politique-de-confidentialite">politique de confidentialité</Link>{" "}
+        et la <Link href="/cookies">politique cookies</Link>.
       </p>
     </LegalShell>
   );

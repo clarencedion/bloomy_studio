@@ -9,9 +9,9 @@ export const SITE_URL = (
 
 export const site = {
   name: "Bloomy Studio",
-  tagline: "Le studio digital qui fait fleurir les fleuristes.",
+  tagline: "Des sites qui font éclore votre activité.",
   description:
-    "Sites e-commerce, SEO local et outils sur mesure pour fleuristes, conçus avec une véritable expertise du secteur floral. Basé à Nantes, actif partout en France.",
+    "Agence de développement web à Nantes : sites vitrines, e-commerce, MVP et micro SaaS sur mesure, conçus et développés par un studio de deux personnes.",
   email: "contact@bloomy.one",
   /** Téléphone public : non communiqué pour l'instant (voir checklist contenu). */
   phone: null as string | null,
@@ -25,7 +25,7 @@ export const site = {
     url: "https://bloomy.one",
   },
   /*
-   * Portraits réels, repris du produit bloomy.one — détourés sur fond
+   * Portraits réels, repris du produit bloomy.one, détourés sur fond
    * transparent. Ce sont les seules photographies de personnes réelles du
    * site : elles montrent l'équipe elle-même, jamais un client.
    */
@@ -40,6 +40,15 @@ export const site = {
 } as const;
 
 export type NavItem = { label: string; href: string };
+
+/**
+ * L'appel à l'action principal du site, partout le même libellé : une seule
+ * formulation par intention (règle taste-skill « no duplicate CTA intent »).
+ * Le diagnostic gratuit reste l'offre d'entrée des pages métier, sous son
+ * propre libellé.
+ */
+export const primaryCta = { label: "Démarrer un projet", href: "/contact" } as const;
+export const auditCta = { label: "Diagnostic gratuit", href: "/audit" } as const;
 
 /** Entrée de menu déroulant : un intitulé, une ligne d'explication, une cible. */
 export type NavLeaf = NavItem & { hint: string };
@@ -90,7 +99,7 @@ export const mainNav: NavEntry[] = [
       {
         label: "Fleuristes",
         href: "/fleuristes",
-        hint: "Notre spécialité : saisons, deuil, mariages, click-and-collect.",
+        hint: "Notre spécialité : saisons, deuil, mariages, click-and-collect.",
       },
       {
         label: "Salons de coiffure",
@@ -98,9 +107,14 @@ export const mainNav: NavEntry[] = [
         hint: "Prestations lisibles sur mobile et réservation intégrée.",
       },
       {
+        label: "Ramoneurs",
+        href: "/ramonage",
+        hint: "Demandes de passage complètes et tournées simplifiées.",
+      },
+      {
         label: "Autres commerces",
         href: "/realisations",
-        hint: "Ateliers, artisans et lieux : voir ce que nous avons livré.",
+        hint: "Ateliers, artisans et lieux : voir ce que nous avons livré.",
       },
     ],
   },
@@ -122,14 +136,12 @@ export const footerNav = {
     { label: "Maintenance & accompagnement", href: "/fleuristes/maintenance" },
   ],
   studio: [
-    { label: "Tous les services", href: "/services" },
-    { label: "Salons de coiffure", href: "/salons-de-coiffure" },
-    { label: "Développement MVP", href: "/developpement-mvp" },
-    { label: "Micro SaaS", href: "/micro-saas" },
-    { label: "Notre méthode", href: "/methode" },
     { label: "Réalisations", href: "/realisations" },
+    { label: "Notre méthode", href: "/methode" },
     { label: "À propos", href: "/a-propos" },
     { label: "Blog", href: "/blog" },
+    { label: "Diagnostic gratuit", href: "/audit" },
+    { label: "Contact", href: "/contact" },
   ],
   legal: [
     { label: "Mentions légales", href: "/mentions-legales" },

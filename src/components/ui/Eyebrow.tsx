@@ -1,3 +1,5 @@
+import { Kicker } from "@/components/ui/Kicker";
+
 type Props = {
   children: string;
   as?: "p" | "span" | "div";
@@ -5,17 +7,14 @@ type Props = {
 };
 
 /**
- * Pastille de section : trois mots pour nommer la section, posés au-dessus du
- * titre. Elle porte le repère à la place d'une phrase d'introduction — c'est
- * une ligne de texte en moins par section.
- *
- * Pas de numérotation : les sections d'une page ne forment pas une séquence.
- * Seules les vraies étapes — la méthode — portent des chiffres (`.step-num`).
+ * Ancien nom du libellé de section, conservé pour les pages pas encore
+ * migrées. Rend désormais un `Kicker` à filets. Préférer `Kicker` dans le
+ * code neuf.
  */
-export function Eyebrow({ children, as: Tag = "p", className = "" }: Props) {
+export function Eyebrow({ children, as = "p", className = "" }: Props) {
   return (
-    <Tag className={className}>
-      <span className="pill plate-label">{children}</span>
-    </Tag>
+    <Kicker as={as} ruled className={className}>
+      {children}
+    </Kicker>
   );
 }

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { blogPosts, getBlogPost } from "@/lib/blog";
 import { caseStudies, publishedCaseStudies } from "@/lib/case-studies";
 import { floristOffers, mvpOffer } from "@/lib/offers";
+import type { ShowcaseSite } from "@/lib/portfolio";
 import { footerNav, mainNav, mainNavLinks } from "@/lib/site";
 
 /** Routes existantes du site (doit refléter src/app). */
@@ -115,9 +116,9 @@ describe("intégrité du contenu", () => {
 });
 
 describe("intégrité du portfolio", () => {
-  it("contient les 20 projets sans doublon de slug ou d'URL", async () => {
+  it("contient les 58 projets sans doublon de slug ou d'URL", async () => {
     const { showcaseSites } = await import("@/lib/portfolio");
-    expect(showcaseSites.length).toBe(20);
+    expect(showcaseSites.length).toBe(58);
 
     const slugs = showcaseSites.map((s) => s.slug);
     expect(new Set(slugs).size).toBe(showcaseSites.length);
@@ -137,7 +138,8 @@ describe("intégrité du portfolio", () => {
 
   it("chaque projet a des métadonnées complètes et valides", async () => {
     const { showcaseSites } = await import("@/lib/portfolio");
-    for (const s of showcaseSites) {
+    const sites: readonly ShowcaseSite[] = showcaseSites;
+    for (const s of sites) {
       expect(s.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
       expect(s.name.length).toBeGreaterThan(0);
       expect(s.city.length).toBeGreaterThan(0);
@@ -147,7 +149,62 @@ describe("intégrité du portfolio", () => {
       expect(s.alt.length).toBeGreaterThanOrEqual(10);
       expect(s.image).toMatch(/^\/realisations\/[a-z0-9-]+\.webp$/);
       expect(s.categories.length).toBeGreaterThan(0);
+      expect(s.tone).toMatch(/^#[0-9a-f]{6}$/);
+      if (s.long) expect(s.long.image).toBe(`/realisations/long/${s.slug}.webp`);
     }
+  });
+
+  it("chaque fichier de capture référencé existe sur le disque", async () => {
+    const { existsSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const { showcaseSites } = await import("@/lib/portfolio");
+    const sites: readonly ShowcaseSite[] = showcaseSites;
+    for (const s of sites) {
+      const files = [s.image, s.mobile?.image, s.long?.image].filter(Boolean) as string[];
+      for (const f of files) {
+        expect(existsSync(join(process.cwd(), "public", f)), `capture manquante : ${f}`).toBe(true);
+      }
+    }
+  });
+
+  it("un projet concept est marqué comme tel et rangé dans le filtre Concepts", async () => {
+    const { showcaseSites } = await import("@/lib/portfolio");
+    const sites: readonly ShowcaseSite[] = showcaseSites;
+    const concepts = sites.filter((s) => s.kind === "concept");
+    // Démonstrations (entreprise fictive) et propositions de refonte non
+    // commandées : elles se déclarent comme telles sur leurs propres pages et
+    // ne doivent jamais passer pour un travail livré.
+    expect(concepts.map((s) => s.slug).sort()).toEqual(
+      [
+        "alliantherm", "atelier-laque", "chatoyance", "domaine-des-aurores", "ecrin",
+        "garage-bielle", "glacage", "lunule", "maison-lisiere", "milesi-atelier",
+        "morgane-perrion", "nailac-passion", "nails-by-cindy", "odette", "opaline",
+        "paoli-immobilier", "sitaclim", "thermibel",
+        // Restaurants fictifs (« restaurant fictif, site de démonstration »).
+        "fanchon", "hanare", "lauro", "maillard", "rameau", "sillon", "tison",
+      ].sort(),
+    );
+    for (const s of concepts) {
+      expect(s.categories as readonly string[]).toContain("concepts");
+    }
+    for (const s of sites.filter((x) => x.kind !== "concept")) {
+      expect(s.categories as readonly string[]).not.toContain("concepts");
+    }
+  });
+
+  it("aucune adresse de développement n'est jamais affichée en clair", async () => {
+    const { showcaseSites, siteHost } = await import("@/lib/portfolio");
+    // Demande de l'équipe (2026-10-13) : vercel.app, web.app… restent derrière
+    // un lien, jamais écrits à l'écran.
+    for (const s of showcaseSites) {
+      expect(siteHost(s)).not.toMatch(/vercel\.app|web\.app|firebaseapp\.com|pages\.dev|netlify\.app/);
+    }
+  });
+
+  it("la vitrine fleuriste de référence pointe vers le domaine d'Osmose Florale", async () => {
+    const { getShowcaseSite, featuredSlugs } = await import("@/lib/portfolio");
+    expect(getShowcaseSite("osmose-florale")?.liveUrl).toBe("https://osmoseflorale-ain.fr");
+    expect(featuredSlugs[0]).toBe("osmose-florale");
   });
 
   it("le filtrage par catégorie retourne les bons éléments pour tous les filtres", async () => {

@@ -1,10 +1,13 @@
 /**
- * Contenu de la page `/ramonage` — site du studio destiné aux ramoneurs.
+ * Contenu de la page `/ramonage` : site du studio destiné aux ramoneurs.
  *
  * La page suit une seule ligne narrative, dans cet ordre : ce que le site
- * fait (hero + repères), à quoi il ressemble (vitrine RamoPlus), comment il
- * réserve (parcours jouable), ce qu'il change avant et après l'intervention
- * (diptyque), puis les questions et l'appel.
+ * fait (hero, puis repères), à quoi il ressemble (vitrine RamoPlus), comment
+ * il réserve (parcours jouable), ce qu'il change avant et après
+ * l'intervention (diptyque), puis les questions et la bande finale.
+ *
+ * Aucun tiret cadratin ni demi-cadratin dans les chaînes visibles (règle
+ * taste-skill) : point, virgule, deux-points ou parenthèses.
  *
  * RamoPlus (`ramoplus.pages.dev`) est un site conçu par le studio, réellement
  * en ligne et cliquable de bout en bout. Ce n'est pas un site client en
@@ -18,20 +21,21 @@
 export const ramonagePage = {
   hero: {
     eyebrow: "Sites pour ramoneurs",
-    title: "Votre site prend les rendez-vous. Vous gardez les mains libres.",
+    title: "Vos rendez-vous, pris sans décrocher.",
+    /** Vingt mots au plus (règle du hero). */
     lede:
-      "Vos clients décrivent leur appareil et proposent leurs créneaux pendant que vous êtes sur un chantier. Vous ouvrez le téléphone le soir sur des demandes déjà complètes.",
+      "Vos clients décrivent leur appareil et proposent leurs créneaux pendant votre chantier. Le soir, les demandes arrivent complètes.",
     primaryCta: "Voir mon futur site",
     secondaryCta: "Essayer la réservation",
     imageAlt:
       "Ramoneur préparant son matériel devant un poêle à bois dans une maison",
-    imageCaption: "Votre métier d’abord. Le numérique travaille en coulisses.",
+    phoneAlt: "Le site RamoPlus ouvert sur un téléphone : prise de rendez-vous en un geste",
   },
 
   /**
-   * Bande de repères accrochée au hero : quatre lignes, pas de paragraphe.
-   * Elle remplace l'ancienne section « une journée simplifiée », dont les
-   * trois cartes disaient déjà ce que le diptyque raconte plus bas.
+   * Bande de repères sous le hero : quatre lignes, pas de paragraphe. Elle
+   * remplace l'ancienne section « une journée simplifiée », dont les trois
+   * cartes disaient déjà ce que le diptyque raconte plus bas.
    */
   markers: [
     {
@@ -53,49 +57,45 @@ export const ramonagePage = {
   ],
 
   showcase: {
-    eyebrow: "Un site en ligne",
-    title: "Le site existe déjà. Ouvrez-le, cliquez partout.",
+    title: "Le site existe déjà. Ouvrez‑le, cliquez partout.",
     lede:
-      "RamoPlus, c'est le site que nous avons conçu pour le ramonage : accueil, prestations, grille tarifaire, réglementation, zones et prise de rendez-vous complète. Le même socle se réécrit avec votre nom, vos tarifs et vos communes.",
-    caption:
-      "RamoPlus — conçu par le studio, en ligne et cliquable de bout en bout.",
+      "RamoPlus, c'est le site que nous avons conçu pour le ramonage : accueil, prestations, grille tarifaire, réglementation, zones et prise de rendez-vous complète. Le même socle se réécrit avec votre nom, vos tarifs et vos communes.",
+    caption: "RamoPlus, conçu par le studio : en ligne et cliquable de bout en bout.",
     liveLabel: "Site en ligne",
     liveUrl: "https://ramoplus.pages.dev/",
     desktopAlt:
-      "Page d’accueil du site RamoPlus : titre, prise de rendez-vous et bandeau de garanties",
-    mobileAlt: "Le même site RamoPlus affiché sur un téléphone",
+      "Page d’accueil du site RamoPlus : titre, prise de rendez-vous et bandeau de garanties",
   },
 
   booking: {
     eyebrow: "Le parcours client",
     title: "Trois écrans, et la demande est qualifiée.",
     lede:
-      "Le module de réservation de RamoPlus, reproduit ici. Choisissez un appareil, proposez des créneaux : le dossier se remplit sans un seul appel.",
-    panelLabel: "Prise de rendez-vous — ce que voit votre client",
+      "Le module de réservation de RamoPlus, reproduit ici. Choisissez un appareil, proposez des créneaux : le dossier se remplit sans un seul appel.",
+    panelLabel: "Prise de rendez-vous, côté client",
     note:
-      "Durées et tarifs repris de la grille publiée sur ramoplus.pages.dev. Sur votre site, ce sont les vôtres.",
+      "Durées et tarifs repris de la grille publiée sur le site RamoPlus. Sur votre site, ce sont les vôtres.",
   },
 
   /**
-   * Diptyque : deux volets de même structure (pastille, titre, texte, trois
-   * points) et de même cadrage, en miroir. C'est la seule répétition voulue
-   * de la page — elle oppose l'avant et l'après d'une intervention.
+   * Diptyque : deux volets de même structure (repère, titre, texte, trois
+   * points) et de même cadrage, côte à côte. C'est la seule répétition voulue
+   * de la page : elle oppose l'avant et l'après d'une intervention.
    */
   field: {
-    eyebrow: "Autour de l’intervention",
     title: "Avant le passage, après le passage.",
     lede:
-      "Le site ne s’arrête pas au bouton « réserver ». Il prépare la tournée, puis il clôt le dossier.",
+      "Le site ne s’arrête pas au bouton « réserver ». Il prépare la tournée, puis il clôt le dossier.",
     panels: [
       {
         eyebrow: "Avant le passage",
         title: "Votre zone d’intervention devient un filtre.",
         body:
-          "Le formulaire connaît vos communes et vos jours. Une demande hors secteur est traitée sur place, sans vous déranger à 20 h.",
+          "Le formulaire connaît vos communes et vos jours. Une demande hors secteur est traitée sur place, sans vous déranger à 20 h.",
         points: [
           "Vos communes et vos rayons sont annoncés noir sur blanc.",
           "Les créneaux proposés regroupent les passages d’un même secteur.",
-          "Hors zone : refus clair ou bascule vers une demande de devis.",
+          "Hors zone : refus clair ou bascule vers une demande de devis.",
         ],
         image: "/ramonage/tournee-crayon.webp",
         imageAlt:
@@ -105,7 +105,7 @@ export const ramonagePage = {
         eyebrow: "Après le passage",
         title: "L’intervention se clôt avant de remonter dans le camion.",
         body:
-          "Le dossier client est déjà ouvert : appareil, adresse, dernier passage. Vous ajoutez le constat, le document part, le rappel de l’an prochain est posé.",
+          "Le dossier client est déjà ouvert : appareil, adresse, dernier passage. Vous ajoutez le constat, le document part, le rappel de l’an prochain est posé.",
         points: [
           "Dossier client centralisé, consultable depuis le chantier.",
           "Envoi du document au client depuis le mobile.",
@@ -119,44 +119,45 @@ export const ramonagePage = {
   },
 
   faq: {
-    eyebrow: "Questions de terrain",
     title: "L’essentiel avant de démarrer.",
     items: [
       {
-        question: "Est-ce compatible avec mon agenda actuel ?",
+        question: "Est‑ce compatible avec mon agenda actuel ?",
         answer:
           "Nous partons de votre façon de gérer les créneaux. Selon votre équipement, le site se connecte à votre calendrier ou fonctionne avec un planning dédié.",
       },
       {
-        question: "Et si certains clients préfèrent appeler ?",
+        question: "Et si certains clients préfèrent appeler ?",
         answer:
           "Le bouton d’appel reste visible, surtout sur mobile. La réservation en ligne absorbe simplement les demandes du soir, du week-end et les clients qui veulent aller vite.",
       },
       {
-        question: "Puis-je limiter les réservations à certaines communes ?",
+        question: "Puis‑je limiter les réservations à certaines communes ?",
         answer:
-          "Oui. Nous configurons votre zone, vos jours de passage et le traitement d’une demande hors secteur : refus clair ou demande de devis.",
+          "Oui. Nous configurons votre zone, vos jours de passage et le traitement d’une demande hors secteur : refus clair ou demande de devis.",
       },
       {
-        question: "Qui décide des tarifs affichés ?",
+        question: "Qui décide des tarifs affichés ?",
         answer:
-          "Vous. Le parcours ci-dessus reprend la grille publiée sur RamoPlus ; votre site affiche vos propres montants, ou aucun montant si vous préférez chiffrer après diagnostic.",
+          "Vous. Le parcours ci-dessus reprend la grille publiée sur RamoPlus ; votre site affiche vos propres montants, ou aucun montant si vous préférez chiffrer après diagnostic.",
       },
       {
-        question: "Combien de temps faut-il pour être en ligne ?",
+        question: "Combien de temps faut‑il pour être en ligne ?",
         answer:
           "Quelques semaines dans la plupart des cas. Le délai dépend surtout des contenus, des connexions souhaitées et de votre disponibilité pour les validations.",
       },
     ],
   },
 
+  /**
+   * Bande finale (`CtaBand`, intention « audit ») : l'entrée la plus légère
+   * pour qui n'est pas prêt à échanger. Les deux déclencheurs de la modale
+   * (hero et parcours) restent l'appel principal de la page.
+   */
   closing: {
-    eyebrow: "Parlons de votre saison",
-    title: "Montrez-nous comment vous travaillez. Nous dessinons le site autour.",
+    title: "Où en est votre visibilité dans vos communes ?",
     lede:
-      "Un premier échange de 15 minutes suffit pour parler de vos communes, de vos prestations et de votre planning.",
-    cta: "Échanger sur mon projet",
-    reassurance: "Gratuit, direct et sans engagement.",
+      "Le diagnostic gratuit passe en revue votre site actuel, votre fiche Google et vos concurrents locaux. Des priorités concrètes sous 48 h, sans engagement.",
   },
 } as const;
 
@@ -216,14 +217,14 @@ export const ramonageDemo = {
       price: "149 €",
     },
   ],
-  /** Jours de tournée par secteur — la logique que le site fait respecter. */
+  /** Jours de tournée par secteur : la logique que le site fait respecter. */
   days: [
     { id: "mar", label: "Mardi 3", sector: "Secteur centre" },
     { id: "mer", label: "Mercredi 4", sector: "Secteur nord" },
     { id: "jeu", label: "Jeudi 5", sector: "Secteur centre" },
     { id: "ven", label: "Vendredi 6", sector: "Secteur sud" },
   ],
-  slots: ["8 h – 10 h", "10 h – 12 h", "14 h – 16 h", "16 h – 18 h"],
+  slots: ["8 h à 10 h", "10 h à 12 h", "14 h à 16 h", "16 h à 18 h"],
   /** Le client propose entre deux et cinq créneaux, comme sur RamoPlus. */
   minSlots: 2,
   maxSlots: 5,

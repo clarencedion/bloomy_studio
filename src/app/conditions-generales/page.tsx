@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
 import { PLACEHOLDER, hasLegalPlaceholders, legalEntity } from "@/lib/legal";
@@ -33,13 +35,13 @@ export default function CgvPage() {
         périmètre, les livrables, le calendrier et le prix. Le devis signé
         (accompagné, le cas échéant, de l&apos;acompte prévu) vaut commande.
         Les demandes hors périmètre font l&apos;objet d&apos;un devis
-        complémentaire — jamais d&apos;une facturation surprise.
+        complémentaire, jamais d&apos;une facturation surprise.
       </p>
 
       <h2>2. Déroulement et validations</h2>
       <p>
         Les projets suivent des phases jalonnées de validations client,
-        décrites sur la page <a href="/methode">Méthode</a>. Le client
+        décrites sur la page <Link href="/methode">Méthode</Link>. Le client
         s&apos;engage à fournir les contenus et retours nécessaires dans des
         délais raisonnables ; les retards de validation décalent d&apos;autant
         le calendrier.
@@ -66,7 +68,7 @@ export default function CgvPage() {
         {legalEntity.name}{" "}
         est tenue à une obligation de moyens. Aucun
         positionnement dans les moteurs de recherche ni aucun volume
-        d&apos;affaires ne peut être garanti — toute promesse contraire serait
+        d&apos;affaires ne peut être garanti : toute promesse contraire serait
         trompeuse. La responsabilité de {legalEntity.name} est limitée au
         montant des sommes effectivement versées au titre de la prestation
         concernée. {PLACEHOLDER}
@@ -75,7 +77,7 @@ export default function CgvPage() {
       <h2>6. Données personnelles</h2>
       <p>
         Les traitements liés aux projets sont décrits dans la{" "}
-        <a href="/politique-de-confidentialite">politique de confidentialité</a>.
+        <Link href="/politique-de-confidentialite">politique de confidentialité</Link>.
         Lorsque le studio agit comme sous-traitant de données pour le compte du
         client (par exemple pour un site e-commerce), un accord de traitement
         est annexé au devis.

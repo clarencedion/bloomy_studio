@@ -1,17 +1,34 @@
 import Link from "next/link";
+import {
+  ArrowRight,
+  CalendarBlank,
+  Camera,
+  ChartLineUp,
+  MagnifyingGlass,
+  MapPin,
+  PlugsConnected,
+  Wrench,
+} from "@phosphor-icons/react/dist/ssr";
+import type { ReactNode } from "react";
 
+import { OfferCard } from "@/components/products/OfferCard";
+import { OfferIndex, type OfferIndexGroup } from "@/components/products/OfferIndex";
+import { OfferPanel } from "@/components/products/OfferPanel";
+import { ButtonArrow, ButtonLink, buttonClass } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
-import { EditorialList } from "@/components/ui/EditorialList";
+import { CtaLink } from "@/components/ui/CtaLink";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { BloomyComparatifShot } from "@/components/visuals/ProductShot";
+import { addOns, floristOffers, mvpOffer, type Offer } from "@/lib/offers";
 import { pageMetadata } from "@/lib/seo";
-import { addOns, floristOffers, mvpOffer } from "@/lib/offers";
+import { primaryCta } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Services et offres : site, e-commerce, SEO local, MVP",
+  title: "Services et offres : site, e-commerce, SEO local, MVP",
   description:
-    "Les offres Bloomy Studio : Essentiel, Boutique et Croissance pour fleuristes, MVP Sprint pour fondateurs, et les services complémentaires en détail.",
+    "Les offres Bloomy Studio : Essentiel, Boutique et Croissance pour votre site, MVP Sprint pour les fondateurs, et les compléments. Tout est sur devis.",
   path: "/services",
 });
 
@@ -20,173 +37,210 @@ const crumbs = [
   { name: "Services", path: "/services" },
 ];
 
+/**
+ * Vue d'ensemble de toutes les offres (`lib/offers.ts`).
+ *
+ * Récit : un sommaire lisible d'un coup d'œil (à droite du titre), puis les
+ * trois formules de site en bento asymétrique (cinq colonnes, sept, puis
+ * pleine largeur : jamais trois cartes égales), les compléments en grille
+ * de définitions sous un titre collant, et les produits (MVP en panneau
+ * forest, micro SaaS en bandeau). Chaque bloc renvoie vers sa page produit
+ * et vers les déclinaisons métier.
+ *
+ * Les prix restent `null` : « Sur devis » partout.
+ */
+
+function offer(id: string): Offer {
+  const found = floristOffers.find((o) => o.id === id);
+  if (!found) throw new Error(`Offre inconnue : ${id}`);
+  return found;
+}
+
+const essentiel = offer("essentiel");
+const boutique = offer("boutique");
+const croissance = offer("croissance");
+
+/** Durées courtes du sommaire, reprises de `process` dans `lib/offers.ts`. */
+const indexGroups: OfferIndexGroup[] = [
+  {
+    name: "Sites & e-commerce",
+    items: [
+      { label: essentiel.name, href: `#${essentiel.id}`, detail: "Environ 4 semaines" },
+      { label: boutique.name, href: `#${boutique.id}`, detail: "6 à 8 semaines" },
+      { label: croissance.name, href: `#${croissance.id}`, detail: "Mensuel" },
+    ],
+  },
+  {
+    name: "Produits",
+    items: [
+      { label: mvpOffer.name, href: `#${mvpOffer.id}`, detail: "6 à 10 semaines" },
+      { label: "Micro SaaS", href: "#micro-saas", detail: "Abonnement" },
+    ],
+  },
+  {
+    name: "À la carte",
+    items: [{ label: "Compléments", href: "#complements", detail: `${addOns.length} services` }],
+  },
+];
+
+const addOnIcons: Record<string, ReactNode> = {
+  "SEO local": <MagnifyingGlass weight="regular" className="size-5" />,
+  Maintenance: <Wrench weight="regular" className="size-5" />,
+  "Google Business Profile": <MapPin weight="regular" className="size-5" />,
+  "Pages saisonnières": <CalendarBlank weight="regular" className="size-5" />,
+  "Direction photo": <Camera weight="regular" className="size-5" />,
+  Analytics: <ChartLineUp weight="regular" className="size-5" />,
+  Intégrations: <PlugsConnected weight="regular" className="size-5" />,
+};
+
+const sectors = [
+  { label: "Fleuristes", href: "/fleuristes" },
+  { label: "Salons de coiffure", href: "/salons-de-coiffure" },
+  { label: "Ramoneurs", href: "/ramonage" },
+];
+
 export default function ServicesPage() {
   return (
     <>
       <PageHero
         crumbs={crumbs}
-        eyebrow="Services & offres"
+        eyebrow="Offres"
         title="Des offres lisibles, des devis qui détaillent tout"
-        lede={
-          <>
-            Pas de grille cachée ni d&apos;options surprises : chaque offre
-            précise pour qui elle est faite, ce qu&apos;elle inclut, ce
-            qu&apos;elle exclut, et comment le projet se déroule. Les montants
-            sont établis sur devis après{" "}
-            <Link href="/audit">le diagnostic gratuit</Link>{" "}— parce
-            qu&apos;un prix juste se calcule sur votre situation réelle.
-          </>
-        }
-      />
-
-      {/* Offres fleuristes */}
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHead
-            eyebrow="Pour les fleuristes"
-            title="Trois offres, selon d'où vous partez"
-            lede={
-              <>
-                Le détail du métier derrière chaque offre se trouve sur les
-                pages dédiées :{" "}
-                <Link href="/fleuristes/site-internet">site</Link>,{" "}
-                <Link href="/fleuristes/e-commerce">e-commerce</Link>,{" "}
-                <Link href="/fleuristes/seo-local">SEO local</Link>{" "}et{" "}
-                <Link href="/fleuristes/maintenance">maintenance</Link>.
-              </>
-            }
+        lede="Pour chaque offre : à qui elle s'adresse, ce qu'elle inclut, ce qu'elle exclut. Les montants sont établis sur devis."
+        aside={
+          <OfferIndex
+            groups={indexGroups}
+            note="Toutes sur devis, établi après un premier échange et détaillé ligne par ligne, sans option surprise."
+            className="lg:ml-6"
           />
-          {/*
-            Trois offres, trois lignes pleine largeur — et non trois cartes
-            identiques côte à côte. Une fiche technique dense répétée trois fois
-            se lit comme un tableau comparatif de fournisseur d'accès : on ne
-            retient rien. Ici, le nom et le prix tiennent une colonne étroite,
-            le contenu s'étale à droite, et l'offre mise en avant se signale par
-            un simple filet bourgogne plutôt qu'un aplat rose.
-          */}
-          <div className="mt-14 border-t border-hairline">
-            {floristOffers.map((offer) => (
-              <article
-                key={offer.id}
-                className={`grid gap-x-12 gap-y-7 border-b border-hairline py-10 sm:py-14 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] ${
-                  offer.highlight ? "border-l-2 border-l-rose pl-6 sm:pl-8" : ""
-                }`}
-              >
-                <div>
-                  {offer.highlight ? (
-                    <p className="plate-label text-rose">La plus demandée</p>
-                  ) : null}
-                  <h3 className={`text-display-lg ${offer.highlight ? "mt-2" : ""}`}>
-                    {offer.name}
-                  </h3>
-                  <p className="mt-4 max-w-sm leading-relaxed text-ink-soft">
-                    {offer.audience}
-                  </p>
-                  <p className="text-display-sm mt-8 text-rose">
-                    {offer.price ?? "Sur devis"}
-                  </p>
-                  <p className="caption mt-1.5">{offer.process}</p>
-                </div>
+        }
+      >
+        <CtaLink
+          href={primaryCta.href}
+          event="cta_contact_click"
+          placement="services_hero"
+          className={buttonClass("primary")}
+        >
+          {primaryCta.label}
+          <ButtonArrow />
+        </CtaLink>
+      </PageHero>
 
-                <div>
-                  <p className="lede max-w-xl">{offer.summary}</p>
-                  <div className="mt-9 grid gap-x-10 gap-y-7 sm:grid-cols-2">
-                    <div>
-                      <h4 className="plate-label">Inclus</h4>
-                      <ul className="mt-4 space-y-2.5 text-[0.95rem]">
-                        {offer.includes.map((item) => (
-                          <li key={item} className="flex gap-2.5">
-                            <span aria-hidden="true" className="mt-0.5 text-sage-deep">
-                              ✓
-                            </span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="plate-label">Non inclus</h4>
-                      <ul className="mt-4 space-y-2 text-[0.95rem] text-ink-soft">
-                        {offer.excludes.map((item) => (
-                          <li key={item} className="flex gap-2.5">
-                            <span aria-hidden="true" className="mt-0.5">—</span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
+      {/* Les trois formules de site : bento 5 / 7 / pleine largeur. */}
+      <section className="border-t border-line py-20 sm:py-28">
+        <Container width="wide">
+          <SectionHead
+            title="Trois formules pour votre site"
+            lede="Selon d'où vous partez. Conçues avec des fleuristes, notre spécialité, et déclinées pour chaque métier."
+          />
+          <div className="mt-14 grid gap-5 sm:mt-16 lg:grid-cols-12">
+            <OfferCard offer={essentiel} surface="white" className="lg:col-span-5" />
+            <OfferCard offer={boutique} surface="blush" className="lg:col-span-7" />
+            <OfferCard
+              offer={croissance}
+              surface="mint"
+              layout="wide"
+              className="lg:col-span-12"
+              link={{ href: "/fleuristes/seo-local", label: "Le SEO local, expliqué pour les fleuristes" }}
+            />
+          </div>
+          <div className="mt-12 flex flex-col gap-6 border-t border-line pt-8 lg:flex-row lg:items-center lg:justify-between">
+            <ul className="flex flex-wrap items-center gap-3" aria-label="Les formules, par métier">
+              {sectors.map((s) => (
+                <li key={s.href}>
+                  <Link
+                    href={s.href}
+                    className="press group inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong bg-white px-5 text-[0.95rem] font-semibold text-forest transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+                  >
+                    {s.label}
+                    <ArrowRight aria-hidden="true" weight="bold" className="arrow-nudge size-3.5" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <ButtonLink href="/sites-internet" variant="ghost" arrow className="self-start lg:self-auto">
+              Sites internet & e-commerce en détail
+            </ButtonLink>
           </div>
         </Container>
       </section>
 
-      {/* Compléments */}
-      <section className="border-y border-hairline bg-paper py-16 sm:py-24">
-        <Container>
-          <SectionHead
-          align="split"
-            eyebrow="Compléments"
-            title="À ajouter selon vos besoins"
-            lede="Chaque complément se greffe sur une offre ou se prend séparément. Là aussi : devis détaillé, périmètre écrit."
-          />
-          <EditorialList
-            className="mt-10"
-            dense
-            items={addOns.map((a) => ({ title: a.name, body: a.description }))}
-          />
+      {/* Compléments : titre collant à gauche, grille de définitions à droite. */}
+      <section id="complements" className="scroll-mt-20 py-20 sm:py-28">
+        <Container width="wide">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-28">
+                <h2 className="text-display-lg">À ajouter selon vos besoins</h2>
+                <p className="lede mt-5">
+                  Chaque complément se greffe sur une formule ou se prend
+                  séparément. Là aussi : devis détaillé, périmètre écrit.
+                </p>
+              </div>
+            </div>
+            <dl className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:col-span-8">
+              {addOns.map((a) => (
+                <div key={a.name} className="flex gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="leaf-sm grid size-11 shrink-0 place-items-center bg-mint text-forest"
+                  >
+                    {addOnIcons[a.name]}
+                  </span>
+                  <div>
+                    <dt className="text-display-sm">{a.name}</dt>
+                    <dd className="mt-2 text-[0.98rem] leading-relaxed text-forest-soft">
+                      {a.description}
+                    </dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Container>
       </section>
 
-      {/* Autres secteurs */}
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHead
-          align="left"
-            eyebrow="Autres métiers"
-            title="Salons de coiffure et produits digitaux"
+      {/* Les produits : MVP en panneau forest, micro SaaS en bandeau. */}
+      <section className="pb-20 pt-4 sm:pb-28 sm:pt-8">
+        <Container width="wide">
+          <OfferPanel
+            offer={mvpOffer}
+            footer={
+              <ButtonLink href="/developpement-mvp" variant="onDark" arrow>
+                Le développement MVP en détail
+              </ButtonLink>
+            }
           />
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <article className="rounded-sm border border-hairline bg-sage-veil/50 p-7">
-              <h3 className="text-display-md">Salons de coiffure</h3>
-              <p className="mt-3 leading-relaxed text-ink-soft">
-                Les offres Essentiel, Boutique et Croissance s&apos;adaptent au
-                métier de la coiffure : réservation intégrée, menu de
-                prestations, équipe, cartes cadeaux.
+
+          <div
+            id="micro-saas"
+            className="leaf-lg mt-5 grid scroll-mt-28 gap-10 overflow-hidden bg-blush px-6 pt-10 sm:px-12 sm:pt-14 lg:grid-cols-12 lg:items-center lg:gap-12 lg:px-16 lg:pt-0"
+          >
+            <div className="lg:col-span-5 lg:py-16">
+              <h2 className="text-display-lg">Micro SaaS</h2>
+              <p className="mt-4 text-[1.05rem] font-medium leading-snug text-forest">
+                Pour le commerçant qui veut l&apos;outil sans le projet.
               </p>
-              <Link
-                href="/salons-de-coiffure"
-                className="mt-5 inline-block font-semibold text-sage-deep underline-offset-4 hover:underline"
-              >
-                La page dédiée aux salons →
-              </Link>
-            </article>
-            <article className="rounded-sm border border-hairline bg-rose-veil/50 p-7">
-              <h3 className="text-display-md">{mvpOffer.name}</h3>
-              <p className="mt-3 leading-relaxed text-ink-soft">{mvpOffer.summary}</p>
-              <p className="mt-3 text-sm text-ink-soft">
-                <span className="font-semibold text-ink">
-                  {mvpOffer.price ?? "Sur devis"}
-                </span>{" "}
-                · {mvpOffer.process}
+              <p className="mt-3 max-w-md text-[0.98rem] leading-relaxed text-forest-soft">
+                Pas de prestation ici : vous vous abonnez à un produit que nous
+                exploitons déjà. Un seul est en production aujourd&apos;hui,
+                Bloomy, pour les fleuristes.
               </p>
-              <Link
-                href="/developpement-mvp"
-                className="mt-5 inline-block font-semibold text-rose underline-offset-4 hover:underline"
-              >
-                Le développement MVP en détail →
-              </Link>
-            </article>
+              <ButtonLink href="/micro-saas" variant="secondary" arrow className="mt-8">
+                Le micro SaaS en détail
+              </ButtonLink>
+            </div>
+            <div className="lg:col-span-7 lg:self-end lg:pt-16">
+              <BloomyComparatifShot className="translate-y-8 sm:translate-y-12" />
+            </div>
           </div>
         </Container>
       </section>
 
       <CtaBand
         placement="services_footer"
-        title="Le bon point de départ : savoir où vous en êtes"
-        lede="Le diagnostic gratuit précède tout devis. Il vous situe honnêtement — et vous choisissez ensuite, sans pression."
+        title="Dites‑nous d'où vous partez."
+        lede={"Un site, une boutique, un produit : décrivez votre projet, nous revenons avec un devis détaillé ligne par ligne. Réponse sous 48\u00a0h ouvrées."}
       />
     </>
   );

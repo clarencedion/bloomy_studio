@@ -1,19 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
+import { FaqBlock } from "@/components/fleuristes/FaqBlock";
+import { FloristWall } from "@/components/fleuristes/FloristWall";
+import { HeroActions } from "@/components/fleuristes/HeroActions";
+import { InkWords } from "@/components/fleuristes/InkWords";
+import { articleLink } from "@/components/fleuristes/reading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CtaBand } from "@/components/ui/CtaBand";
-import { FaqAccordion } from "@/components/ui/FaqAccordion";
-import { EditorialList } from "@/components/ui/EditorialList";
+import type { FaqItem } from "@/components/ui/FaqAccordion";
+import { Kicker } from "@/components/ui/Kicker";
 import { PageHero } from "@/components/ui/PageHero";
-import { SectionHead } from "@/components/ui/SectionHead";
-import { SiteGallery } from "@/components/visuals/ShowcaseSites";
+import { Reveal } from "@/components/ui/Reveal";
+import { SiteShowpiece } from "@/components/visuals/ShowcaseSites";
+import { floristSites } from "@/lib/portfolio";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Agence web pour fleuristes — site, e-commerce, SEO local",
+  title: "Agence web pour fleuristes : site, e-commerce, SEO local",
   description:
     "Bloomy Studio conçoit sites, boutiques en ligne et visibilité Google pour fleuristes indépendants, avec l'expertise de la plateforme bloomy.one.",
   path: "/fleuristes",
@@ -24,37 +31,70 @@ const crumbs = [
   { name: "Fleuristes", path: "/fleuristes" },
 ];
 
-const seasons = [
+/*
+ * Les journées d'un fleuriste, en grille à cellules inégales. Chaque cellule
+ * déclare sa teinte et son emprise ; la photo d'ambiance occupe la septième
+ * cellule (deux rangées en desktop). Elle illustre le métier, jamais un client.
+ */
+type Season = {
+  title: string;
+  body: string;
+  tone: "blush" | "mint" | "white";
+  /** Emprise en desktop (grille de 12). */
+  span: string;
+  lead?: boolean;
+};
+
+const seasons: Season[] = [
   {
-    title: "Saint-Valentin & fête des mères",
-    body: "Vos deux plus gros pics de l'année se jouent en quelques jours. Pages dédiées prêtes trois semaines avant, créneaux de retrait renforcés, précommandes : le site absorbe la demande au lieu de la perdre.",
+    title: "Saint-Valentin et fête des mères",
+    body: "Vos deux plus gros pics de l'année se jouent en quelques jours. Pages dédiées prêtes trois semaines avant, créneaux de retrait renforcés, précommandes\u00a0: le site absorbe la demande au lieu de la perdre.",
+    tone: "blush",
+    span: "md:col-span-2 lg:col-span-7",
+    lead: true,
   },
   {
     title: "Mariages",
-    body: "Un mariage se prépare des mois à l'avance et se choisit sur dossier. Une page mariage avec vos réalisations, votre démarche et un formulaire de brief attire des demandes qualifiées — pas des curieux.",
+    body: "Un mariage se prépare des mois à l'avance et se choisit sur dossier. Une page mariage avec vos réalisations, votre démarche et un formulaire de brief attire des demandes qualifiées, pas des curieux.",
+    tone: "white",
+    span: "lg:col-span-5",
   },
   {
     title: "Deuil",
     body: "Les familles cherchent dans l'urgence, souvent depuis un téléphone, avec une charge émotionnelle forte. Un parcours sobre, clair, avec livraison directe en cérémonie, est un vrai service rendu.",
+    tone: "mint",
+    span: "lg:col-span-4",
   },
   {
-    title: "Entreprises & abonnements",
-    body: "Bureaux, hôtels, restaurants : des revenus récurrents que peu de fleuristes valorisent en ligne. Une page dédiée avec demande de devis structure cette clientèle.",
+    title: "Entreprises et abonnements",
+    body: "Bureaux, hôtels, restaurants\u00a0: des revenus récurrents que peu de fleuristes valorisent en ligne. Une page dédiée avec demande de devis structure cette clientèle.",
+    tone: "white",
+    span: "lg:col-span-4",
   },
   {
     title: "Le quotidien",
-    body: "Anniversaires, naissances, « je passe ce soir » : le client veut savoir si c'est ouvert, ce qui est disponible et si on peut lui préparer quelque chose pour 18 h. Click-and-collect et catalogue à jour répondent à ça.",
+    body: "Anniversaires, naissances, «\u00a0je passe ce soir\u00a0»\u00a0: le client veut savoir si c'est ouvert, ce qui est disponible et si on peut lui préparer quelque chose pour 18\u00a0h. Click-and-collect et catalogue à jour répondent à ça.",
+    tone: "white",
+    span: "lg:col-span-4",
   },
   {
     title: "Le stock qui change chaque matin",
-    body: "Votre catalogue n'est pas figé : arrivages, saisons, météo. Votre site doit se mettre à jour en deux minutes depuis le comptoir — pas via un ticket à votre prestataire.",
+    body: "Votre catalogue n'est pas figé\u00a0: arrivages, saisons, météo. Votre site doit se mettre à jour en deux minutes depuis le comptoir, pas via un ticket à votre prestataire.",
+    tone: "blush",
+    span: "lg:col-span-4",
   },
 ];
+
+const seasonTones: Record<Season["tone"], string> = {
+  blush: "bg-blush",
+  mint: "bg-mint",
+  white: "border border-line bg-white",
+};
 
 const pillars = [
   {
     title: "Un site à la hauteur de votre boutique",
-    body: "Identité visuelle propre à votre maison, photos mises en valeur, textes qui parlent votre langue. Rapide et impeccable sur mobile — là où vos clients vous cherchent.",
+    body: "Identité visuelle propre à votre maison, photos mises en valeur, textes qui parlent votre langue. Rapide et impeccable sur mobile, là où vos clients vous cherchent.",
     href: "/fleuristes/site-internet",
     label: "Création de site pour fleuriste",
   },
@@ -62,11 +102,11 @@ const pillars = [
     title: "Vendre en ligne sans reverser de commission",
     body: "Catalogue saisonnier, click-and-collect avec créneaux, livraison locale par zones, paiement sécurisé. Chaque commande passée sur votre site est une commande que les plateformes ne prélèvent pas.",
     href: "/fleuristes/e-commerce",
-    label: "E-commerce & click-and-collect",
+    label: "E-commerce et click-and-collect",
   },
   {
     title: "Être trouvé sur Google et Google Maps",
-    body: "Fiche Google Business Profile complète et cohérente avec votre site, pages services dédiées, stratégie d'avis régulière : les fondamentaux du référencement local, appliqués sérieusement.",
+    body: "Fiche Google Business Profile complète et cohérente avec votre site, pages services dédiées, stratégie d'avis régulière\u00a0: les fondamentaux du référencement local, appliqués sérieusement.",
     href: "/fleuristes/seo-local",
     label: "SEO local pour fleuriste",
   },
@@ -74,34 +114,34 @@ const pillars = [
     title: "Un site vivant, pas un site livré",
     body: "Mises à jour, sauvegardes, pages saisonnières préparées avant les pics, rapport mensuel lisible. Vous savez ce qui se passe et ce que ça rapporte.",
     href: "/fleuristes/maintenance",
-    label: "Maintenance & accompagnement",
+    label: "Maintenance et accompagnement",
   },
 ];
 
-const faq = [
+const faq: FaqItem[] = [
   {
-    question: "Mon stock change tous les jours. Comment un site peut-il suivre ?",
+    question: "Mon stock change tous les jours. Comment un site peut-il suivre\u00a0?",
     answer: (
       <p>
         C&apos;est précisément pour cela que nous ne vendons pas de catalogue
-        figé. Vous gérez des disponibilités : un bouquet passe « épuisé » en un
+        figé. Vous gérez des disponibilités&nbsp;: un bouquet passe «&nbsp;épuisé&nbsp;» en un
         geste, une nouvelle création se publie depuis le téléphone, et les
-        gammes de prix (« bouquet du marché dès 25 € ») évitent de photographier
+        gammes de prix («&nbsp;bouquet du marché dès 25&nbsp;€&nbsp;») évitent de photographier
         chaque composition. Voir{" "}
         <Link href="/fleuristes/e-commerce">notre approche e-commerce</Link>.
       </p>
     ),
   },
   {
-    question: "Que penser des grandes plateformes de transmission florale ?",
+    question: "Que penser des grandes plateformes de transmission florale\u00a0?",
     answer: (
       <p>
         Elles apportent des commandes, mais au prix de commissions importantes
         et d&apos;un catalogue standardisé qui efface votre identité. Notre
-        position est pragmatique : gardez-les si elles vous rapportent, mais
-        construisez en parallèle un canal qui vous appartient — votre site, vos
+        position est pragmatique&nbsp;: gardez-les si elles vous rapportent, mais
+        construisez en parallèle un canal qui vous appartient. Votre site, vos
         prix, vos marges, vos clients. C&apos;est la conviction qui a fondé{" "}
-        <a href="https://bloomy.one">Bloomy</a>{" "}: 0 % de commission pour
+        <a href="https://bloomy.one">Bloomy</a>&nbsp;: 0&nbsp;% de commission pour
         l&apos;artisan.
       </p>
     ),
@@ -112,19 +152,19 @@ const faq = [
       <p>
         C&apos;est le cas de la plupart de nos interlocuteurs, et ça se résout.
         Nous concevons d&apos;abord un site qui met en valeur des photos
-        simples prises au téléphone dans de bonnes conditions — nous vous
-        montrons comment. Et si vous voulez aller plus loin, la direction photo
+        simples prises au téléphone dans de bonnes conditions, et nous vous
+        montrons comment. Si vous voulez aller plus loin, la direction photo
         fait partie de <Link href="/services">nos services complémentaires</Link>.
       </p>
     ),
   },
   {
-    question: "En combien de temps mon site peut-il être en ligne ?",
+    question: "En combien de temps mon site peut-il être en ligne\u00a0?",
     answer: (
       <p>
-        Un site vitrine soigné : environ quatre semaines. Une boutique en ligne
-        complète : six à huit semaines selon le catalogue. Si vous visez un pic
-        (Saint-Valentin, fête des mères), parlons-en tôt : nous planifions pour
+        Un site vitrine soigné&nbsp;: environ quatre semaines. Une boutique en ligne
+        complète&nbsp;: six à huit semaines selon le catalogue. Si vous visez un pic
+        (Saint-Valentin, fête des mères), parlons-en tôt&nbsp;: nous planifions pour
         que le site travaille pendant le pic, pas qu&apos;il sorte juste après.
       </p>
     ),
@@ -144,154 +184,195 @@ export default function FleuristesPage() {
           audience: "Fleuristes indépendants",
         })}
       />
+
+      {/* Ouverture : le site fleuriste de référence du studio, en grand,
+          avant tout argumentaire. La capture longue défile au survol. */}
       <PageHero
         crumbs={crumbs}
         eyebrow="Fleuristes"
         title={
           <>
-            Votre boutique mérite mieux qu&apos;un template — et mieux
-            qu&apos;une commission.
+            L&apos;agence web des <span className="text-bloom-ink">fleuristes</span>{" "}
+            indépendants
           </>
         }
-        lede={
-          <>
-            Nous construisons des sites e-commerce et une visibilité locale
-            pour fleuristes indépendants. Pas une déclinaison « métiers de
-            bouche et artisans » : une spécialisation née en créant{" "}
-            <a href="https://bloomy.one">bloomy.one</a>, la plateforme de
-            composition florale, aux côtés de vrais artisans.
-          </>
-        }
-      />
+        lede="Sites, boutiques en ligne et visibilité Google, pensés pour les saisons, le comptoir et les commandes d'un fleuriste."
+        visual={<SiteShowpiece slug="osmose-florale" eager />}
+      >
+        <HeroActions placement="fleuristes_hero" />
+      </PageHero>
 
-      {/* La vitrine avant l'argumentaire : sur la page où un fleuriste décide,
-          montrer le travail vaut mieux que le décrire. Les trois captures sont
-          montrées entières — sur un pilier, on a la place de tout voir. */}
-      <section className="border-b border-hairline bg-cream-deep py-14 sm:py-20">
+      {/* Le mur des boutiques : toutes les autres vitrines florales, formats
+          mêlés. Desktop en colonnes, mobile en rail horizontal. */}
+      <section className="pb-20 pt-8 sm:pb-28 sm:pt-12">
         <Container width="wide">
-          <SectionHead
-          align="center"
-            eyebrow="Sites livrés"
-            title="Quatre boutiques, quatre univers"
-            lede="Aucun modèle décliné : chaque site part de la boutique, de ses matières et de sa façon de vendre."
-          />
-          <SiteGallery className="mt-12" />
+          <div className="max-w-3xl">
+            <h2 className="text-display-lg">
+              {floristSites.length}&nbsp;boutiques en ligne, chacune à son image
+            </h2>
+            <p className="lede mt-5">
+              Chaque site part de la boutique&nbsp;: ses matières, ses couleurs, sa
+              façon de vendre. Ce sont des adresses publiques, pas des
+              maquettes. Ouvrez-les.
+            </p>
+          </div>
+          <FloristWall exclude={["osmose-florale"]} className="mt-12 sm:mt-16" />
         </Container>
       </section>
 
-      {/* Preuve de compréhension métier */}
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHead
-          align="split"
-            eyebrow="Votre métier, pas un secteur"
-            title="Un site de fleuriste se pense autour de vos vraies journées"
-            lede="Un prestataire généraliste voit un « commerce de détail ». Nous voyons des arrivages du matin, des pics saisonniers, des mariages sur dossier et des familles en deuil qui commandent depuis un téléphone."
-          />
-          <EditorialList className="mt-12" items={seasons} />
-        </Container>
-      </section>
+      {/* Le métier, en grille à cellules inégales.
+          Mobile : une colonne, la photo entre « Mariages » et « Deuil ».
+          Tablette : deux colonnes. Desktop : 7/5 puis photo sur deux rangées. */}
+      <section className="py-20 sm:py-28">
+        <Container width="wide">
+          <div className="max-w-3xl">
+            <h2 className="text-display-lg">
+              Un site de fleuriste se pense autour de vos vraies journées
+            </h2>
+            <p className="lede mt-5">
+              Un prestataire généraliste voit un «&nbsp;commerce de détail&nbsp;». Nous
+              voyons des arrivages du matin, des pics saisonniers, des mariages
+              sur dossier et des familles en deuil qui commandent depuis un
+              téléphone.
+            </p>
+          </div>
 
-      {/* Respiration : la matière du métier, en bande fine. Pas une vignette
-          décorative — elle sépare deux blocs de texte denses. */}
-      <div className="relative h-48 overflow-hidden sm:h-64">
-        <Image
-          src="/photos/comptoir-matin-wide.webp"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-      </div>
-
-      {/* Les 4 piliers → spokes */}
-      <section className="border-y border-hairline bg-paper py-16 sm:py-24">
-        <Container>
-          <SectionHead
-          align="split"
-            eyebrow="Ce que nous construisons"
-            title="Le système complet, brique par brique"
-            lede="Chaque brique a sa page dédiée — parce que chaque sujet mérite mieux que trois lignes dans une liste."
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {pillars.map((p) => (
-              <Link
-                key={p.href}
-                href={p.href}
-                className="lift group flex flex-col rounded-sm border border-hairline bg-cream p-7 hover:border-rose"
-              >
-                <h3 className="text-display-md transition-colors group-hover:text-rose">
-                  {p.title}
-                </h3>
-                <p className="mt-3 flex-1 leading-relaxed text-ink-soft">{p.body}</p>
-                <span className="mt-5 font-semibold text-rose">
-                  {p.label} →
-                </span>
-              </Link>
+          <div className="mt-12 grid gap-4 sm:mt-16 md:grid-cols-2 lg:grid-cols-12 lg:gap-5">
+            {seasons.slice(0, 2).map((s) => (
+              <SeasonCell key={s.title} season={s} />
+            ))}
+            <div className="leaf relative min-h-[18rem] overflow-hidden md:min-h-0 lg:col-span-4 lg:row-span-2">
+              <Image
+                src="/photos/mains-composition-wide.webp"
+                alt="Mains d'une fleuriste ajustant un bouquet de roses et d'hortensias."
+                fill
+                sizes="(min-width: 1024px) 28rem, (min-width: 768px) 50vw, 100vw"
+                className="object-cover object-[60%_50%]"
+              />
+            </div>
+            {seasons.slice(2).map((s) => (
+              <SeasonCell key={s.title} season={s} />
             ))}
           </div>
         </Container>
       </section>
 
-      {/* Indépendance — angle différenciant */}
-      <section className="on-ink bg-plum py-16 text-cream sm:py-24">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <SectionHead
-              eyebrow="Notre conviction"
-              title="Votre canal en propre d'abord, les plateformes ensuite"
-              align="center"
-            />
-            <p className="mt-6 text-left leading-relaxed text-cream/75 sm:text-center">
-              La transmission florale prélève sa marge sur chaque bouquet et
-              standardise votre catalogue. Nous avons construit Bloomy sur le
-              principe inverse — 0 % de commission pour l&apos;artisan — et
-              votre site suit la même logique : vos commandes vous appartiennent
-              entièrement. Un site en propre ne remplace pas votre présence
-              ailleurs ; il vous rend le choix.
-            </p>
-            <p className="prose-links mt-8 text-sm text-cream/60">
-              Pour approfondir :{" "}
-              <Link
-                href="/blog/marketplace-ou-site-en-propre"
-                className="text-cream underline underline-offset-4 hover:text-rose-veil"
-              >
-                marketplace ou site en propre, le vrai calcul
-              </Link>
-            </p>
+      {/* Les quatre briques, sur un panneau vert : la tige du système.
+          Desktop : présentation à gauche (5), liens à droite (7).
+          Mobile : présentation puis liste, pleine largeur. */}
+      <section className="py-6 sm:py-10">
+        <Container width="wide">
+          <div className="on-forest leaf-lg bg-forest px-6 py-14 sm:px-12 sm:py-20 lg:px-16">
+            <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+              <div className="lg:col-span-5">
+                <h2 className="text-display-lg text-paper">
+                  Le système complet, brique par brique
+                </h2>
+                <p className="mt-6 max-w-md text-[1.05rem] leading-relaxed text-paper/80">
+                  Chaque brique a sa page dédiée, parce que chaque sujet mérite
+                  mieux que trois lignes dans une liste.
+                </p>
+                <p className="prose-links mt-4 max-w-md text-[1.05rem] leading-relaxed text-paper/80">
+                  Pas une déclinaison «&nbsp;métiers de bouche et artisans&nbsp;»&nbsp;: une
+                  spécialisation née en créant{" "}
+                  <a href="https://bloomy.one">bloomy.one</a>, la plateforme de
+                  composition florale, aux côtés de vrais artisans.
+                </p>
+              </div>
+              <ul className="border-t border-line-dark lg:col-span-7">
+                {pillars.map((p) => (
+                  <li key={p.href} className="border-b border-line-dark">
+                    <Link
+                      href={p.href}
+                      className="group grid gap-3 py-7 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-8 sm:py-8"
+                    >
+                      <span>
+                        <span className="block text-display-md text-paper transition-colors group-hover:text-bloom-light">
+                          {p.title}
+                        </span>
+                        <span className="mt-2.5 block max-w-xl leading-relaxed text-paper/75">
+                          {p.body}
+                        </span>
+                        <span className="mt-4 inline-flex items-center gap-1.5 text-[0.92rem] font-semibold text-bloom-light">
+                          {p.label}
+                          <ArrowRight aria-hidden="true" weight="bold" className="arrow-nudge size-4" />
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* FAQ */}
-      <section className="py-16 sm:py-24">
-        <Container width="narrow">
-          <SectionHead
-          align="left"
-            eyebrow="Vos questions"
-            title="Questions de fleuristes, réponses concrètes"
-            className="mb-10"
-          />
-          <FaqAccordion items={faq} />
-          <p className="prose-links mt-8 text-sm text-ink-soft">
-            À lire aussi :{" "}
-            <Link href="/blog/site-internet-fleuriste-checklist">
-              que doit contenir le site d&apos;un fleuriste ?
-            </Link>{" "}
-            et{" "}
-            <Link href="/blog/apparaitre-google-maps-fleuriste">
-              comment apparaître sur Google Maps
-            </Link>
-            .
-          </p>
+      {/* Conviction : une phrase à l'encre, qui se remplit en traversant
+          l'écran, puis le raisonnement décalé sur la droite. */}
+      <section className="py-24 sm:py-36">
+        <Container width="wide">
+          <Kicker ruled className="mb-8">
+            Notre conviction
+          </Kicker>
+          <h2 className="scroll-ink text-display-xl max-w-5xl">
+            <InkWords text="Votre canal en propre d'abord, les plateformes ensuite." />
+          </h2>
+          <div className="mt-10 grid gap-8 lg:grid-cols-12">
+            <Reveal className="lg:col-span-6 lg:col-start-6">
+              <p className="text-[1.08rem] leading-relaxed text-forest-soft">
+                La transmission florale prélève sa marge sur chaque bouquet et
+                standardise votre catalogue. Nous avons construit Bloomy sur le
+                principe inverse, 0&nbsp;% de commission pour l&apos;artisan, et
+                votre site suit la même logique&nbsp;: vos commandes vous
+                appartiennent entièrement. Un site en propre ne remplace pas
+                votre présence ailleurs. Il vous rend le choix.
+              </p>
+              <Link
+                href="/blog/marketplace-ou-site-en-propre"
+                className="group mt-7 inline-flex min-h-11 items-center gap-2 font-semibold text-bloom-ink"
+              >
+                <span className="link-live">Marketplace ou site en propre, le vrai calcul</span>
+                <ArrowRight aria-hidden="true" weight="bold" className="arrow-nudge size-4" />
+              </Link>
+            </Reveal>
+          </div>
         </Container>
       </section>
 
+      <FaqBlock
+        title="Questions de fleuristes, réponses concrètes"
+        items={faq}
+        reading={[
+          articleLink("site-internet-fleuriste-checklist"),
+          articleLink("apparaitre-google-maps-fleuriste"),
+        ]}
+      />
+
       <CtaBand
+        intent="audit"
         placement="fleuristes_footer"
-        title="Commençons par un diagnostic honnête de votre présence en ligne"
-        lede="Site actuel, fiche Google, visibilité locale face à vos concurrents : vous recevez une analyse humaine et concrète, gratuite et sans engagement."
+        title="Commençons par un diagnostic."
+        lede="Site actuel, fiche Google, visibilité face aux fleuristes voisins&nbsp;: une analyse humaine et concrète, gratuite et sans engagement."
       />
     </>
+  );
+}
+
+function SeasonCell({ season }: { season: Season }) {
+  return (
+    <Reveal className={`${season.span} flex`}>
+      <article
+        className={`leaf flex w-full flex-col justify-between gap-8 p-7 sm:p-9 ${seasonTones[season.tone]}`}
+      >
+        <h3 className={season.lead ? "text-display-lg" : "text-display-md"}>{season.title}</h3>
+        <p
+          className={`leading-relaxed text-forest-soft ${
+            season.lead ? "max-w-xl text-[1.06rem]" : "text-[0.98rem]"
+          }`}
+        >
+          {season.body}
+        </p>
+      </article>
+    </Reveal>
   );
 }

@@ -1,5 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Icon } from "@phosphor-icons/react";
+import {
+  ArrowDown,
+  CalendarCheck,
+  Certificate,
+  Check,
+  Funnel,
+  Path,
+} from "@phosphor-icons/react/dist/ssr";
 
 import {
   RamonageBookingModal,
@@ -8,19 +17,23 @@ import {
 import { RamonageSimulator } from "@/components/ramonage/RamonageSimulator";
 import { RamonageSiteShowcase } from "@/components/ramonage/RamonageSiteShowcase";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { ButtonArrow, buttonClass } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { CtaBand } from "@/components/ui/CtaBand";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { Kicker } from "@/components/ui/Kicker";
+import { PageHero } from "@/components/ui/PageHero";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { PhoneFrame } from "@/components/visuals/DeviceFrame";
 import { ramonagePage as copy } from "@/lib/ramonage";
 import { serviceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Site internet pour ramoneur : réservations & tournées",
+  title: "Site internet pour ramoneur : réservations & tournées",
   description:
-    "Un site pensé pour les ramoneurs : réservation en ligne, tournées par commune et suivi des interventions. Ouvrez le site que nous avons conçu.",
+    "Un site pensé pour les ramoneurs : réservation en ligne, tournées par commune et suivi des interventions. Ouvrez le site que nous avons conçu.",
   path: "/ramonage",
 });
 
@@ -29,15 +42,57 @@ const crumbs = [
   { name: "Ramoneurs", path: "/ramonage" },
 ];
 
+/** Une icône par repère, dans l'ordre de `copy.markers`. */
+const markerIcons: Icon[] = [CalendarCheck, Funnel, Path, Certificate];
+
 /**
- * Page ramoneur — une seule ligne narrative, six bandes.
+ * Hero : le métier d'abord (la photographie), le site ensuite (le mobile de
+ * RamoPlus, ancré au bord bas de la photo). Desktop : colonne de droite.
+ * Mobile : sous le texte, téléphone plus petit, toujours ancré au même bord.
+ */
+function HeroVisual() {
+  return (
+    <figure className="relative pb-10 sm:pb-14">
+      <div className="leaf-lg relative aspect-[4/3] overflow-hidden bg-mint">
+        <Image
+          src="/ramonage/ramoneur-intervention.webp"
+          alt={copy.hero.imageAlt}
+          fill
+          sizes="(min-width: 1024px) 38vw, 100vw"
+          loading="eager"
+          fetchPriority="high"
+          className="object-cover object-[42%_center]"
+        />
+      </div>
+      <PhoneFrame className="absolute bottom-0 right-5 w-[6.75rem] sm:right-10 sm:w-36 lg:right-8 lg:w-[8.5rem] xl:w-40">
+        <Image
+          src="/ramonage/ramoplus-accueil-mobile.webp"
+          alt={copy.hero.phoneAlt}
+          width={780}
+          height={1688}
+          sizes="10rem"
+          className="h-auto w-full"
+        />
+      </PhoneFrame>
+    </figure>
+  );
+}
+
+/**
+ * /ramonage : une seule ligne narrative.
  *
- * Rythme des fonds : paper (hero) → cream (vitrine) → cream-deep (parcours)
- * → paper (diptyque) → cream (questions) → plum (appel). Chaque bande est
- * séparée par un filet, et tous les visuels passent par la même famille de
- * cadres : capture réelle en `BrowserFrame` / `PhoneFrame`, parcours jouable
- * en `PanelFrame`, photographie et illustrations dans le même cadre `rounded-sm`
- * au même rapport 4/3.
+ * 1. Hero (texte, photo du métier + mobile du site).
+ * 2. Repères : quatre tuiles soudées en un seul bandeau (2 × 2 en tablette,
+ *    une colonne en mobile).
+ * 3. Vitrine : titre au-dessus, capture réelle en grand.
+ * 4. Parcours jouable (#reservation) : titre collant à gauche, panneau à
+ *    droite. Mobile : titre puis panneau.
+ * 5. Diptyque avant / après : deux volets côte à côte, le second décalé.
+ *    Mobile : l'un sous l'autre.
+ * 6. Questions, en colonne de lecture. Puis la bande finale (diagnostic).
+ *
+ * Les deux déclencheurs de la modale (hero et parcours) portent l'appel
+ * principal ; la bande finale offre l'entrée la plus légère.
  */
 export default function RamonagePage() {
   const faq = copy.faq.items.map((item) => ({
@@ -51,188 +106,138 @@ export default function RamonagePage() {
         data={serviceSchema({
           name: "Création de site pour ramoneur et fumiste",
           description:
-            "Conception de sites internet spécialisés pour artisans ramoneurs et entreprises de fumisterie : réservation en ligne, gestion des tournées, certificats et visibilité locale.",
+            "Conception de sites internet spécialisés pour artisans ramoneurs et entreprises de fumisterie : réservation en ligne, gestion des tournées, certificats et visibilité locale.",
           path: "/ramonage",
           serviceType: "Création de site internet spécialisé",
           audience: "Ramoneurs et entreprises de fumisterie",
         })}
       />
 
-      {/* 1 — Hero et repères, une seule bande : le titre et ses quatre preuves
-          de fonctionnement ne se lisent pas séparément. */}
-      <section className="overflow-hidden border-b border-hairline bg-paper">
-        <Container width="wide" className="py-8 sm:py-12 lg:py-16">
-          <Breadcrumbs items={crumbs} />
-          <div className="mt-8 grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
-            <div className="max-w-2xl">
-              <Eyebrow>{copy.hero.eyebrow}</Eyebrow>
-              <h1 className="text-display-xl mt-6">{copy.hero.title}</h1>
-              <p className="lede mt-6 max-w-xl">{copy.hero.lede}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <RamonageBookingTrigger variant="primary">
-                  {copy.hero.primaryCta}
-                </RamonageBookingTrigger>
-                <Link
-                  href="#reservation"
-                  className="press inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink/15 bg-paper px-7 py-3 text-[0.95rem] font-semibold text-ink transition-colors duration-150 hover:border-ink/40"
-                >
-                  {copy.hero.secondaryCta} ↓
-                </Link>
-              </div>
-            </div>
-
-            <figure className="relative min-w-0 lg:pl-6">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-hairline bg-cream-deep shadow-lift">
-                <Image
-                  src="/ramonage/ramoneur-intervention.webp"
-                  alt={copy.hero.imageAlt}
-                  fill
-                  sizes="(max-width: 1023px) 100vw, 54vw"
-                  loading="eager"
-                  fetchPriority="high"
-                  className="object-cover object-[56%_center] lg:object-[48%_center]"
-                />
-              </div>
-              <figcaption className="relative -mt-8 ml-5 max-w-xs rounded-sm border border-hairline bg-cream p-4 text-sm leading-relaxed text-ink shadow-lift sm:ml-auto sm:mr-6">
-                {copy.hero.imageCaption}
-              </figcaption>
-            </figure>
-          </div>
-
-          <ul className="mt-12 grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
-            {copy.markers.map((marker) => (
-              <li key={marker.label} className="border-t border-hairline pt-4">
-                <p className="plate-label text-ink">{marker.label}</p>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                  {marker.body}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
-
-      {/* 2 — Montrer avant de raconter : la capture réelle du site en ligne. */}
-      <section className="py-16 sm:py-24">
-        <Container width="wide">
-          <SectionHead
-            align="split"
-            eyebrow={copy.showcase.eyebrow}
-            title={copy.showcase.title}
-            lede={copy.showcase.lede}
-            className="mb-12"
-          />
-          <RamonageSiteShowcase />
-        </Container>
-      </section>
-
-      {/* 3 — Le moteur du site précédent, cette fois jouable. */}
-      <section
-        id="reservation"
-        className="scroll-mt-24 border-y border-hairline bg-cream-deep py-16 sm:py-24"
+      <PageHero
+        crumbs={crumbs}
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        lede={copy.hero.lede}
+        aside={<HeroVisual />}
       >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <RamonageBookingTrigger variant="primary">
+            {copy.hero.primaryCta}
+            <ButtonArrow />
+          </RamonageBookingTrigger>
+          <a href="#reservation" className={buttonClass("secondary")}>
+            {copy.hero.secondaryCta}
+            <ArrowDown aria-hidden="true" weight="bold" className="size-4" />
+          </a>
+        </div>
+      </PageHero>
+
+      {/* 2. Repères : ce que le site fait, en quatre lignes. */}
+      <section aria-label="Ce que fait le site" className="pb-24 sm:pb-32">
         <Container width="wide">
-          <SectionHead
-            align="split"
-            eyebrow={copy.booking.eyebrow}
-            title={copy.booking.title}
-            lede={copy.booking.lede}
-            className="mb-12"
-          />
-          <RamonageSimulator />
+          <dl className="leaf-lg grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+            {copy.markers.map((marker, index) => {
+              const MarkerIcon = markerIcons[index] ?? Check;
+              return (
+                <div key={marker.label} className="bg-white px-6 py-8 sm:px-8 sm:py-10">
+                  <MarkerIcon aria-hidden="true" className="size-8 text-bloom-ink" />
+                  <dt className="text-display-sm mt-6">{marker.label}</dt>
+                  <dd className="mt-2 max-w-[30ch] text-[0.98rem] leading-relaxed text-forest-soft">
+                    {marker.body}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
         </Container>
       </section>
 
-      {/* 4 — Diptyque : deux volets de même gabarit, en miroir. */}
-      <section className="border-b border-hairline bg-paper py-16 sm:py-24">
+      {/* 3. Montrer avant de raconter : la capture réelle du site en ligne. */}
+      <section className="pb-24 sm:pb-32">
         <Container width="wide">
-          <SectionHead
-            align="split"
-            eyebrow={copy.field.eyebrow}
-            title={copy.field.title}
-            lede={copy.field.lede}
-          />
+          <SectionHead title={copy.showcase.title} lede={copy.showcase.lede} className="mb-12 sm:mb-14" />
+          <Reveal>
+            <RamonageSiteShowcase />
+          </Reveal>
+        </Container>
+      </section>
 
-          {copy.field.panels.map((panel, index) => (
-            <div
-              key={panel.title}
-              className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-16 ${
-                index === 0 ? "mt-12" : "mt-12 border-t border-hairline pt-12 lg:mt-16 lg:pt-16"
-              }`}
-            >
-              <figure
-                className={`relative aspect-[4/3] overflow-hidden rounded-sm border border-hairline bg-cream-deep shadow-lift ${
-                  index % 2 === 1 ? "lg:order-2" : ""
-                }`}
-              >
-                <Image
-                  src={panel.image}
-                  alt={panel.imageAlt}
-                  fill
-                  sizes="(max-width: 1023px) 100vw, 46vw"
-                  className="object-cover"
-                />
-              </figure>
-
-              <div className={index % 2 === 1 ? "lg:order-1" : ""}>
-                <Eyebrow>{panel.eyebrow}</Eyebrow>
-                <h3 className="text-display-md mt-5">{panel.title}</h3>
-                <p className="mt-4 leading-relaxed text-ink-soft">{panel.body}</p>
-                <ul className="mt-7 divide-y divide-hairline border-y border-hairline">
-                  {panel.points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex gap-3 py-3.5 text-sm leading-relaxed text-ink-soft"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="mt-2 size-1.5 shrink-0 rounded-full bg-rose"
-                      />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
+      {/* 4. Le moteur du site précédent, cette fois jouable. */}
+      <section id="reservation" className="scroll-mt-24 border-y border-line bg-mint/45 py-24 sm:py-32">
+        <Container width="wide">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-28">
+                <Kicker ruled className="mb-6">
+                  {copy.booking.eyebrow}
+                </Kicker>
+                <h2 className="text-display-lg">{copy.booking.title}</h2>
+                <p className="lede mt-5">{copy.booking.lede}</p>
+                <p className="caption mt-8 max-w-xs">{copy.booking.note}</p>
               </div>
             </div>
-          ))}
+            <div className="min-w-0 lg:col-span-8">
+              <RamonageSimulator />
+            </div>
+          </div>
         </Container>
       </section>
 
-      {/* 5 — Questions de terrain. */}
-      <section className="py-16 sm:py-24">
+      {/* 5. Diptyque : avant le passage, après le passage. */}
+      <section className="py-24 sm:py-32">
+        <Container width="wide">
+          <SectionHead title={copy.field.title} lede={copy.field.lede} />
+          <div className="mt-14 grid gap-16 md:grid-cols-2 md:gap-8 lg:gap-14">
+            {copy.field.panels.map((panel, index) => (
+              <Reveal key={panel.title} delay={index * 80} className={index === 1 ? "md:mt-24" : ""}>
+                <article>
+                  <div className="leaf relative aspect-[4/3] overflow-hidden bg-mint">
+                    <Image
+                      src={panel.image}
+                      alt={panel.imageAlt}
+                      fill
+                      sizes="(min-width: 768px) 44vw, 100vw"
+                      className={`object-cover ${index === 1 ? "object-[50%_42%]" : "object-center"}`}
+                    />
+                  </div>
+                  <p className="mt-8 text-[0.95rem] font-semibold text-bloom-ink">{panel.eyebrow}</p>
+                  <h3 className="text-display-md mt-2">{panel.title}</h3>
+                  <p className="mt-4 max-w-xl text-[1.02rem] leading-relaxed text-forest-soft">
+                    {panel.body}
+                  </p>
+                  <ul className="mt-6 max-w-xl space-y-3">
+                    {panel.points.map((point) => (
+                      <li key={point} className="flex gap-3 text-[0.98rem] leading-relaxed text-forest">
+                        <Check aria-hidden="true" weight="bold" className="mt-1 size-4 shrink-0 text-bloom-ink" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* 6. Questions de terrain, en colonne de lecture. */}
+      <section className="border-t border-line py-24 sm:py-32">
         <Container width="narrow">
-          <SectionHead
-            align="left"
-            eyebrow={copy.faq.eyebrow}
-            title={copy.faq.title}
-            className="mb-10"
-          />
+          <SectionHead title={copy.faq.title} className="mb-10" />
           <FaqAccordion items={faq} />
-          <p className="prose-links mt-8 text-sm text-ink-soft">
+          <p className="prose-links mt-10 text-[0.98rem] leading-relaxed text-forest-soft">
             Découvrez aussi notre <Link href="/sites-internet">approche des sites internet</Link>{" "}
             ou notre <Link href="/methode">méthode de travail</Link>.
           </p>
         </Container>
       </section>
 
-      {/* 6 — L'appel, seule bande sombre de la page. */}
-      <section className="on-ink border-t border-hairline bg-plum py-16 text-cream sm:py-24">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <Eyebrow>{copy.closing.eyebrow}</Eyebrow>
-            <h2 className="text-display-lg mt-6">{copy.closing.title}</h2>
-            <p className="mx-auto mt-5 max-w-xl leading-relaxed text-cream/75">
-              {copy.closing.lede}
-            </p>
-            <div className="mt-9 flex flex-col items-center gap-4">
-              <RamonageBookingTrigger variant="onInk">
-                {copy.closing.cta}
-              </RamonageBookingTrigger>
-              <p className="text-xs text-cream/60">{copy.closing.reassurance}</p>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <CtaBand
+        placement="ramonage_footer"
+        intent="audit"
+        title={copy.closing.title}
+        lede={copy.closing.lede}
+      />
 
       <RamonageBookingModal />
     </>

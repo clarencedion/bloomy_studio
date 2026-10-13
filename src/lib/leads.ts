@@ -50,7 +50,7 @@ export async function storeLead(lead: Lead): Promise<boolean> {
 
   // Repli explicite : visible dans les logs serveur, jamais silencieux.
   console.warn(
-    "[leads] Firestore non configuré — lead journalisé uniquement :",
+    "[leads] Firestore non configuré, lead journalisé uniquement :",
     JSON.stringify({ kind: record.kind, email: record.email, createdAt: record.createdAt }),
   );
   return false;
@@ -58,7 +58,7 @@ export async function storeLead(lead: Lead): Promise<boolean> {
 
 /**
  * Notification e-mail via Resend, si RESEND_API_KEY est configurée.
- * Clé lue uniquement côté serveur — jamais exposée au client.
+ * Clé lue uniquement côté serveur, jamais exposée au client.
  */
 export async function notifyTeam(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -92,7 +92,7 @@ export async function notifyTeam(lead: Lead): Promise<void> {
       body: JSON.stringify({
         from,
         to: [site.email],
-        subject: `[Bloomy Studio] Nouvelle demande ${lead.kind} — ${lead.name}`,
+        subject: `[Bloomy Studio] Nouvelle demande ${lead.kind} : ${lead.name}`,
         text: lines,
       }),
     });

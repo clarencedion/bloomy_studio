@@ -123,16 +123,16 @@ test("le parcours de réservation de /ramonage se joue en trois étapes", async 
   // n'est pas atteint : c'est la règle du tunnel réel, pas un détail d'UI.
   const recap = panel.getByRole("button", { name: /Voir le récapitulatif/ });
   await expect(recap).toBeDisabled();
-  await panel.getByRole("button", { name: "10 h – 12 h" }).click();
+  await panel.getByRole("button", { name: "10 h à 12 h" }).click();
   await panel.getByRole("button", { name: "Jeudi 5" }).click();
-  await panel.getByRole("button", { name: "8 h – 10 h" }).click();
+  await panel.getByRole("button", { name: "8 h à 10 h" }).click();
   await expect(panel.getByText("2 / 5 créneaux proposés")).toBeVisible();
   await recap.click();
 
   // Étape 3 — le dossier reprend les choix précédents.
   await expect(panel.getByText("La demande arrive complète.")).toBeVisible();
   await expect(panel.getByText("Poêle à granulés")).toBeVisible();
-  await expect(panel.getByText("Jeudi 5 · 8 h – 10 h")).toBeVisible();
+  await expect(panel.getByText("Jeudi 5 · 8 h à 10 h")).toBeVisible();
 
   // Et il ouvre la modale de prise de contact du studio.
   await panel.getByRole("button", { name: "Créer mon site ramoneur" }).click();

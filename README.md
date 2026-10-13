@@ -85,7 +85,31 @@ Le site tourne sur un backend **Firebase App Hosting** (`bloomystudio`, europe-w
 ```bash
 # Déploiement depuis la source locale (pas besoin de pousser sur GitHub)
 firebase deploy --only apphosting --project bloomy-antigravity
+
+# Puis, toujours : vérifier que chaque image de chaque page répond
+npm run check:images
 ```
+
+**Ce qui part en production.** La CLI zippe le dossier en excluant la liste
+`ignore` de `firebase.json` **et** chaque ligne du `.gitignore` (d'où les
+entrées `.shots` et `assets` : 500 Mo de captures de contrôle n'ont rien à
+faire dans l'archive). Sur App Hosting, l'adaptateur Next.js construit en mode
+`standalone`, puis copie `public/` dans le bundle **uniquement si
+`.next/standalone/public` n'existe pas déjà**.
+
+> **Incident du 2026-10-03.** L'image Open Graph lisait le logo dans
+> `public/brand/` : le traçage de Next a créé `.next/standalone/public` avec
+> ces six SVG, l'adaptateur a sauté la copie, et **toutes les images WebP
+> répondaient 404** en production alors que tout fonctionnait en local.
+> Corrigé dans `next.config.ts` (`outputFileTracingExcludes` sur `public/`),
+> verrouillé par `tests/unit/build-hygiene.test.ts`. Reproduire le build
+> d'App Hosting en local, au besoin :
+> `FRAMEWORK_VERSION=16.2.11 npx -p @apphosting/adapter-nextjs@14.0.21 apphosting-adapter-nextjs-build`
+> dans une copie du dépôt, puis `node .next/standalone/server.js`.
+
+L'adaptateur impose aussi `images.unoptimized: true` si la configuration ne
+dit rien ; `next.config.ts` le met explicitement à `false` pour que
+`/_next/image` serve des captures à la bonne taille.
 
 1. Configuration runtime dans `apphosting.yaml` : instances, `NEXT_PUBLIC_SITE_URL`, secrets commentés.
 2. Secrets : `firebase apphosting:secrets:set RESEND_API_KEY`, puis décommenter le bloc correspondant.
@@ -97,7 +121,7 @@ firebase deploy --only apphosting --project bloomy-antigravity
 
 ## Captures des réalisations
 
-`npm run captures` reprend les captures desktop et mobile des sites livrés depuis leur version en ligne, les convertit en WebP sous 100 Ko et les écrit dans `public/realisations/`. La liste des sources vit dans `scripts/capture-realisations.mjs` ; les métadonnées (ville, secteur, légende) dans `src/lib/portfolio.ts`. À relancer après toute refonte d'un site client.
+`npm run captures` reprend les captures des sites du portfolio depuis leur version en ligne, en trois formats : desktop (WebP < 100 Ko) et mobile dans `public/realisations/`, et une capture longue de la page entière (< 190 Ko) dans `public/realisations/long/`, que la vitrine fait défiler au survol. `npm run captures -- slug1 slug2` ne reprend que certains sites. La liste des sources vit dans `scripts/capture-realisations.mjs` ; les métadonnées (ville, secteur, légende, nature client ou concept, teinte du panneau) dans `src/lib/portfolio.ts`. À relancer après toute refonte d'un site.
 
 ## Avant le lancement public
 

@@ -777,6 +777,198 @@ Ajouter une entrée par session. Ne jamais supprimer une entrée passée.
 | 2026-07-31 | Refonte complète (brief ci-dessus) + création d'un fichier de suivi pour continuité inter-conversation | Lecture de l'état actuel du dépôt (routes, `docs/`, historique git). Création de ce fichier (`docs/refonte-suivi.md`). **Aucun changement de code, de contenu ou de design n'a encore été fait pour ce brief.** | Phase 1 (audit formel page par page par rapport au brief), Phase 2 (stratégie créative : concept en une phrase, principes, matrice de références), puis Phases 3–5 (design, build, QA) — voir §1 « Required workflow ». |
 | 2026-07-31 | « on y va tu fais tout » — exécution autonome des Phases 1–5 | **Conclusion stratégique (Phase 2) :** le système « atelier clair » documenté dans `AGENTS.md`/`direction-artistique.md` est déjà cohérent, discipliné et conforme à l'esprit anti-patterns-IA du brief (pas de glassmorphism, pas de bento, pas de gradient, pas de preuve inventée) — décision : **évoluer/corriger l'existant plutôt que le remplacer**, conformément à la clause du brief « if the existing identity is strong, evolve it rather than replacing it blindly ». Audit complet (3 agents en parallèle : contenu/SEO, système de design/animation, tests/intégrité) puis corrections réelles : <br>• **Budget d'animation** — `band-drift` (parallaxe scroll sur 4 bandes photo) supprimé de `globals.css` et de ses 4 usages : ce pattern n'est pas dans les 5 animations autorisées par `direction-artistique.md` §4.4 et recoupe l'interdit explicite « parallaxe lourde ». `fade-up-late` restreint au Hero (`PageHero.tsx` utilise désormais `<Reveal>`, déjà comptée dans le budget, au lieu de réutiliser l'animation d'entrée du hero sur chaque page intérieure). <br>• **Discipline `bloom`** vérifiée : n'apparaît que via la pastille `.pill` (un usage explicitement sanctionné par la règle), jamais combiné à un autre usage bloom dans un même écran — conforme, aucun changement. <br>• **Hygiène technique** : `public/photos/_raw/` (18 Mo de PNG sources, gitignorés mais servis publiquement lors d'un déploiement depuis la source locale) déplacé vers `assets/photos-raw/`, hors de `public/` ; script `optimize-images.mjs` et `.gitignore` mis à jour. Deux photos orphelines supprimées. Champ mort `site.legalName` supprimé (jamais lu, redondant avec `legal.ts`). <br>• **SEO** : titles/descriptions hors clou (50–60/130–150 car.) corrigés sur 11 pages + 2 articles de blog (mesuré précisément par script, pas à l'estimation). <br>• **Intégrité du contenu** : légende de `CaseSpotlight` reformulée (affirmation d'usage non vérifiable → principe de conception assumé, cohérent avec la règle « aucune preuve inventée »). URLs `liveUrl` du portfolio vérifiées par fetch réel (domaine perso + repli `.web.app` = même site, conforme). <br>• **Tests de garde-fou ajoutés** (rules d'`AGENTS.md` jusqu'ici non testées) : `mainNav.length <= 6`, budget de poids `< 100 Ko` sur `public/realisations/*.webp`, présence de `"server-only"` sur les modules sensibles (nouveau fichier `tests/unit/build-hygiene.test.ts`), et règle d'espacement après un lien (`</a>` collé au texte suivant) vérifiée sur le HTML rendu de chaque route dans `tests/e2e/site.spec.ts`. <br>• **Contenu** : accueil dégraissé (~65 mots, FAQ redondante avec la démo d'administration retirée, aparté technique de `ProductLab` coupé — sans toucher à une section). Les 3 articles de blog étoffés de ~650–900 mots chacun (contenu réel : pièges UX, accessibilité, calendrier de visibilité, exemple de calcul chiffré explicitement labellisé illustratif, questions à poser à une plateforme) pour dépasser 1500 mots (mesuré par script sur le texte réellement rendu). `/fleuristes/maintenance` et `/fleuristes/site-internet` étoffées (nouvelle section « démarrage » à 3 étapes, nouveau FAQ, paragraphe de positionnement) pour dépasser 800 mots. <br>• **Vérification** : `npm run lint`, `typecheck`, `test` (26 tests, tous verts), `build` et `e2e` (55 passés / 1 skip) tous verts. Contrôle visuel réel via Playwright (desktop + mobile, `prefers-reduced-motion: reduce` pour vérifier le contenu sans dépendre du timing du scroll-reveal) sur l'accueil, les deux pages fleuristes étoffées et un article de blog — rendu conforme au système, aucune régression. | **Non fait dans cette session, à faire ensuite si l'utilisateur le souhaite :** (1) pages légales toujours `noindex` — `lib/legal.ts` a besoin de vraies données d'entité (SIREN, forme juridique, adresse du siège...) qu'aucune IA ne peut inventer ; (2) le reste du site (`/services`, `/salons-de-coiffure`, `/realisations`, `/methode`, `/a-propos`, etc.) n'a pas eu la même passe de relecture ligne à ligne que les pages touchées ici — l'audit initial n'a rien signalé de cassé dessus, mais elles n'ont pas été retravaillées activement ; (3) Phase 5 du brief demande aussi un test de compatibilité multi-navigateurs (Safari/iOS réel) — seul Chromium a été testé ici, conformément à `playwright.config.ts` actuel. |
 
+### Session 2026-10-13 : capture La Fine Fleur, 28 projets ajoutés, adresses masquées
+
+**Demande :** corriger la capture de La Fine Fleur (barre de navigation au
+milieu du titre), ajouter les sites de la liste fournie (PDF de 36 domaines
+vercel.app) « en faisant attention à ne pas montrer les liens en clair, la
+plupart sont des liens de dev ».
+
+**Fait :**
+
+- **La Fine Fleur** : seule la capture longue était fautive (le site gardait
+  son en-tête « défilé » après le passage de défilement). Le script de
+  capture fige désormais la page longue en `prefers-reduced-motion: reduce`
+  et attend 2 s après le retour en haut ; option de délai par site pour les
+  animations d'introduction (Nature & Sens, Nailac, Maison Lisière).
+- **Tri des 36 domaines**, chacun ouvert dans un navigateur :
+  - 12 entreprises réelles sans mention de démonstration → `kind: "recent"`
+    (« Projet récent ») : L'Agave, Blandine Vallé, Maison MaNa, Manon Fleurs
+    du Sud, Nature & Sens, Bonheurs Nature, Rosset, Les P'tits Goûters
+    d'Élise, AIDF, Garage de l'Industrie, Milesi Services, Isler.
+  - 5 propositions de refonte non commandées pour des entreprises réelles
+    (le site l'écrit : « maquette non officielle ») → `concept` : Sitaclim,
+    Thermibel, Paoli Immobilier, Nailac Passion, Alliantherm.
+  - 11 démonstrations à entreprise fictive → `concept` : Maison Lisière,
+    Chatoyance, Glaçage, Odette, Écrin, Lunule, Atelier Laque, Opaline,
+    Morgane Perrion, Garage Bielle, Garage Auto (milesi-atelier).
+  - Écartés : `nails-by-cindy-laque` (même gabarit qu'Atelier Laque),
+    `milesi-automobile-chi` (deuxième version de Milesi Services), les deux
+    signatures e-mail Net Plus et l'agenda interne KIVO (pas des sites).
+  - Déjà présents : Nails by Cindy, Domaine des Aurores, GB Performance.
+- **Portfolio : 51 projets** (21 livrés, 12 récents, 18 concepts), nouveaux
+  filtres Garages & automobile, Immobilier ; la page réalisations affiche les
+  projets par lots de douze.
+- **Restaurants (même jour)** : sept démonstrations ajoutées (Sillon,
+  Fanchon, Rameau, Lauro, Hanare, Tison, Maillard ; chacune écrit
+  « restaurant fictif, site de démonstration ») → `concept`. Le filtre
+  « Cafés & gourmandises » devient « Restaurants & cafés » (`restaurant`),
+  qui regroupe aussi Les P'tits Goûters d'Élise. Total : **58 projets**
+  (21 livrés, 12 récents, 25 concepts).
+- **Adresses masquées** : `siteHost()` ne renvoie plus jamais un domaine de
+  développement ; `LiveSiteLink` écrit « Voir le site » / « Voir le
+  concept ». Appliqué aussi aux anciens sites en `.web.app` et à RamoPlus
+  (`pages.dev`). Tests unitaire et e2e ajoutés.
+- Copie corrigée : « Aucun modèle décliné » retiré de l'accueil (plusieurs
+  sites fleuristes partagent la base Bloomy) ; la galerie « Des sites en
+  ligne, pas des maquettes » de `/sites-internet` ne contient plus de concept.
+
+**À confirmer par l'utilisateur :** le statut réel des 12 « projets récents »
+(livrés ou non) ; l'accord des cinq entreprises dont la refonte non commandée
+est montrée sous leur nom.
+
+### Session 2026-10-03 : images cassées en production après le déploiement
+
+**Symptôme (signalé par l'utilisateur, capture à l'appui) :** sur
+studio.bloomy.one, aucune image ne s'affiche ; les cadres de navigateur et de
+téléphone sont vides. En local, tout fonctionnait.
+
+**Diagnostic, vérifié pas à pas :**
+
+- En production, toutes les `.webp` de `public/` répondent 404 (page 404 de
+  Next) ; les `.svg` de `public/brand/` répondent 200.
+- L'archive envoyée (`gs://firebaseapphosting-sources-…`) et l'espace de
+  travail de Cloud Build contiennent bien les 89 WebP : rien n'est perdu à
+  l'envoi.
+- L'adaptateur `@apphosting/adapter-nextjs` 14.0.21 copie `public/` dans
+  `.next/standalone` **seulement si le dossier n'y existe pas déjà**. Or
+  `src/app/opengraph-image.tsx` lit le logo dans `public/brand/` avec
+  `readFileSync` : le traçage de Next a créé `.next/standalone/public/brand/`
+  avec six SVG, et l'adaptateur a sauté la copie du reste.
+- Reproduit à l'identique en local en lançant l'adaptateur sur une copie du
+  dépôt (`standalone/public` = 6 SVG).
+- Second effet de l'adaptateur : `images.unoptimized: true` imposé quand la
+  configuration ne dit rien, donc captures servies en taille réelle.
+
+**Correctif :** `next.config.ts` exclut `public/**/*` du traçage
+(`outputFileTracingExcludes`) et pose `images.unoptimized: false`. Vérifié sur
+le build reproduit : `standalone/public` complet (89 WebP + 6 SVG), `sharp`
+embarqué, `/_next/image` répond, et le nouveau script `npm run check:images`
+contrôle 714 URL d'images sur les 27 routes, zéro échec (contre 64 échecs sur
+68 sur la production d'alors). Test de non-régression dans
+`tests/unit/build-hygiene.test.ts`, règle ajoutée à `AGENTS.md`, procédure
+dans le README.
+
+**Reste à faire par l'utilisateur :** redéployer
+(`firebase deploy --only apphosting --project bloomy-antigravity`), puis
+`npm run check:images`.
+
+### Session 2026-10-02 : refonte « Tige & fleur », nouveau logo, portfolio élargi
+
+**Demande (verbatim, traduite) :** « Utilise ce logo et, pour le design du
+site, refais-le avec les skills de tasteskill.dev (toutes celles qui sont
+nécessaires). Je veux un design de site vraiment unique pour une agence web ;
+il y a déjà une bonne base mais tu peux tout réimaginer. Ce doit être un beau
+site qui montre ce dont nous sommes capables. Ajoute aussi ces sites :
+nails-by-cindy-beta.vercel.app, domaine-des-aurores.vercel.app,
+gb-performance.vercel.app. Le site fleuriste à montrer est
+osmoseflorale-ain.fr. Et refais les captures des sites existants, ils ont
+changé. »
+
+C'est l'arbitrage que le § 4 point 4 ci-dessous réservait à l'utilisateur :
+une refonte radicale de l'identité visuelle, **explicitement demandée**.
+
+**Ce qui a été fait :**
+
+- **Logo** : le PNG fourni (`assets/brand/bloomy-logo-source.png`) a été
+  vectorisé en deux couches (rose `#F04284`, vert `#0E3F2F`) et décliné dans
+  `public/brand/` (logo complet clair et sombre, mot-symbole, monogramme
+  B + tulipe). Favicon et `apple-icon.png` refaits sur le monogramme.
+- **Skills taste-skill** (dépôt `Leonxlnx/taste-skill`) utilisées :
+  `design-taste-frontend` (lecture du brief, réglages 8/6/3, interdits « AI
+  tells », contrôle final), `redesign-existing-projects` (audit et ordre des
+  leviers), `full-output-enforcement` (aucun gabarit à moitié fini), et
+  `soft-skill` pour la retenue. Les skills de génération d'images n'ont pas
+  servi : le site montre de vraies captures, pas des visuels générés.
+- **Nouveau système « Tige & fleur »** (`docs/direction-artistique.md`, réécrit
+  en entier) : palette tirée du logo, Bricolage Grotesque + Geist, coins
+  « feuille » tirés des feuilles du logo, libellé à filets tiré de « DIGITAL
+  STUDIO », icônes Phosphor. Les anciens jetons restent comme alias de
+  migration dans `globals.css`.
+- **Règles taste-skill adoptées** et ajoutées à `AGENTS.md` : zéro tiret
+  cadratin dans le texte visible (vérifié par un test unitaire sur `src/lib`
+  et par un test e2e sur chaque route), libellés rationnés, un libellé de
+  bouton par intention (`primaryCta`, `auditCta`).
+- **Conversion** : l'action principale devient « Démarrer un projet »
+  (`/contact`, événement `cta_contact_click`) ; le diagnostic gratuit reste
+  l'offre d'entrée des pages métier. Le bandeau d'annonce au-dessus de
+  l'en-tête est supprimé (il doublait l'appel à l'action).
+- **Portfolio** (`lib/portfolio.ts`) : 23 projets. Ajouts : WAW Carrosserie
+  (atelier GB Performance, Saint-Priest, `gb-performance.vercel.app`), et deux
+  **projets concept** (champ `kind: "concept"`) : Nails by Cindy et Domaine
+  des Aurores, qui se déclarent eux-mêmes « maquette » et « site de
+  démonstration » sur leurs propres pages. Ils sont toujours étiquetés
+  « Projet concept » et regroupés dans un filtre dédié, conformément à la
+  règle « aucune preuve inventée ». Osmose Florale pointe désormais vers
+  `osmoseflorale-ain.fr` et ouvre la vitrine. Chaque projet porte une teinte
+  de panneau tirée de son propre site (`tone`).
+- **Captures** : les 23 sites recapturés (69 fichiers) avec le script
+  enrichi : fermeture des bandeaux cookies, défilement préalable pour
+  déclencher les révélations, et un troisième format, la **capture longue**
+  (`public/realisations/long/`), que `ScrollingCapture` fait défiler au
+  survol. Pépinières Raffard défile dans un conteneur interne : sa capture
+  longue ne contenait qu'un écran, elle est retirée (la carte reste
+  immobile).
+- **Pages** : toutes les routes reconstruites sur le nouveau système.
+  - Accueil : hero asymétrique avec le **mur de travaux** (panneau forest où
+    défilent les captures mobiles réelles, pause au clavier), grille de
+    projets à échelles variables (Osmose Florale en tête, captures longues
+    qui défilent au survol), offres en cartes empilées (sticky CSS), secteurs
+    en accordéon d'images, manifeste à l'encre (`animation-timeline`), méthode
+    en frise, Bloomy comme preuve logicielle, fondateurs, questions.
+  - `/realisations` : index filtrable (« Tous les projets » par défaut, filtre
+    « Projets concept »), vitrine Osmose Florale ; l'étude de cas Bloomy est
+    réécrite en récit (faits vérifiables d'abord, chapitres avec sommaire
+    collant ; champs `headline` et `metaTitle` ajoutés à `case-studies.ts`).
+  - Produits, fleuristes (5 pages, toutes ≥ 800 mots ; la fausse page de
+    résultats Google en `div` de `/seo-local`, avec une note inventée, a été
+    supprimée), secteurs, à propos, méthode (les **quatre** jalons réels,
+    l'ancienne page en annonçait cinq), contact, diagnostic, blog (79 tirets
+    réécrits, articles toujours ≥ 1 500 mots), pages légales, 404, image de
+    partage, bandeau cookies.
+  - Formulaires : les champs ne se vident plus après une erreur serveur
+    (envoi via `onSubmit` dans une transition, `action` gardée pour l'envoi
+    sans JavaScript), focus sur le premier champ en erreur.
+- **Outil** : `npm run shot -- <route>` (`scripts/shot.mjs`) produit les
+  captures desktop et mobile d'une page du serveur de dev, en tranches
+  lisibles, avec statut, H1, débordement et erreurs console (dossier
+  `.shots/`, ignoré par Git).
+- **Typographie française** : espace insécable avant `: ; ? !` et dans
+  `48 h`, `0 %` dans la copie (évite les signes orphelins en mobile).
+
+**Pièges rencontrés, à retenir :**
+
+- `buttonClass()` contient `inline-flex` : une classe `hidden` passée en plus
+  perd. Utiliser `max-sm:hidden`.
+- Une piste `w-max` (bande défilante) dans un élément de grille élargit la
+  page : `min-w-0` sur l'élément de grille, `[contain:inline-size]` sur le
+  conteneur qui rogne. Un rail `overflow-x-auto` doit être `relative`, sinon
+  ses descendants en position absolue (texte `sr-only`) s'en échappent.
+- JSX supprime l'espace en fin de ligne après `</strong>`, `</span>` ou une
+  expression `{x}` quand le texte continue à la ligne suivante : écrire
+  `{" "}`.
+- Le travail a été interrompu une fois par la limite d'usage (sept agents en
+  parallèle) : relancer par vagues de quatre au plus.
+
+**Décisions à confirmer par l'utilisateur :**
+
+- WAW Carrosserie (atelier GB Performance) est traité comme un **site client
+  en ligne** sur `gb-performance.vercel.app` (le site porte les vraies
+  coordonnées de l'atelier). Si c'est encore une maquette, passer
+  `kind: "concept"`.
+- Les pages légales restent `noindex` tant que `lib/legal.ts` n'a pas les
+  données réelles de l'entité (inchangé).
+
 ### Session 2026-08-25 — /ramonage : unifier le design et montrer un vrai site
 
 **Demande :** « un design plus uniforme et avec des sections qui se complètent
@@ -921,9 +1113,6 @@ Ce qui reste, par ordre de valeur probable :
    la même passe active.
 3. **Compatibilité navigateur réelle** (Safari/iOS) — seul Chromium a été
    vérifié (config Playwright actuelle).
-4. Si l'utilisateur veut aller au-delà d'une évolution du système existant
-   vers une refonte plus radicale de l'identité visuelle (nouvelle palette,
-   nouvelle typographie) : ce serait contraire à la conclusion de Phase 2
-   ci-dessus (« évoluer, pas remplacer ») et mérite d'être validé
-   explicitement avec l'utilisateur avant d'être entrepris — c'est un choix
-   qui lui appartient, pas une déduction technique.
+4. ~~Refonte radicale de l'identité visuelle~~ : faite le 2026-10-02 à la
+   demande explicite de l'utilisateur (système « Tige & fleur », voir la
+   session du 2026-10-02 et `docs/direction-artistique.md`).

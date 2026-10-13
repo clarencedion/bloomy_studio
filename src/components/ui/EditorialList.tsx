@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+
 import { Reveal } from "@/components/ui/Reveal";
 
 /**
@@ -31,21 +33,17 @@ export type EditorialItem = {
 function Row({ item, dense }: { item: EditorialItem; dense: boolean }) {
   const inner = (
     <div
-      className={`grid gap-x-10 gap-y-2 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] ${
-        dense ? "py-5" : "py-7 sm:py-9"
-      }`}
+      className={`grid gap-x-12 gap-y-3 md:grid-cols-12 ${dense ? "py-6" : "py-8 sm:py-10"}`}
     >
-      <h3 className="text-display-sm transition-colors group-hover:text-rose">
+      <h3 className="text-display-md transition-colors group-hover:text-bloom-ink md:col-span-5">
         {item.title}
       </h3>
-      <div>
-        <p className="leading-relaxed text-ink-soft">{item.body}</p>
+      <div className="md:col-span-7">
+        <p className="max-w-[60ch] text-[1.02rem] leading-relaxed text-forest-soft">{item.body}</p>
         {item.cta ? (
-          <span className="plate-label mt-4 inline-flex items-center gap-1.5 text-rose">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-[0.92rem] font-semibold text-bloom-ink">
             {item.cta}
-            <span aria-hidden="true" className="link-live-arrow">
-              →
-            </span>
+            <ArrowRight aria-hidden="true" weight="bold" className="arrow-nudge size-4" />
           </span>
         ) : null}
       </div>
@@ -71,9 +69,9 @@ export function EditorialList({
   className?: string;
 }) {
   return (
-    <ul className={`border-t border-hairline ${className}`}>
+    <ul className={`border-t border-line ${className}`}>
       {items.map((item, i) => (
-        <li key={item.title} className="border-b border-hairline">
+        <li key={item.title} className="border-b border-line">
           {/* Trois décalages au maximum : au-delà, la page semble charger
               lentement plutôt que se composer. */}
           <Reveal delay={Math.min(i, 2) * 70}>

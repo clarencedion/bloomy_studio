@@ -1,19 +1,24 @@
 import type { ReactNode } from "react";
 
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Kicker } from "@/components/ui/Kicker";
 
 type Props = {
-  eyebrow: string;
+  /**
+   * Libellé facultatif au-dessus du titre. Un pour trois sections au
+   * maximum : la plupart des sections n'en ont pas besoin.
+   */
+  eyebrow?: string;
   title: ReactNode;
   lede?: ReactNode;
   /**
-   * `center` est réservé aux moments forts d'une page — deux au maximum.
-   * Centrer chaque tête de section produit une page symétrique du haut en bas,
-   * sans hiérarchie : c'est le premier signe d'une mise en page automatique.
-   * `split` pose le titre à gauche et le chapô à droite, sur deux colonnes :
-   * la tête devient elle-même un élément de composition.
+   * `center` est réservé à un ou deux moments forts par page. `split` est
+   * conservé pour compatibilité mais rend désormais un empilement à gauche :
+   * le gabarit « grand titre à gauche, petit paragraphe flottant à droite »
+   * est un réflexe de gabarit que le système proscrit.
    */
   align?: "left" | "center" | "split";
+  /** Taille du titre : `lg` par défaut, `xl` pour une section maîtresse. */
+  size?: "lg" | "xl";
   className?: string;
 };
 
@@ -22,39 +27,20 @@ export function SectionHead({
   title,
   lede,
   align = "left",
+  size = "lg",
   className = "",
 }: Props) {
-  if (align === "split") {
-    return (
-      <div
-        className={`grid gap-x-12 gap-y-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-end ${className}`}
-      >
-        <div>
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h2 className="text-display-lg mt-6 max-w-xl">{title}</h2>
-        </div>
-        {lede ? (
-          <p className="prose-links max-w-lg leading-relaxed text-ink-soft lg:pb-2">
-            {lede}
-          </p>
-        ) : null}
-      </div>
-    );
-  }
-
   const centered = align === "center";
   return (
-    <div className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-2xl"} ${className}`}>
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="text-display-lg mt-6">{title}</h2>
+    <div className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl"} ${className}`}>
+      {eyebrow ? (
+        <Kicker ruled={centered} className="mb-6">
+          {eyebrow}
+        </Kicker>
+      ) : null}
+      <h2 className={size === "xl" ? "text-display-xl" : "text-display-lg"}>{title}</h2>
       {lede ? (
-        <p
-          className={`prose-links mt-5 text-[1.05rem] leading-relaxed text-ink-soft ${
-            centered ? "mx-auto max-w-xl" : ""
-          }`}
-        >
-          {lede}
-        </p>
+        <p className={`lede prose-links mt-5 ${centered ? "mx-auto" : ""}`}>{lede}</p>
       ) : null}
     </div>
   );
