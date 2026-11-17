@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { LegalShell } from "@/components/legal/LegalShell";
 import { pageMetadata } from "@/lib/seo";
-import { PLACEHOLDER, hasLegalPlaceholders, legalEntity } from "@/lib/legal";
+import { hasLegalPlaceholders, legalEntity } from "@/lib/legal";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
@@ -20,7 +20,7 @@ export default function CgvPage() {
     <LegalShell
       title="Conditions générales"
       path="/conditions-generales"
-      updatedAt="24 juillet 2026"
+      updatedAt="5 novembre 2026"
     >
       <p>
         Les présentes conditions encadrent les prestations de services
@@ -57,8 +57,14 @@ export default function CgvPage() {
 
       <h2>4. Prix et paiement</h2>
       <p>
-        Modalités de facturation, acompte, échéancier et pénalités de retard :{" "}
-        {PLACEHOLDER}. Les prestations récurrentes (maintenance,
+        Le prix, l&apos;acompte éventuel et l&apos;échéancier de facturation
+        sont fixés par le devis accepté. Sauf mention contraire du devis, les
+        factures sont payables à 30 jours à compter de leur date d&apos;émission.
+        Tout retard de paiement entraîne de plein droit, sans rappel
+        préalable, des pénalités égales au taux de refinancement de la Banque
+        centrale européenne majoré de 10 points, ainsi qu&apos;une indemnité
+        forfaitaire de 40 € pour frais de recouvrement (articles L441-10 et
+        D441-5 du Code de commerce). Les prestations récurrentes (maintenance,
         accompagnement) sont facturées mensuellement et résiliables selon les
         modalités du devis.
       </p>
@@ -71,7 +77,10 @@ export default function CgvPage() {
         d&apos;affaires ne peut être garanti : toute promesse contraire serait
         trompeuse. La responsabilité de {legalEntity.name} est limitée au
         montant des sommes effectivement versées au titre de la prestation
-        concernée. {PLACEHOLDER}
+        concernée. Elle ne couvre pas les dommages indirects (perte de
+        chiffre d&apos;affaires, de clientèle ou de données), ni les
+        interruptions imputables aux hébergeurs, aux plateformes tierces ou au
+        client.
       </p>
 
       <h2>6. Données personnelles</h2>
@@ -87,7 +96,8 @@ export default function CgvPage() {
       <p>
         Les présentes conditions sont soumises au droit français. En cas de
         litige, une résolution amiable sera recherchée avant toute action ;
-        juridiction compétente : {PLACEHOLDER}.
+        à défaut d&apos;accord, compétence exclusive est attribuée au{" "}
+        {legalEntity.court}.
       </p>
     </LegalShell>
   );

@@ -8,7 +8,13 @@ export const SITE_URL = (
 ).replace(/\/$/, "");
 
 export const site = {
-  name: "Bloomy Studio",
+  /**
+   * Nom de marque, celui du logo. C'est lui que Google affiche comme nom du
+   * site (données structurées WebSite, `og:site_name`, suffixe des titres).
+   * « Bloomy Studio » reste déclaré comme nom alternatif.
+   */
+  name: "Bloomy Digital Studio",
+  alternateName: "Bloomy Studio",
   tagline: "Des sites qui font éclore votre activité.",
   description:
     "Agence de développement web à Nantes : sites vitrines, e-commerce, MVP et micro SaaS sur mesure, conçus et développés par un studio de deux personnes.",

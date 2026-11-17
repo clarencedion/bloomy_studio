@@ -34,8 +34,8 @@ const geist = Geist({
 export const metadata: Metadata = {
   metadataBase,
   title: {
-    default: "Bloomy Studio | Agence de développement web à Nantes",
-    template: "%s | Bloomy Studio",
+    default: "Bloomy Digital Studio | Agence de développement web à Nantes",
+    template: "%s | Bloomy Digital Studio",
   },
   description: site.description,
   applicationName: site.name,

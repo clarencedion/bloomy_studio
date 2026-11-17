@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SITE_URL, absoluteUrl, site } from "@/lib/site";
 
 type PageMeta = {
-  /** Title 50–60 caractères, mot-clé devant. Le gabarit ajoute « | Bloomy Studio ». */
+  /** Title 50–60 caractères, mot-clé devant. Le gabarit ajoute « | Bloomy Digital Studio ». */
   title: string;
   /** Meta description 130–150 caractères, sans guillemets. */
   description: string;

@@ -18,8 +18,6 @@ import { join } from "node:path";
  */
 const SITES = [
   ["osmose-florale", "https://osmoseflorale-ain.fr/"],
-  ["gb-performance", "https://gb-performance.vercel.app/"],
-  ["nails-by-cindy", "https://nails-by-cindy-beta.vercel.app/#/"],
   ["domaine-des-aurores", "https://domaine-des-aurores.vercel.app/"],
   ["act4results", "https://act4results.web.app/"],
   ["flovia", "https://flovia.web.app/"],
@@ -66,12 +64,9 @@ const SITES = [
   ["chatoyance", "https://chatoyance-onglerie.vercel.app/"],
   ["glacage", "https://glacage-nails.vercel.app/"],
   ["odette", "https://odette-ongles.vercel.app/"],
-  ["ecrin", "https://ecrin-salon-five.vercel.app/"],
   ["lunule", "https://lunule-atelier.vercel.app/"],
   ["atelier-laque", "https://atelier-laque.vercel.app/"],
   ["garage-bielle", "https://garage-bielle.vercel.app/"],
-  ["milesi-atelier", "https://milesi-atelier.vercel.app/"],
-  ["morgane-perrion", "https://morgane-perrion-reflexologue.vercel.app/"],
   // Restaurants (démonstrations, ajoutés le 2026-10-13).
   ["sillon", "https://sillon-restaurant.vercel.app/"],
   ["fanchon", "https://fanchon-bistrot.vercel.app/"],
@@ -80,6 +75,64 @@ const SITES = [
   ["hanare", "https://hanare-paris.vercel.app/"],
   ["tison", "https://tison-bayonne.vercel.app/"],
   ["maillard", "https://maillard-lille.vercel.app/"],
+  // Liste complète fournie le 2026-10-30.
+  ["la-boheme-epagny", "https://la-boheme-epagny.vercel.app/", 9000],
+  ["crocus-fleuriste-redon", "https://crocus-fleuriste-redon.vercel.app/"],
+  ["petite-fleur-compagnie", "https://petite-fleur-compagnie.vercel.app/"],
+  ["o-jardin-de-lea", "https://o-jardin-de-lea.vercel.app/"],
+  ["art-et-fleurs-saint-raphael", "https://art-et-fleurs-saint-raphael.vercel.app/"],
+  ["cecilia-artisan-fleuriste", "https://cecilia-artisan-fleuriste.vercel.app/"],
+  ["univers-des-fleurs-marolles", "https://univers-des-fleurs-marolles.vercel.app/"],
+  ["seconde-nature-beaugency", "https://seconde-nature-beaugency.vercel.app/"],
+  ["marion-creations-portets", "https://marion-creations-portets.vercel.app/"],
+  ["bouquets-de-clery", "https://bouquets-de-clery.vercel.app/"],
+  ["cathie-fleurs-lourdes", "https://cathie-fleurs-lourdes.vercel.app/"],
+  ["maison-mimosa-bellevigny", "https://maison-mimosa-bellevigny.vercel.app/", 9000],
+  ["au-petit-bouquet-piolenc", "https://au-petit-bouquet-piolenc.vercel.app/"],
+  ["o-fleurs-de-nath", "https://o-fleurs-de-nath.vercel.app/", 9000],
+  ["crealy-fleurs-mours", "https://crealy-fleurs-mours.vercel.app/"],
+  ["auberge-des-fleurs-saint-maixent", "https://auberge-des-fleurs-saint-maixent.vercel.app/", 9000],
+  ["acanthe-le-raincy", "https://acanthe-le-raincy.vercel.app/", 9000],
+  ["prestaflor-fleuriste-melun", "https://prestaflor-fleuriste-melun.vercel.app/"],
+  ["fred-ink-shop-tattoo", "https://fred-ink-shop-tattoo.vercel.app/"],
+  ["velours-vegetal-avranches", "https://velours-vegetal-avranches.vercel.app/", 9000],
+  ["matlo-fleurs-challans", "https://matlo-fleurs-challans.vercel.app/"],
+  ["une-lubie-tattoo", "https://une-lubie-tattoo.vercel.app/"],
+  ["scabiosa-fleuriste", "https://scabiosa-fleuriste.vercel.app/"],
+  ["inklimit-tattoo-epernay", "https://inklimit-tattoo-epernay.vercel.app/"],
+  ["manatu-tattoo-conliege", "https://manatu-tattoo-conliege.vercel.app/"],
+  ["suzon-ink-thuir", "https://suzon-ink-thuir.vercel.app/"],
+  ["adele-blanche-tattoo", "https://adele-blanche-tattoo.vercel.app/"],
+  ["antho-tattoo-biguglia", "https://antho-tattoo-biguglia.vercel.app/"],
+  ["head-tattoo-malesherbois", "https://head-tattoo-malesherbois.vercel.app/"],
+  ["botan-ink-tattoo", "https://botan-ink-tattoo.vercel.app/"],
+  ["atelier-ronce-tattoo", "https://atelier-ronce-tattoo.vercel.app/"],
+  ["tokyo-nails-art", "https://tokyo-nails-art.vercel.app/"],
+  ["ongles-anne-laure-bayonne", "https://ongles-anne-laure-bayonne.vercel.app/"],
+  ["nails-by-cindy", "https://nails-by-cindy-laque.vercel.app/"],
+  ["marys-hair-clermont", "https://marys-hair-clermont.vercel.app/"],
+  ["barber-hako-sarralbe", "https://barber-hako-sarralbe.vercel.app/"],
+  ["maison-vaneau-coiffure", "https://maison-vaneau-coiffure.vercel.app/"],
+  ["garance-coiffure-rennes", "https://garance-coiffure-rennes.vercel.app/", 9000],
+  ["bigoudi-coiffure-montpellier", "https://bigoudi-coiffure-montpellier.vercel.app/"],
+  ["coupechou-toulouse", "https://coupechou-toulouse.vercel.app/"],
+  ["cave-dame-carcas", "https://cave-dame-carcas.vercel.app/"],
+  ["epicerie-saint-yves-dinan", "https://epicerie-saint-yves-dinan.vercel.app/"],
+  ["cave-tire-bouchon-lille", "https://cave-tire-bouchon-lille.vercel.app/", 9000],
+  ["maries-de-jade-grand-champ", "https://maries-de-jade-grand-champ.vercel.app/"],
+  ["domaine-hautes-prairies", "https://domaine-hautes-prairies.vercel.app/"],
+  ["thiou-immobilier-annecy", "https://thiou-immobilier-annecy.vercel.app/"],
+  ["tremiere-conciergerie", "https://tremiere-conciergerie.vercel.app/"],
+  ["myhost-conciergerie", "https://myhost-conciergerie.vercel.app/"],
+  ["morgane-perrion", "https://morgane-perrion.vercel.app/"],
+  ["gb-performance", "https://waw-carrosserie.vercel.app/"],
+  ["czc-batei-refonte", "https://czc-batei-refonte.vercel.app/"],
+  ["soderel-refonte", "https://soderel-refonte.vercel.app/"],
+  ["ramoplus", "https://ramoplus-ramonage.vercel.app/"],
+  ["tcm-isolation-meysse", "https://tcm-isolation-meysse.vercel.app/"],
+  ["linteau-construction", "https://linteau-construction.vercel.app/"],
+  ["sk-froid-electricite", "https://sk-froid-electricite.vercel.app/"],
+  ["bleu-calanque-piscines", "https://bleu-calanque-piscines.vercel.app/"],
 ];
 
 const only = process.argv.slice(2);
@@ -111,6 +164,9 @@ async function toWebp(input, target, maxBytes, resize) {
  */
 async function dismissOverlays(page) {
   const labels = [
+    // Vérification d'âge des cavistes.
+    /^oui$/i,
+    /j['’]ai (plus de )?18 ans/i,
     /^tout refuser$/i,
     /^refuser$/i,
     /^continuer sans accepter$/i,
@@ -124,7 +180,8 @@ async function dismissOverlays(page) {
     const button = page.getByRole("button", { name }).first();
     if (await button.isVisible().catch(() => false)) {
       await button.click({ timeout: 2000 }).catch(() => {});
-      await page.waitForTimeout(400);
+      // Laisse jouer l'animation de sortie (porte d'âge d'un caviste…).
+      await page.waitForTimeout(3000);
     }
   }
 }

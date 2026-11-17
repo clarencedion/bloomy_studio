@@ -6,7 +6,7 @@ import { ImageResponse } from "next/og";
 import { SITE_URL } from "@/lib/site";
 
 export const alt =
-  "Bloomy Studio, agence de développement web : des sites qui font éclore votre activité";
+  "Bloomy Digital Studio, agence de développement web : des sites qui font éclore votre activité";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

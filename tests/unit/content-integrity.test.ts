@@ -116,9 +116,9 @@ describe("intégrité du contenu", () => {
 });
 
 describe("intégrité du portfolio", () => {
-  it("contient les 58 projets sans doublon de slug ou d'URL", async () => {
+  it("contient les 110 projets sans doublon de slug ou d'URL", async () => {
     const { showcaseSites } = await import("@/lib/portfolio");
-    expect(showcaseSites.length).toBe(58);
+    expect(showcaseSites.length).toBe(110);
 
     const slugs = showcaseSites.map((s) => s.slug);
     expect(new Set(slugs).size).toBe(showcaseSites.length);
@@ -176,12 +176,42 @@ describe("intégrité du portfolio", () => {
     // ne doivent jamais passer pour un travail livré.
     expect(concepts.map((s) => s.slug).sort()).toEqual(
       [
-        "alliantherm", "atelier-laque", "chatoyance", "domaine-des-aurores", "ecrin",
-        "garage-bielle", "glacage", "lunule", "maison-lisiere", "milesi-atelier",
-        "morgane-perrion", "nailac-passion", "nails-by-cindy", "odette", "opaline",
-        "paoli-immobilier", "sitaclim", "thermibel",
-        // Restaurants fictifs (« restaurant fictif, site de démonstration »).
-        "fanchon", "hanare", "lauro", "maillard", "rameau", "sillon", "tison",
+        "alliantherm",
+        "atelier-laque",
+        "atelier-ronce-tattoo",
+        "bigoudi-coiffure-montpellier",
+        "bleu-calanque-piscines",
+        "cave-tire-bouchon-lille",
+        "chatoyance",
+        "coupechou-toulouse",
+        "domaine-des-aurores",
+        "domaine-hautes-prairies",
+        "fanchon",
+        "garage-bielle",
+        "garance-coiffure-rennes",
+        "glacage",
+        "hanare",
+        "lauro",
+        "linteau-construction",
+        "lunule",
+        "maillard",
+        "maison-lisiere",
+        "maison-vaneau-coiffure",
+        "marys-hair-clermont",
+        "nailac-passion",
+        "nails-by-cindy",
+        "odette",
+        "opaline",
+        "paoli-immobilier",
+        "rameau",
+        "ramoplus",
+        "sillon",
+        "sitaclim",
+        "soderel-refonte",
+        "thermibel",
+        "thiou-immobilier-annecy",
+        "tison",
+        "tremiere-conciergerie",
       ].sort(),
     );
     for (const s of concepts) {
@@ -222,5 +252,18 @@ describe("intégrité du portfolio", () => {
         }
       }
     }
+  });
+});
+
+describe("pages légales", () => {
+  it("aucun champ légal à compléter : les pages sont publiables et indexables", async () => {
+    const { hasLegalPlaceholders, legalEntity, dataProtection, PLACEHOLDER } = await import("@/lib/legal");
+    expect(hasLegalPlaceholders()).toBe(false);
+    // Faits repris des textes en vigueur de l'application (version 2.0 du 28/10/2026).
+    const all = JSON.stringify({ legalEntity, dataProtection });
+    expect(all).not.toContain(PLACEHOLDER);
+    expect(all).not.toMatch(/XX|à compléter|à confirmer/i);
+    expect(legalEntity.vat).toBe("FR62101421212");
+    expect(legalEntity.siret.replace(/\s/g, "")).toBe("10142121200016");
   });
 });

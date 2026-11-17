@@ -20,7 +20,7 @@ describe("organizationSchema", () => {
   it("expose les champs essentiels et les fondateurs réels", () => {
     const org = organizationSchema();
     expect(org["@type"]).toBe("ProfessionalService");
-    expect(org.name).toBe("Bloomy Studio");
+    expect(org.name).toBe("Bloomy Digital Studio");
     const founders = org.founder as { name: string }[];
     expect(founders.map((f) => f.name)).toEqual([
       "Clarence Dion",

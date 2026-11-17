@@ -115,12 +115,12 @@ test("la page réalisations permet de filtrer les projets par catégorie", async
     await expect(banner).toBeHidden();
   }
 
-  // Par défaut, tous les projets (21 livrés, 12 récents, 25 concepts), par
+  // Par défaut, tous les projets (21 livrés, 53 récents, 36 concepts), par
   // lots de douze : le bouton ajoute le lot suivant jusqu'au dernier.
   const cards = page.locator("#portfolio-grid article");
   const more = page.getByRole("button", { name: /^Afficher \d+ projets? de plus$/ });
   await expect(cards).toHaveCount(12);
-  for (const expected of [24, 36, 48, 58]) {
+  for (const expected of [24, 36, 48, 60, 72, 84, 96, 108, 110]) {
     await more.click();
     await expect(cards).toHaveCount(expected);
   }
@@ -129,42 +129,30 @@ test("la page réalisations permet de filtrer les projets par catégorie", async
   // Changer de filtre repart du premier lot.
   await page.getByRole("tab", { name: /^Fleuristes/ }).click();
   await expect(cards).toHaveCount(12);
-  await more.click();
-  await expect(cards).toHaveCount(21);
   await expect(page.locator("#portfolio-grid")).toContainText("Osmose Florale");
 
-  await page.getByRole("tab", { name: /Hôtellerie/ }).click();
-  await expect(cards).toHaveCount(1);
-  await expect(page.locator("#portfolio-grid")).toContainText("FLÖVIA");
+  await page.getByRole("tab", { name: /^Tatoueurs/ }).click();
+  await expect(cards).toHaveCount(10);
 
-  await page.getByRole("tab", { name: /Conseil/ }).click();
-  await expect(cards).toHaveCount(2);
-  await expect(page.locator("#portfolio-grid")).toContainText("ACT4RESULTS");
-
-  await page.getByRole("tab", { name: /Artisans/ }).click();
-  await expect(cards).toHaveCount(7);
-  await expect(page.locator("#portfolio-grid")).toContainText("Net Plus Services");
-  await expect(page.locator("#portfolio-grid")).toContainText("WAW Carrosserie");
-
-  await page.getByRole("tab", { name: /Automobile|Garages/ }).click();
-  await expect(cards).toHaveCount(5);
-
-  // Les projets concept sont regroupés et étiquetés comme tels.
-  await page.getByRole("tab", { name: /Restaurants/ }).click();
+  await page.getByRole("tab", { name: /^Restaurants/ }).click();
   await expect(cards).toHaveCount(8);
   await expect(page.locator("#portfolio-grid")).toContainText("Hanare");
 
+  await page.getByRole("tab", { name: /^Garages/ }).click();
+  await expect(cards).toHaveCount(4);
+  await expect(page.locator("#portfolio-grid")).toContainText("WAW Carrosserie");
+
+  await page.getByRole("tab", { name: /^Autres/ }).click();
+  await expect(cards).toHaveCount(3);
+  await expect(page.locator("#portfolio-grid")).toContainText("FLÖVIA");
+
+  // Les projets concept sont regroupés et étiquetés comme tels.
   await page.getByRole("tab", { name: /concept/i }).click();
   await expect(cards).toHaveCount(12);
   await more.click();
-  await expect(cards).toHaveCount(24);
   await more.click();
-  await expect(cards).toHaveCount(25);
+  await expect(cards).toHaveCount(36);
   await expect(page.locator("#portfolio-grid")).toContainText("Projet concept");
-
-  await page.getByRole("tab", { name: /Horticulture/ }).click();
-  await expect(cards).toHaveCount(1);
-  await expect(page.locator("#portfolio-grid")).toContainText("Pépinières Raffard");
 
   await page.getByRole("tab", { name: /Tous les projets/ }).click();
   await expect(cards).toHaveCount(12);

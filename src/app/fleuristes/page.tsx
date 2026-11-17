@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 import { FaqBlock } from "@/components/fleuristes/FaqBlock";
+import { ButtonLink } from "@/components/ui/Button";
 import { FloristWall } from "@/components/fleuristes/FloristWall";
 import { HeroActions } from "@/components/fleuristes/HeroActions";
 import { InkWords } from "@/components/fleuristes/InkWords";
@@ -208,15 +209,19 @@ export default function FleuristesPage() {
         <Container width="wide">
           <div className="max-w-3xl">
             <h2 className="text-display-lg">
-              {floristSites.length}&nbsp;boutiques en ligne, chacune à son image
+              {floristSites.length}&nbsp;sites de fleuristes, chacun à son image
             </h2>
             <p className="lede mt-5">
               Chaque site part de la boutique&nbsp;: ses matières, ses couleurs, sa
-              façon de vendre. Ce sont des adresses publiques, pas des
-              maquettes. Ouvrez-les.
+              façon de vendre. En voici une sélection, ouvrez-les.
             </p>
           </div>
           <FloristWall exclude={["osmose-florale"]} className="mt-12 sm:mt-16" />
+          <p className="mt-10">
+            <ButtonLink href="/realisations" variant="secondary" arrow>
+              Voir les réalisations
+            </ButtonLink>
+          </p>
         </Container>
       </section>
 

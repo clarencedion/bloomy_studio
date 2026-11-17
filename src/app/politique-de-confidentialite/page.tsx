@@ -20,7 +20,7 @@ export default function ConfidentialitePage() {
     <LegalShell
       title="Politique de confidentialité"
       path="/politique-de-confidentialite"
-      updatedAt="24 juillet 2026"
+      updatedAt="5 novembre 2026"
     >
       <p>
         Cette politique décrit comment {site.name} traite vos données
@@ -83,16 +83,17 @@ export default function ConfidentialitePage() {
 
       <h2>Durées de conservation</h2>
       <p>
-        Demandes et diagnostics : {dataProtection.leadRetention}. Données de
-        mesure d&apos;audience : selon les durées standard de l&apos;outil,
-        après anonymisation.
+        Demandes et diagnostics : {dataProtection.leadRetention}, puis
+        suppression. Mesure d&apos;audience : aucune n&apos;est active
+        aujourd&apos;hui ; si elle l&apos;était, elle ne fonctionnerait
+        qu&apos;avec votre accord, pour 13 mois au plus.
       </p>
 
       <h2>Destinataires et sous-traitants</h2>
       <ul>
         {dataProtection.processors.map((p) => (
           <li key={p.name}>
-            <strong>{p.name}</strong>, hébergé en {p.location}. Accord de
+            <strong>{p.name}</strong>. Localisation : {p.location}. Accord de
             traitement des données :{" "}
             {p.dpa.startsWith("https://") ? (
               <a href={p.dpa} rel="noopener">

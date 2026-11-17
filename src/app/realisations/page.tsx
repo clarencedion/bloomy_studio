@@ -12,8 +12,8 @@ import { pageMetadata } from "@/lib/seo";
 const total = showcaseSites.length;
 
 export const metadata = pageMetadata({
-  title: "Réalisations : portfolio des sites conçus par Bloomy Studio",
-  description: `Le portfolio de Bloomy Studio : ${total} projets, du fleuriste au carrossier. Boutiques en ligne, sites d'artisans, tourisme, conseil B2B et concepts.`,
+  title: "Réalisations : nos sites web, du fleuriste au garage",
+  description: `${total} sites conçus par le studio : fleuristes, tatoueurs, onglerie, restaurants, artisans du bâtiment, garages, immobilier et projets concept.`,
   path: "/realisations",
 });
 

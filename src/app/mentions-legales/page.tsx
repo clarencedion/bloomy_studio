@@ -17,16 +17,18 @@ export const metadata = pageMetadata({
 
 export default function MentionsLegalesPage() {
   return (
-    <LegalShell title="Mentions légales" path="/mentions-legales" updatedAt="24 juillet 2026">
+    <LegalShell title="Mentions légales" path="/mentions-legales" updatedAt="5 novembre 2026">
       <h2>Éditeur du site</h2>
       <p>
         Le site {site.name} (ci-après « le Site ») est édité par :{" "}
         <strong>{legalEntity.name}</strong>, {legalEntity.form} au capital de{" "}
-        {legalEntity.capital}, immatriculée au RCS de {legalEntity.rcs} sous le
-        numéro {legalEntity.siren}, dont le siège social est situé{" "}
-        {legalEntity.address}.
+        {legalEntity.capital}, immatriculée au registre du commerce et des
+        sociétés de {legalEntity.rcs} sous le numéro {legalEntity.siren}, dont
+        le siège social est situé {legalEntity.address}.
       </p>
       <p>
+        SIRET du siège : {legalEntity.siret}
+        <br />
         N° de TVA intracommunautaire : {legalEntity.vat}
         <br />
         Contact : <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>
@@ -39,13 +41,16 @@ export default function MentionsLegalesPage() {
 
       <h2>Hébergement</h2>
       <p>
-        Le Site est hébergé par {hosting.name}, opéré par {hosting.company},{" "}
-        {hosting.address}. Site de l&apos;hébergeur :{" "}
+        Le Site est hébergé par {hosting.company}, {hosting.address}, dans
+        le cadre des services {hosting.name}. Google Cloud France ne publie
+        pas de numéro de téléphone : elle peut être contactée par le
+        formulaire{" "}
         <a href={hosting.website} rel="noopener">
-          {hosting.website}
+          {hosting.website.replace("https://", "")}
         </a>
         .
       </p>
+      <p>{hosting.location}</p>
 
       <h2>Propriété intellectuelle</h2>
       <p>

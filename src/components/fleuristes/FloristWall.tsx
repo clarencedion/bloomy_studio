@@ -59,18 +59,27 @@ function WallItem({ site, phone }: { site: ShowcaseSite; phone: boolean }) {
   );
 }
 
+/** Rang d'affichage : les sites livrés d'abord, puis les projets récents. */
+const kindRank = { client: 0, recent: 1, concept: 2 } as const;
+
 export function FloristWall({
   exclude = [],
+  limit = 14,
   className = "",
 }: {
   /** Projets déjà montrés plus haut sur la page. */
   exclude?: readonly ShowcaseSlug[];
+  /** Nombre de sites montrés ; la liste complète vit sur /realisations. */
+  limit?: number;
   className?: string;
 }) {
-  const sites = floristSites.filter((s) => !(exclude as readonly string[]).includes(s.slug));
+  const sites = floristSites
+    .filter((s) => !(exclude as readonly string[]).includes(s.slug))
+    .sort((a, b) => kindRank[a.kind] - kindRank[b.kind])
+    .slice(0, limit);
   return (
     <ul
-      aria-label="Sites de fleuristes livrés par le studio"
+      aria-label="Sites de fleuristes conçus par le studio"
       className={`relative -mx-5 flex snap-x snap-mandatory items-start gap-5 overflow-x-auto px-5 pb-6 [scrollbar-width:thin] sm:-mx-8 sm:px-8 md:mx-0 md:block md:columns-2 md:gap-8 md:overflow-visible md:px-0 md:pb-0 lg:columns-3 lg:gap-10 ${className}`}
     >
       {sites.map((site, i) => (
